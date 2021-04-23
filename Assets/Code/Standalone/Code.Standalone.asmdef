@@ -1,0 +1,18 @@
+{
+    "name": "Code.Standalone",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1169f6a8ec7e0e04696415220c6aafd5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "Newtonsoft.Json.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
