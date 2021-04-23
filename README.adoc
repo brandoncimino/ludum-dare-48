@@ -1,6 +1,65 @@
-= Brandon's Unity Template
+﻿= Ludum Dare 48
+:icons: font
 
-[WARNING,caption=🔥]
-====
-The full `README` is located at link:Assets/README.adoc[]!
-====
+https://ldjam.com/events/ludum-dare/48[Official Site]
+
+Date:: Friday April 23rd - Monday April 26th, 2021
+Start Time::
++
+--
+[horizontal]
+CST:: `8:00` PM
+MESZ:: `3:00` AM{wj}footnote:[On the _next day_, April 24th]
+--
+
+== Participants
+
+Confirmed::
+- Brandon
+- Nicole
+- Michael{wj}footnote:[Programming, specifically]
+- David
+- Francesca
+
+Possible::
+- Dan
+- Jon Reed
+
+== Pre-Work
+
+- [ ] Create `ludum-dare-48` Unity project
+ ** [ ] Create folder structure
+ ** [ ] Create `.asmdef` files
+ ** [ ] Set up project dependencies
+  *** [ ] `BrandonUtils`
+  *** [ ] Newtonsoft JSON
+  *** [ ] `.gitignore`
+- [ ] Create `ludum-dare-48` Github repository
+ ** [ ] Make sure that each person has the repository cloned
+  *** [ ] Brandon
+  *** [ ] Nicole
+  *** [ ] Michael
+  *** [ ] David
+  *** [ ] Francesca
+- [ ] Update https://unity3d.com/get-unity/update[Unity]{wj}footnote:[Currently `2021.1.4f1`]
+ ** [ ] Brandon
+ ** [ ] Nicole
+ ** [ ] Michael
+ ** [ ] David
+ ** [ ] Francesca
+- [ ] Update https://www.jetbrains.com/rider/[Rider]
+ ** [x] Brandon
+ ** [ ] Nicole
+ ** [x] Michael
+ ** [ ] David
+ ** [ ] Francesca
+- [ ] Plan to include icon:music[] *Sound*
+ ** [ ] (possibly) Recruit Jon Reed
+ ** [ ] Identifying / preparing sources of generic sound effects
+  *** https://www.sounds-resource.com/
+ ** [ ] Identify music-making software
+  *** [ ] Check if FL Studios still exists
+  *** [ ] Check some stuff David got from Humble Bundle
+   **** Music Maker 80s edition
+   **** Music Maker Hip-Hop Beat Producer
+  *** [ ] Audacity, I guess
