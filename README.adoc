@@ -38,8 +38,8 @@ Possible::
  ** [ ] Make sure that each person has the repository cloned
   *** [ ] Brandon
   *** [ ] Nicole
-  *** [x] Michael
-  *** [ ] David
+  *** [ ] Michael
+  *** [x] David
   *** [ ] Francesca
 - [ ] Update https://unity3d.com/get-unity/update[Unity]{wj}footnote:[Currently `2021.1.4f1`]
  ** [ ] Brandon
@@ -51,7 +51,7 @@ Possible::
  ** [x] Brandon
  ** [ ] Nicole
  ** [x] Michael
- ** [ ] David
+ ** [x] David
  ** [ ] Francesca
 - [ ] Plan to include icon:music[] *Sound*
  ** [ ] (possibly) Recruit Jon Reed
@@ -62,14 +62,4 @@ Possible::
   *** [ ] Check some stuff David got from Humble Bundle
    **** Music Maker 80s edition
    **** Music Maker Hip-Hop Beat Producer
-  *** [ ] Audacity, I guess 
-
-Pre-Work How-Tos::
-How to clone the repository for JetBrains Rider:
-
-1. Update JetBrains Rider
-2. Accept GitHub repository invite
-3. Launch JetBrains Rider
-4. Click 'Get from VCS' in the top-right corner
-5. Click 'GitHub' in the leftmost column
-6. On the right side, select Ludum-Dare-48
+  *** [ ] Audacity, I guess
