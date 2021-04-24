@@ -16,7 +16,7 @@ public class FishBehaviour : MonoBehaviour
     
     protected bool isUncomfortable = false;
 
-    protected float timeTillChange = 4f;
+    protected float timeTillChange = 40f;
     protected float minTimeTillChange = 1f;
     protected float maxTimeTillChange = 7f;
     
@@ -50,13 +50,13 @@ public class FishBehaviour : MonoBehaviour
         if (isUncomfortable)
         {
             // always avoid in the right direction
-            // var angle = 90 * Time.deltaTime;
-            // transform.Rotate(transform.up, angle);
+            var angle = 90 * Time.deltaTime;
+            transform.Rotate(transform.up, angle);
             //direction = Quaternion.Euler(angle * Vector3.up) * direction;
         }
         else
         {
-            // changeDirectionAtRandom();
+            changeDirectionAtRandom();
         }
 
         // move forward
@@ -71,13 +71,6 @@ public class FishBehaviour : MonoBehaviour
     public void CalmDown()
     {
         isUncomfortable = false;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        myInnerCollider.isTrigger = false;
-        EventManager.Single.TriggerCollisionFish(this);
-
     }
 
     private void gotCaught(FishBehaviour fish)
