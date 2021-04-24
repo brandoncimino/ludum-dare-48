@@ -12,7 +12,7 @@ public class FishBehaviour : MonoBehaviour
     protected float speed = 5;
     protected Vector3 direction = Vector3.forward;
     protected bool isUncomfortable = false;
-    protected float myComfortRadius = 1;
+    protected float myComfortRadius = 2;
     
     
     // Start is called before the first frame update
