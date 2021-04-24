@@ -141,7 +141,7 @@ public class @HookInputActions : IInputActionCollection, IDisposable
                 {
                     ""name"": ""Gamepad"",
                     ""id"": ""7948edfa-6904-47e0-ae59-c7cde1fc51bb"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
