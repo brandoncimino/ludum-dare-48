@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class HookBehaviour : MonoBehaviour
 {
+
     public static HookBehaviour Single;
     public CharacterController controller;
+    public Rigidbody MyRigidbody;
     
     private float _depth;
     private float _pressure;
@@ -14,6 +16,7 @@ public class HookBehaviour : MonoBehaviour
     
     private Vector3 _velocityPull = new Vector3(0, 0, 0 );
     private Vector3 _velocityPush = new Vector3(0, 0, 0 );
+    public Vector3 _directionPush = new Vector3(0, 0, 0 );
     private float _pullModifier = 0.001f;
     private float _pushModifier = 0.001f;
     private float _maxDepth = 1000f;
@@ -44,16 +47,23 @@ public class HookBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         // falling down based on pressure and gravity
         _depth = Mathf.Abs(transform.localPosition.y - _depthInitial);
         _velocityPull.y = WaterManager.Single.computePull(_depth, _maxDepth);
         
         // user induced movement
-        // TODO: David wanted to do this
+        // var horizontal = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
+        // var horizontal = -Input.GetAxisRaw("Horizontal");
+        // var vertical = -Input.GetAxisRaw("Vertical");
+        //  horizontal = 1f;
+        // _directionPush = new Vector3(horizontal, 0f, vertical);
         
         // movement in total (additive as an approximation)
-        var moveVector = (_pullModifier * _velocityPull + _pushModifier * _velocityPush) * Time.deltaTime;
-        controller.Move(moveVector);
+        var moveVector = (_pullModifier * _velocityPull + _pushModifier * _velocityPush);
+        MyRigidbody.velocity = moveVector;
+        // transform.Translate(moveVector);
+        //controller.Move(moveVector);
 
     }
 

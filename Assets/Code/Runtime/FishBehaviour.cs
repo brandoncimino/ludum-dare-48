@@ -1,20 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.Runtime;
+using UnityEditor.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class FishBehaviour : MonoBehaviour
 {
     public Collider myInnerCollider;
-    public Transform myComfortZone;
-    public LayerMask fishMask;
+    public Rigidbody myRigidbody;
 
     protected float speed = 5;
-    protected Vector3 direction = Vector3.forward;
+    //protected Vector3 direction = Vector3.forward;
     
     protected bool isUncomfortable = false;
-    protected float myComfortRadius = 2;
 
     protected float timeTillChange = 4f;
     protected float minTimeTillChange = 1f;
@@ -33,7 +33,7 @@ public class FishBehaviour : MonoBehaviour
         EventManager.Single.ONTriggerCollisionFish += gotCaught;
         
         // adjust direction to own rotation
-        direction = transform.rotation * direction;
+        //direction = transform.rotation * direction;
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
     }
 
@@ -46,30 +46,38 @@ public class FishBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // check if anything is inside the comfort zone
-        isUncomfortable = Physics.CheckSphere(myComfortZone.position, myComfortRadius, fishMask);
-
         // change direction if feeling uncomfortable
         if (isUncomfortable)
         {
             // always avoid in the right direction
-            var angle = 90 * Time.deltaTime;
-            transform.Rotate(Vector3.up, angle);
-            direction = Quaternion.Euler(angle * Vector3.up) * direction;
+            // var angle = 90 * Time.deltaTime;
+            // transform.Rotate(transform.up, angle);
+            //direction = Quaternion.Euler(angle * Vector3.up) * direction;
         }
         else
         {
-            changeDirectionAtRandom();
+            // changeDirectionAtRandom();
         }
 
         // move forward
-        transform.localPosition += (speed * Time.deltaTime) * direction;
+        myRigidbody.velocity = speed * transform.forward;
+    }
+
+    public void Scare()
+    {
+        isUncomfortable = true;
+    }
+
+    public void CalmDown()
+    {
+        isUncomfortable = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
         myInnerCollider.isTrigger = false;
         EventManager.Single.TriggerCollisionFish(this);
+
     }
 
     private void gotCaught(FishBehaviour fish)
@@ -86,8 +94,8 @@ public class FishBehaviour : MonoBehaviour
         {
             timeForChange -= Time.deltaTime;
             
-            transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
-            direction = Quaternion.Euler((AngleChange * Time.deltaTime) * Vector3.up) * direction;
+            transform.Rotate(transform.up, AngleChange * Time.deltaTime);
+            //direction = Quaternion.Euler((AngleChange * Time.deltaTime) * Vector3.up) * direction;
             
             // start moving forward again when your change time is up
             if (timeForChange < 0)
