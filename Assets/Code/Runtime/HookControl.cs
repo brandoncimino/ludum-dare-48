@@ -41,5 +41,11 @@ public class HookControl : MonoBehaviour
         return new Vector2(keyboard.dKey.ReadValue() - keyboard.aKey.ReadValue(),
             keyboard.wKey.ReadValue() - keyboard.sKey.ReadValue());
     }
+
+    public void HookMover(InputAction.CallbackContext context)
+    {
+        Debug.Log("Indirect Input Detected");
+        
+    }
     
 }
