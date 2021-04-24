@@ -7,6 +7,8 @@ public class FishBehaviour : MonoBehaviour
 {
 
     public float test = 0;
+
+    private Collider myInnerCollider;
     
     // Start is called before the first frame update
     void Start()
@@ -29,10 +31,11 @@ public class FishBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        EventManager.Single.TriggerCollisionFish();
+        myInnerCollider.isTrigger = false;
+        EventManager.Single.TriggerCollisionFish(this);
     }
 
-    private void gotCaught()
+    private void gotCaught(FishBehaviour fish)
     {
         // just as a test behaviour to show that collision works
         transform.eulerAngles = 90f * Vector3.left;
