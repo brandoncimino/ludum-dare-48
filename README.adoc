@@ -39,7 +39,7 @@ Possible::
   *** [ ] Brandon
   *** [ ] Nicole
   *** [ ] Michael
-  *** [ ] David
+  *** [x] David
   *** [ ] Francesca
 - [ ] Update https://unity3d.com/get-unity/update[Unity]{wj}footnote:[Currently `2021.1.4f1`]
  ** [ ] Brandon
@@ -51,7 +51,7 @@ Possible::
  ** [x] Brandon
  ** [ ] Nicole
  ** [x] Michael
- ** [ ] David
+ ** [x] David
  ** [ ] Francesca
 - [ ] Plan to include icon:music[] *Sound*
  ** [ ] (possibly) Recruit Jon Reed
