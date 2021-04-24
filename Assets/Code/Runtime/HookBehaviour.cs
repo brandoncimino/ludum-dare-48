@@ -18,6 +18,8 @@ public class HookBehaviour : MonoBehaviour
     private float _pushModifier = 0.001f;
     private float _maxDepth = 1000f;
 
+    private List<FishBehaviour> myCatches;
+
     private void Awake()
     {
         Single = this;
@@ -55,8 +57,13 @@ public class HookBehaviour : MonoBehaviour
 
     }
 
-    private void CollisionFish()
+    private void CollisionFish(FishBehaviour fish)
     {
+        if (myCatches.Count == 0)
+        {
+            EventManager.Single.TriggerFirstFishCaught();
+        }
+        myCatches.Add(fish);
         // not implemented yet
     }
     

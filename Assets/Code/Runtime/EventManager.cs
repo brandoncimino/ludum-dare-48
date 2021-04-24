@@ -12,12 +12,17 @@ public class EventManager : MonoBehaviour
         Single = this;
     }
 
-    public event Action ONTriggerCollisionFish;
-
-    public void TriggerCollisionFish()
+    public event Action <FishBehaviour> ONTriggerCollisionFish;
+    public void TriggerCollisionFish(FishBehaviour fish)
     {
-        ONTriggerCollisionFish?.Invoke();
+        ONTriggerCollisionFish?.Invoke(fish);
     }
 
+    public event Action ONTriggerFirstFishCaught;
+
+    public void TriggerFirstFishCaught()
+    {
+        ONTriggerFirstFishCaught();
+    }
 
 }
