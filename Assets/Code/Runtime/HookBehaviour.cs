@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HookMovement : MonoBehaviour
+public class HookBehaviour : MonoBehaviour
 {
-    public static HookMovement Single;
+    public static HookBehaviour Single;
     public CharacterController controller;
     
     private float _depth;
@@ -14,8 +14,8 @@ public class HookMovement : MonoBehaviour
     
     private Vector3 _velocityPull = new Vector3(0, 0, 0 );
     private Vector3 _velocityPush = new Vector3(0, 0, 0 );
-    private float _pullModifier = 0.01f;
-    private float _pushModifier = 0.01f;
+    private float _pullModifier = 0.001f;
+    private float _pushModifier = 0.001f;
     private float _maxDepth = 1000f;
 
     private void Awake()
@@ -29,13 +29,13 @@ public class HookMovement : MonoBehaviour
         _depthInitial = transform.localPosition.y;
         
         // substrictions to the event manager
-        EventManager.Single.onTriggerCollisionFish += CollisionFish;
+        EventManager.Single.ONTriggerCollisionFish += CollisionFish;
     }
 
     private void OnDestroy()
     {
         // cancel all substrictions to the event manager
-        EventManager.Single.onTriggerCollisionFish -= CollisionFish;
+        EventManager.Single.ONTriggerCollisionFish -= CollisionFish;
     }
 
 
@@ -57,7 +57,7 @@ public class HookMovement : MonoBehaviour
 
     private void CollisionFish()
     {
-        
+        // not implemented yet
     }
     
 }
