@@ -31,15 +31,25 @@ public class WaterManager : MonoBehaviour
     {
         // pressure changes by 1 bar per 10 m
         // this means 10000 Pa per m
-        return 1e4f * depth;
+        // this means 10000 N m^(-3)
+        // this means 10000 km s^{-2} m^{-2}
+        return 1e4f * Mathf.Abs(depth) + pressureSurface;
     }
 
-    public float computePull(float depth)
+    public float computeVelocityConst(float maxDepth)
+    {
+        return (1e4f * maxDepth + gravity * maxDepth) / density;
+    }
+    public float computePull(float depth, float maxDepth = 1e4f)
     {
         // fall velocity according to Bernoulli principle
-        var velocity = (pressureSurface + computePressure(depth)) / density;
-        velocity -= gravity * depth;
-        velocity = -Mathf.Sqrt(2 * velocity);
+        var velocity = computeVelocityConst(maxDepth);
+        velocity += (pressureSurface - computePressure(depth)) / density;
+        velocity -= gravity * Mathf.Abs(depth);
+        
+        // not sure how to decide on the sign
+        var sign = Mathf.Sign(velocity);
+        velocity = -sign * Mathf.Sqrt(2 * sign * velocity);
         return velocity;
     }
 }
