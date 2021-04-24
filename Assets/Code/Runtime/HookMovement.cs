@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class HookMovement : MonoBehaviour
 {
-    public HookMovement Single;
+    public static HookMovement Single;
     public CharacterController controller;
     
     private float _depth;
@@ -23,10 +24,20 @@ public class HookMovement : MonoBehaviour
     }
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _depthInitial = transform.localPosition.y;
+        
+        // substrictions to the event manager
+        EventManager.Single.onTriggerCollisionFish += CollisionFish;
     }
+
+    private void OnDestroy()
+    {
+        // cancel all substrictions to the event manager
+        EventManager.Single.onTriggerCollisionFish -= CollisionFish;
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -43,6 +54,10 @@ public class HookMovement : MonoBehaviour
         controller.Move(moveVector);
 
     }
-    
+
+    private void CollisionFish()
+    {
+        
+    }
     
 }
