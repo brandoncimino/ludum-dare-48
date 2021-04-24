@@ -29,15 +29,16 @@ public class WaterManager : MonoBehaviour
     
     public float computePressure(float depth)
     {
-        // pressure changes by 1 bar per 10 m
-        // this means 10000 Pa per m
-        // this means 10000 N m^(-3)
-        // this means 10000 km s^{-2} m^{-2}
-        return 1e4f * Mathf.Abs(depth) + pressureSurface;
+        // in water, pressure changes by 1 bar per 10 m
+        // = 10000 Pa m^{-2}
+        // = 10000 N m^{-3}
+        //  10000 km s^{-2} m^{-2}
+        return 1e4f * depth + pressureSurface;
     }
 
     public float computeVelocityConst(float maxDepth)
     {
+        // rearrange Bernoullil's equation to get squared initial velocity such that the equilibrium is reached at depth = maxDepth
         return (1e4f * maxDepth + gravity * maxDepth) / density;
     }
     public float computePull(float depth, float maxDepth = 1e4f)
@@ -47,9 +48,11 @@ public class WaterManager : MonoBehaviour
         velocity += (pressureSurface - computePressure(depth)) / density;
         velocity -= gravity * Mathf.Abs(depth);
         
-        // not sure how to decide on the sign
+        // using the sign to make sure everything is well-defined and we get the right direction
+        // (moving up and down at equilibrium because of the discontinuity in time of the Update function)
         var sign = Mathf.Sign(velocity);
         velocity = -sign * Mathf.Sqrt(2 * sign * velocity);
+        
         return velocity;
     }
 }

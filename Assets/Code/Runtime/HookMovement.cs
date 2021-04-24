@@ -11,10 +11,10 @@ public class HookMovement : MonoBehaviour
     private float _pressure;
     private float _depthInitial;
     
-    public Vector3 _velocityPull = new Vector3(0, 0, 0 );
-    public Vector3 _velocityPush = new Vector3(0, 0, 0 );
-    public float _pullModifier = 1f;
-    public float _pushModifier = 1f;
+    private Vector3 _velocityPull = new Vector3(0, 0, 0 );
+    private Vector3 _velocityPush = new Vector3(0, 0, 0 );
+    private float _pullModifier = 0.01f;
+    private float _pushModifier = 0.01f;
     private float _maxDepth = 1000f;
 
     private void Awake()
@@ -31,9 +31,14 @@ public class HookMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // falling down based on pressure and gravity
         _depth = Mathf.Abs(transform.localPosition.y - _depthInitial);
         _velocityPull.y = WaterManager.Single.computePull(_depth, _maxDepth);
         
+        // user induced movement
+        // TODO: David wanted to do this
+        
+        // movement in total (additive as an approximation)
         var moveVector = (_pullModifier * _velocityPull + _pushModifier * _velocityPush) * Time.deltaTime;
         controller.Move(moveVector);
 
