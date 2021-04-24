@@ -8,7 +8,15 @@ public class FishBehaviour : MonoBehaviour
 
     public float test = 0;
 
-    private Collider myInnerCollider;
+    public Collider myInnerCollider;
+    public Transform myComfortZone;
+    public LayerMask fishMask;
+
+    protected float speed = 5;
+    protected Vector3 direction = Vector3.forward;
+    protected bool isUncomfortable = false;
+    protected float myComfortRadius = 1;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -26,7 +34,21 @@ public class FishBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // check if anything is inside the comfort zone
+        isUncomfortable = Physics.CheckSphere(myComfortZone.position, myComfortRadius, fishMask);
+
+        // move according to feeling
+        if (isUncomfortable)
+        {
+            // evade danger   
+        }
+        else
+        {
+            // return to normal or change position randomly
+        }
         
+        // move forward
+        transform.position += (speed * Time.deltaTime) * direction;
     }
 
     private void OnTriggerEnter(Collider other)
