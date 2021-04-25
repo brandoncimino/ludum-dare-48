@@ -23,20 +23,9 @@ public class FishBehaviour : Catchables {
 
     public TMP_Text thoughts;
 
-
-    // Start is called before the first frame update
-    void Start() {
-        // subscribe to the event manager
-        EventManager.Single.ONTriggerCollisionFish += gotCaught;
-
-        // adjust direction to own rotation
-        //direction = transform.rotation * direction;
+    protected override void myStartBehaviour()
+    {
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
-    }
-
-    private void OnDestroy() {
-        // cancel all substrictions to the event manager
-        EventManager.Single.ONTriggerCollisionFish -= gotCaught;
     }
 
     // Update is called once per frame
@@ -46,9 +35,9 @@ public class FishBehaviour : Catchables {
             // always avoid in the right direction
             var angle = 90 * Time.deltaTime;
             transform.Rotate(Vector3.up, angle);
-            //direction = Quaternion.Euler(angle * Vector3.up) * direction;
         }
         else {
+            changeDirectionToHorizonntal();
             changeDirectionAtRandom();
         }
 
@@ -66,30 +55,34 @@ public class FishBehaviour : Catchables {
         thoughts.text   = "that was close";
     }
 
-    private void gotCaught(FishBehaviour fish) {
-        // just as a test behaviour to show that collision works
 
-        if (fish == this)
-        {
-            transform.eulerAngles = 90f * Vector3.left;
-        }
+    private void changeDirectionAtRandom() {
+        
+        // count down until you change directions again
+        timeTillChange -= Time.deltaTime;
+        if (!(timeTillChange < 0)) return;
+        
+        // rotate to your heart's desire
+        timeForChange -= Time.deltaTime;
+        transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
+        if (!(timeForChange < 0)) return;
+
+        // start moving forward again when your change time is up
+        timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
+        timeForChange  = Random.Range(minTimeForChange,  maxTimeForChange);
+        AngleChange    = Random.Range(-90f,              90f);
+    }
+
+    private void changeDirectionToHorizonntal()
+    {
+        var horizontalRotation = new Quaternion();
+        horizontalRotation.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, horizontalRotation, 20 * Time.deltaTime);
         
     }
 
-    private void changeDirectionAtRandom() {
-        timeTillChange -= Time.deltaTime;
-        if (timeTillChange < 0) {
-            timeForChange -= Time.deltaTime;
-
-            transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
-            //direction = Quaternion.Euler((AngleChange * Time.deltaTime) * Vector3.up) * direction;
-
-            // start moving forward again when your change time is up
-            if (timeForChange < 0) {
-                timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
-                timeForChange  = Random.Range(minTimeForChange,  maxTimeForChange);
-                AngleChange    = Random.Range(-90f,              90f);
-            }
-        }
+    protected override void myPersonalTrigger()
+    {
+        EventManager.Single.TriggerCollisionFish(this);
     }
 }
