@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.Runtime;
 using UnityEngine;
 
 public class HookBehaviour : MonoBehaviour
 {
+    public float test = 0;
 
     public static HookBehaviour Single;
-    public CharacterController controller;
     public Rigidbody MyRigidbody;
     
     private float _depth;
@@ -16,12 +17,12 @@ public class HookBehaviour : MonoBehaviour
     
     private Vector3 _velocityPull = new Vector3(0, 0, 0 );
     private Vector3 _velocityPush = new Vector3(0, 0, 0 );
-    public Vector3 _directionPush = new Vector3(0, 0, 0 );
+    private Vector3 _directionPush = new Vector3(0, 0, 0 );
     private float _pullModifier = 0.001f;
     private float _pushModifier = 0.001f;
     private float _maxDepth = 1000f;
 
-    private List<FishBehaviour> myCatches;
+    public List<Catchables> myCatches;
 
     private void Awake()
     {
@@ -35,12 +36,14 @@ public class HookBehaviour : MonoBehaviour
         
         // substrictions to the event manager
         EventManager.Single.ONTriggerCollisionFish += CollisionFish;
+        EventManager.Single.ONTriggerCollisionDebris += CollisionDebris;
     }
 
     private void OnDestroy()
     {
         // cancel all substrictions to the event manager
         EventManager.Single.ONTriggerCollisionFish -= CollisionFish;
+        EventManager.Single.ONTriggerCollisionDebris += CollisionDebris;
     }
 
 
@@ -67,13 +70,37 @@ public class HookBehaviour : MonoBehaviour
 
     }
 
+    private void OnTriggerEnter(Collision other)
+    {
+        test = 4f;
+        if (other.gameObject.CompareTag("Fish"))
+        {
+            EventManager.Single.TriggerCollisionFish(other.gameObject.GetComponent<FishBehaviour>());
+        }
+        
+        if (other.gameObject.CompareTag("Debris"))
+        {
+            EventManager.Single.TriggerCollisionDebris(other.gameObject.GetComponent<DebrisBehaviour>());
+        }
+    }
+
     private void CollisionFish(FishBehaviour fish)
     {
         if (myCatches.Count == 0)
         {
-            EventManager.Single.TriggerFirstFishCaught();
+            EventManager.Single.TriggerFirstCatch();
         }
         myCatches.Add(fish);
+    }
+    
+    private void CollisionDebris(DebrisBehaviour debris)
+    {
+        test = 1f;
+        if (myCatches.Count == 0)
+        {
+            EventManager.Single.TriggerFirstCatch();
+        }
+        myCatches.Add(debris);
         // not implemented yet
     }
     

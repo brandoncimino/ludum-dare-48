@@ -1,8 +1,9 @@
+using Code.Runtime;
 using TMPro;
 
 using UnityEngine;
 
-public class FishBehaviour : MonoBehaviour {
+public class FishBehaviour : Catchables {
     public Collider  myInnerCollider;
     public Rigidbody myRigidbody;
 
@@ -11,7 +12,7 @@ public class FishBehaviour : MonoBehaviour {
 
     protected bool isUncomfortable = false;
 
-    protected float timeTillChange    = 40f;
+    protected float timeTillChange    = 4f;
     protected float minTimeTillChange = 1f;
     protected float maxTimeTillChange = 7f;
 
@@ -44,7 +45,7 @@ public class FishBehaviour : MonoBehaviour {
         if (isUncomfortable) {
             // always avoid in the right direction
             var angle = 90 * Time.deltaTime;
-            transform.Rotate(transform.up, angle);
+            transform.Rotate(Vector3.up, angle);
             //direction = Quaternion.Euler(angle * Vector3.up) * direction;
         }
         else {
@@ -67,7 +68,12 @@ public class FishBehaviour : MonoBehaviour {
 
     private void gotCaught(FishBehaviour fish) {
         // just as a test behaviour to show that collision works
-        transform.eulerAngles = 90f * Vector3.left;
+
+        if (fish == this)
+        {
+            transform.eulerAngles = 90f * Vector3.left;
+        }
+        
     }
 
     private void changeDirectionAtRandom() {
@@ -75,7 +81,7 @@ public class FishBehaviour : MonoBehaviour {
         if (timeTillChange < 0) {
             timeForChange -= Time.deltaTime;
 
-            transform.Rotate(transform.up, AngleChange * Time.deltaTime);
+            transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
             //direction = Quaternion.Euler((AngleChange * Time.deltaTime) * Vector3.up) * direction;
 
             // start moving forward again when your change time is up
