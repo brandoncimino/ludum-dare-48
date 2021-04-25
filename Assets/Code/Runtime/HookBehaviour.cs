@@ -56,8 +56,8 @@ public class HookBehaviour : MonoBehaviour
         // TODO: David, he knows how the input system works
 
         // movement in total (additive as an approximation)
-        var moveVector = -(_pullModifier * _velocityPull + _pushModifier * _velocityPush);
-        // MyRigidbody.velocity = moveVector;
+        var moveVector = (_pullModifier * _velocityPull + _pushModifier * _velocityPush);
+        MyRigidbody.velocity = moveVector;
     }
 
     private void OnTriggerEnter(Collider other)
