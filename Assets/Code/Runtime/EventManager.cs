@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.Runtime;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -29,6 +30,13 @@ public class EventManager : MonoBehaviour
     public void TriggerCollisionDebris(DebrisBehaviour debris)
     {
         ONTriggerCollisionDebris?.Invoke(debris);
+    }
+    
+    
+    public event Action <Catchables> ONTriggerCollisionCatchable;
+    public void TriggerCollisionCatchable(Catchables newCatch)
+    {
+        ONTriggerCollisionCatchable?.Invoke(newCatch);
     }
 
 }
