@@ -702,6 +702,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hook
       objectReference: {fileID: 0}
+    - target: {fileID: 9216492914830173565, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
 --- !u!1 &6909130122571171657
