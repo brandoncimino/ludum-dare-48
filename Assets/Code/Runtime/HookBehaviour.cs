@@ -9,6 +9,7 @@ public class HookBehaviour : MonoBehaviour
     public float test = 0f;
     public static HookBehaviour Single;
     public        Rigidbody     MyRigidbody;
+    public Rigidbody MouthCollector;
 
     private float _depth;
     private float _pressure;
@@ -52,23 +53,19 @@ public class HookBehaviour : MonoBehaviour
         _velocityPull.y = WaterManager.Single.computePull(_depth, _maxDepth);
 
         // user induced movement
-        // var horizontal = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
-        // var horizontal = -Input.GetAxisRaw("Horizontal");
-        // var vertical = -Input.GetAxisRaw("Vertical");
-        //  horizontal = 1f;
-        // _directionPush = new Vector3(horizontal, 0f, vertical);
+        // TODO: David, he knows how the input system works
 
         // movement in total (additive as an approximation)
-        var moveVector = (_pullModifier * _velocityPull + _pushModifier * _velocityPush);
-        MyRigidbody.velocity = moveVector;
-        // transform.Translate(moveVector);
-        //controller.Move(moveVector);
+        var moveVector = -(_pullModifier * _velocityPull + _pushModifier * _velocityPush);
+        // MyRigidbody.velocity = moveVector;
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        test = 1;
         if (other.GetComponent<Catchables>() != null)
         {
+            test = 2;
             EventManager.Single.TriggerCollisionCatchable(other.GetComponent<Catchables>());
         }
     }
@@ -83,6 +80,7 @@ public class HookBehaviour : MonoBehaviour
 
     private void CollisionCatchable(Catchables newCatch)
     {
+        test = 3;
         // general reaction to having caught a catchable: Yay!
         if (myCatches.Count == 0) {
             EventManager.Single.TriggerFirstCatch();
@@ -90,4 +88,10 @@ public class HookBehaviour : MonoBehaviour
 
         myCatches.Add(newCatch);
     }
+
+    public Rigidbody FindHook()
+    {
+        return MouthCollector;
+    }
+
 }
