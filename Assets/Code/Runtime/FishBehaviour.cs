@@ -7,6 +7,10 @@ public class FishBehaviour : Catchables {
     public Collider  myInnerCollider;
     public Rigidbody myRigidbody;
 
+    public Vector3 myRotation;
+    public float misfit1;
+    public float misfit2;
+
     protected float speed = 5;
     //protected Vector3 direction = Vector3.forward;
 
@@ -46,10 +50,10 @@ public class FishBehaviour : Catchables {
             // always avoid in the right direction
             var angle = 90 * Time.deltaTime;
             transform.Rotate(Vector3.up, angle);
-            //direction = Quaternion.Euler(angle * Vector3.up) * direction;
         }
         else {
-            changeDirectionAtRandom();
+            changeDirectionToHorizonntal();
+            // changeDirectionAtRandom();
         }
 
         // move forward
@@ -77,19 +81,27 @@ public class FishBehaviour : Catchables {
     }
 
     private void changeDirectionAtRandom() {
+        
+        // count down until you change directions again
         timeTillChange -= Time.deltaTime;
-        if (timeTillChange < 0) {
-            timeForChange -= Time.deltaTime;
+        if (!(timeTillChange < 0)) return;
+        
+        // rotate to your heart's desire
+        timeForChange -= Time.deltaTime;
+        transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
+        if (!(timeForChange < 0)) return;
 
-            transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
-            //direction = Quaternion.Euler((AngleChange * Time.deltaTime) * Vector3.up) * direction;
+        // start moving forward again when your change time is up
+        timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
+        timeForChange  = Random.Range(minTimeForChange,  maxTimeForChange);
+        AngleChange    = Random.Range(-90f,              90f);
+    }
 
-            // start moving forward again when your change time is up
-            if (timeForChange < 0) {
-                timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
-                timeForChange  = Random.Range(minTimeForChange,  maxTimeForChange);
-                AngleChange    = Random.Range(-90f,              90f);
-            }
-        }
+    private void changeDirectionToHorizonntal()
+    {
+        var horizontalRotation = new Quaternion();
+        horizontalRotation.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
+        transform.rotation = Quaternion.RotateTowards(transform.rotation, horizontalRotation, 20 * Time.deltaTime);
+        
     }
 }
