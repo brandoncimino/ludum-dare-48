@@ -33,7 +33,7 @@ Transform:
   m_LocalScale: {x: 1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 9216492914830173560}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &1961041186
 MeshFilter:
@@ -160,10 +160,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9216492914830173564}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: -0.28094864, y: 3, z: 1.8292942}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6909130123374469584}
   - {fileID: 1961041181}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -324,85 +323,3 @@ MonoBehaviour:
   MyRigidbody: {fileID: 45029038}
   MouthCollector: {fileID: 1961041183}
   myCatches: []
---- !u!1001 &1120777389
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 9216492914830173560}
-    m_Modifications:
-    - target: {fileID: 6909130123827270536, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: DollyLerp_X
-      value: 0.804
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574780, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: Subject
-      value: 
-      objectReference: {fileID: 9216492914830173560}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124409574786, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: m_Name
-      value: DollyCrew
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124522701827, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: LookStyle
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124522701827, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: MiddleDistanceLerp_X
-      value: 0.24
-      objectReference: {fileID: 0}
-    - target: {fileID: 6909130124522701827, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-      propertyPath: MiddleDistanceLerp_Y
-      value: 0.546
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 625918190dd623548bbec7d881acb8af, type: 3}
---- !u!4 &6909130123374469584 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6909130124409574781, guid: 625918190dd623548bbec7d881acb8af, type: 3}
-  m_PrefabInstance: {fileID: 1120777389}
-  m_PrefabAsset: {fileID: 0}
