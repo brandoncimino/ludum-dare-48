@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Code.Runtime
@@ -6,7 +7,9 @@ namespace Code.Runtime
     public class Catchables : MonoBehaviour
     {
 
-        public CharacterJoint myMouth;
+        [CanBeNull] protected CharacterJoint myMouth = null;
+        public Vector3 MouthPosition = new Vector3(0, 0, 0.5f);
+        public Rigidbody catchableRigidbody;
         protected void Start()
         {
             // subscribe to the event manager
@@ -25,7 +28,8 @@ namespace Code.Runtime
         {
             if (newCatch == this)
             {
-                HookUp();
+                FindMyMouth();
+                myMouth.connectedBody = HookBehaviour.Single.FindHook();
                 myPersonalTrigger();
                 
                 // just to show that something is happening
@@ -43,9 +47,30 @@ namespace Code.Runtime
             // subclass dependent trigger
         }
 
-        protected virtual void HookUp()
+        protected virtual void FindMyMouth()
         {
-            myMouth.connectedBody = HookBehaviour.Single.FindHook();
+            if (myMouth != null) return;
+            
+            // create joint
+            gameObject.AddComponent<CharacterJoint>();
+            myMouth = gameObject.GetComponent<CharacterJoint>();
+
+            // configure the settings of the joint
+            myMouth.autoConfigureConnectedAnchor = false;
+            myMouth.anchor = MouthPosition;
+            myMouth.massScale = 1e5f;
+            myMouth.connectedAnchor = Vector3.zero;
+
+            // set angular swing limits
+            var angleLimits = new SoftJointLimit();
+            angleLimits.limit = 45f;
+            myMouth.highTwistLimit = angleLimits;
+            myMouth.lowTwistLimit = angleLimits;
+                
+            // let it dangle down using gravity!
+            catchableRigidbody.useGravity = true;
+            catchableRigidbody.isKinematic = false;
+
         }
     }
 }
