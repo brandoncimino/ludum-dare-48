@@ -5,6 +5,8 @@ namespace Code.Runtime
 {
     public class Catchables : MonoBehaviour
     {
+
+        public CharacterJoint myMouth;
         protected void Start()
         {
             // subscribe to the event manager
@@ -23,10 +25,11 @@ namespace Code.Runtime
         {
             if (newCatch == this)
             {
+                HookUp();
                 myPersonalTrigger();
                 
                 // just to show that something is happening
-                transform.eulerAngles = 90f * Vector3.left;
+                //transform.eulerAngles = 90f * Vector3.left;
             }
         }
 
@@ -38,6 +41,11 @@ namespace Code.Runtime
         protected virtual void myPersonalTrigger()
         {
             // subclass dependent trigger
+        }
+
+        protected virtual void HookUp()
+        {
+            myMouth.connectedBody = HookBehaviour.Single.FindHook();
         }
     }
 }
