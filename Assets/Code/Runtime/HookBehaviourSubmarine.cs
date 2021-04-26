@@ -118,12 +118,12 @@ namespace Code.Runtime {
             // user-induced movement
             _directionPush     =  (transform.rotation * _directionOriginal);
             PushModifier       =  1f - 0.3f * Mathf.Abs(RawMovement.x) + RawMovement.z;
-            transform.position += (PushModifier * _pushSpeed * Time.deltaTime) * _directionPush;
+            // transform.position += (PushModifier * _pushSpeed * Time.deltaTime) * _directionPush;
 
             // pull: falling downward based on pressure and gravity
             _depth               = Mathf.Abs(transform.localPosition.y - _depthInitial);
             _velocityPull.y      = WaterManager.Single.computePull(_depth, MaxDepth);
-            MyRigidbody.velocity = PullModifier * _velocityPull;
+            MyRigidbody.velocity = PullModifier * _velocityPull + (PushModifier * _pushSpeed) * _directionPush;
         }
 
         #region catch
