@@ -8,6 +8,7 @@ public class FishBehaviour : Catchables {
     public Collider myInnerCollider;
 
     protected float speed = 5;
+
     //protected Vector3 direction = Vector3.forward;
 
     protected bool isUncomfortable = false;
@@ -28,7 +29,9 @@ public class FishBehaviour : Catchables {
     }
 
     // Update is called once per frame
-    void Update() {
+    protected void Update()
+    {
+        
         // change direction if feeling uncomfortable
         if (isUncomfortable) {
             // always avoid in the right direction
@@ -55,7 +58,7 @@ public class FishBehaviour : Catchables {
     }
 
 
-    private void changeDirectionAtRandom() {
+    protected void changeDirectionAtRandom() {
         // count down until you change directions again
         timeTillChange -= Time.deltaTime;
         if (!(timeTillChange < 0)) return;
@@ -71,7 +74,7 @@ public class FishBehaviour : Catchables {
         AngleChange    = Random.Range(-90f,              90f);
     }
 
-    private void changeDirectionToHorizonntal() {
+    protected void changeDirectionToHorizonntal() {
         var horizontalRotation = new Quaternion();
         horizontalRotation.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
         transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, 20 * Time.deltaTime);

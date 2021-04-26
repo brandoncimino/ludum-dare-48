@@ -131,6 +131,11 @@ namespace Code.Runtime {
 
         #region catch
         
+        private void OnTriggerEnter(Collider other) {
+            if (other.GetComponent<Catchables>() != null) {
+                EventManager.Single.TriggerCollisionCatchable(other.GetComponent<Catchables>());
+            }
+        }
 
         private void CollisionFish(FishBehaviour fish) {
             // fish-specific collision stuff
