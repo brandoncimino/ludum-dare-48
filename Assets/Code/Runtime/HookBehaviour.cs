@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 
-using JetBrains.Annotations;
-
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Code.Runtime {
     /// <summary>
@@ -76,22 +73,6 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionFish      -= CollisionFish;
             EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
-        }
-
-        /// <summary>
-        /// Called by the Player Action Component whenever the designated input occurs
-        /// </summary>
-        /// <param name="context">Black Magic. Contains info regarding inputs and axes</param>
-        [UsedImplicitly]
-        public void OnMovement(InputAction.CallbackContext context) {
-            setRawInput(context.ReadValue<Vector2>());
-            Debug.LogWarning($"MOVED: {_movementAxesRawInput}");
-        }
-
-        public void setRawInput(Vector2 vector2) {
-            if (vector2 != Vector2.zero) {
-                _movementAxesRawInput = vector2;
-            }
         }
 
         public Vector3 CalculateLateralAcceleration() {
