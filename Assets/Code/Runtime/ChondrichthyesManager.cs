@@ -10,7 +10,7 @@ public class ChondrichthyesManager : MonoBehaviour
     public GameObject basicFish;
 
     public float minimumTimeBeforeNextFish;
-    public float maxiumumTimeBeforeNextFish;
+    public float maximumTimeBeforeNextFish;
     public float distanceFromCameraCrewToSpawnFish;
     [Range(0, 100)] public float chanceToUseGoblinShark;
 
@@ -31,7 +31,7 @@ public class ChondrichthyesManager : MonoBehaviour
     /// </summary>
     private void GenerateFishTicket()
     {
-        nextFishDelivery = Time.time + Random.Range(minimumTimeBeforeNextFish, maxiumumTimeBeforeNextFish);
+        nextFishDelivery = lastFishTimeStamp + Random.Range(minimumTimeBeforeNextFish, maximumTimeBeforeNextFish);
     }
 
     // Update is called once per frame
@@ -39,6 +39,7 @@ public class ChondrichthyesManager : MonoBehaviour
     {
         if (Time.time >= nextFishDelivery)
         {
+            lastFishTimeStamp = Time.time;
             GenerateFishTicket();
             SpawnFish();
         }
