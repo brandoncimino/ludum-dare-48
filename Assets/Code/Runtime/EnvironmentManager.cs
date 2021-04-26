@@ -18,6 +18,7 @@ public class EnvironmentManager : MonoBehaviour
     public GameObject tubeWeed;
     public GameObject acornBarnacle;
     public GameObject coral;
+    public GameObject wall;
 
     [Range(0,100)]
     public int terrainWallDensityPercentage;
@@ -30,6 +31,8 @@ public class EnvironmentManager : MonoBehaviour
     [Range(0,1)]
     public float terrainWallRockSizeRandomizationPercentage;
 
+    [Range(0, 10)] public float scalingFactor = 10f;
+
     public int numberOfRocksPerRing;
 
     private Transform environmentHolder;
@@ -39,6 +42,9 @@ public class EnvironmentManager : MonoBehaviour
     {
         environmentHolder = new GameObject(nameof(environmentHolder)).transform;
         InstantiateTerrain();
+        
+        // scale up so we can move around
+        environmentHolder.localScale = scalingFactor * Vector3.one;
     }
 
     private void InstantiateTerrain()
@@ -54,6 +60,8 @@ public class EnvironmentManager : MonoBehaviour
         //InstantiateTerrainVerticalWall(new Vector3(courseWidth / 2, 0, courseHeight / 2 * -1), courseHeight);
         
         InstantiateRockTube();
+        
+        
     }
 
     private void InstantiateRockTube()

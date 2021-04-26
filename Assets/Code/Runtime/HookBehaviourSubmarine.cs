@@ -136,7 +136,8 @@ namespace Code.Runtime
 
         private void CollisionCatchable(Catchables newCatch) {
             // general reaction to having caught a catchable: Yay!
-            if (myCatches.Count == 0) {
+            if (myCatches.Count == 0)
+            {
                 EventManager.Single.TriggerFirstCatch();
             }
 
