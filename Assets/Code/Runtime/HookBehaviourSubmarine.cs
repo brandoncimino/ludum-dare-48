@@ -12,7 +12,6 @@ namespace Code.Runtime
         #region public
         public static HookBehaviourSubmarine Single;
         public        Rigidbody     MyRigidbody;
-        public        Rigidbody     MouthCollector;
         #endregion
         
         #region depth-related variables
@@ -47,13 +46,15 @@ namespace Code.Runtime
         #endregion
 
         #region stabilization related variables
-
         private float _stabilizationSpeed = 10f;
-        
-
         #endregion
+
+        
         
         #region catch-related variables
+
+        public List<Rigidbody> MouthCollection;
+        public        Rigidbody     MouthCollector;
         public List<Catchables> myCatches = new List<Catchables>() { };
         #endregion
         

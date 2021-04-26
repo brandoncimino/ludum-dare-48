@@ -23,7 +23,7 @@ public class EventManager : MonoBehaviour
 
     public void TriggerFirstCatch()
     {
-        ONTriggerFirstCatch();
+        ONTriggerFirstCatch?.Invoke();
     }
     
     public event Action <DebrisBehaviour> ONTriggerCollisionDebris;

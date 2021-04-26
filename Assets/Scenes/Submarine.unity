@@ -208,6 +208,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3021700474712694475, guid: 81c09af1ce3294cac8ee8e7c553b780c, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021700474712694475, guid: 81c09af1ce3294cac8ee8e7c553b780c, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021700474712694475, guid: 81c09af1ce3294cac8ee8e7c553b780c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3021700474712694475, guid: 81c09af1ce3294cac8ee8e7c553b780c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 6199402711513392810, guid: 81c09af1ce3294cac8ee8e7c553b780c, type: 3}
       propertyPath: m_Name
       value: Submarine
@@ -265,6 +281,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
+      propertyPath: isSubmarine
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
+      propertyPath: MouthPosition.z
+      value: 0.8
+      objectReference: {fileID: 0}
     - target: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
       propertyPath: catchableRigidbody
       value: 
