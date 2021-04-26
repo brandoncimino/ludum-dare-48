@@ -23,7 +23,7 @@ namespace Code.Runtime
         
         #region pull-related variables
         private       Vector3 _velocityPull  = new Vector3(0, 0, 0);
-        private const float   PullModifier   = 1e-6f;
+        private const float   PullModifier   = 1e-3f;
         #endregion
         
         #region input-related variables
@@ -83,23 +83,32 @@ namespace Code.Runtime
         {
 
             RawMovement = myControlEngine._rawInputMovement;
-            
-            // stabilization
             var horizontalRotation = new Quaternion();
-            horizontalRotation.eulerAngles = new Vector3(-30, transform.rotation.eulerAngles.y, 0);
-            transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _stabilizationSpeed * Time.deltaTime);
             
-            // push: acceleration and deceleration in front-back direction
-            horizontalRotation.eulerAngles = new Vector3(-30 + RawMovement.z * _pushAngleMax, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
-            transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _pushAngleSpeed * Time.deltaTime);
+            if (RawMovement.magnitude < 0.5f)
+            {
+                // stabilization
+                horizontalRotation.eulerAngles = new Vector3(-60, transform.rotation.eulerAngles.y, 0);
+                transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _stabilizationSpeed * Time.deltaTime);
+            }
+            else
+            {
+                // combined movement
+                horizontalRotation.eulerAngles = new Vector3(-60 + RawMovement.z * _pushAngleMax, transform.rotation.eulerAngles.y, 0 + RawMovement.x * _lateralAngleMax);
+                transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _pushAngleSpeed * Time.deltaTime);
+                
+                // push: acceleration and deceleration in front-back direction
+                //horizontalRotation.eulerAngles = new Vector3(-60 + RawMovement.z * _pushAngleMax, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+                //transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _pushAngleSpeed * Time.deltaTime);
             
-            // lateral movement
-            horizontalRotation.eulerAngles = new Vector3(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0 + RawMovement.x * _lateralAngleMax);
-            transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _lateralAngleSpeed * Time.deltaTime);
+                // lateral movement
+                //horizontalRotation.eulerAngles = new Vector3(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0 + RawMovement.x * _lateralAngleMax);
+                //transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, _lateralAngleSpeed * Time.deltaTime);
+            }
             
             // user-induced movement
             _directionPush = (transform.rotation * _directionOriginal);
-            PushModifier = 1 + Mathf.Abs(RawMovement.x) + RawMovement.z;
+            PushModifier = 1f - 0.3f*Mathf.Abs(RawMovement.x) + RawMovement.z;
             transform.position += (PushModifier * _pushSpeed * Time.deltaTime) * _directionPush;
             
             // pull: falling downward based on pressure and gravity
