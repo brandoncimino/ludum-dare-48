@@ -752,85 +752,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 45029038, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 45029038, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_Constraints
-      value: 112
+    - target: {fileID: 45029039, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: MaxLateralSpeed
+      value: 99
       objectReference: {fileID: 0}
     - target: {fileID: 45029039, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1604464410372779526, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1604464410372779526, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269548549936086116, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269548549936086116, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269548549936086116, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269548549936086116, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2269548549936086116, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682274486884840294, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_MassScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682274486884840294, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_ConnectedAnchor.x
-      value: 0.44936597
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682274486884840294, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_ConnectedAnchor.z
-      value: -0.286988
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682274486884840294, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_Swing2Limit.limit
-      value: 55.676155
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682274486884840294, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_HighTwistLimit.limit
-      value: 110.04215
-      objectReference: {fileID: 0}
-    - target: {fileID: 2682274486884840294, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_AutoConfigureConnectedAnchor
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2741265853641161154, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_EnableCollision
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2741265853641161154, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_ConnectedMassScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8839014097246437340, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_Mass
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8839014097246437340, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_UseGravity
-      value: 0
+      propertyPath: LateralAccelerationFactor
+      value: 99
       objectReference: {fileID: 0}
     - target: {fileID: 9216492914830173560, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
       propertyPath: m_RootOrder
@@ -876,15 +804,32 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9216492914830173561, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9216492914830173562, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: m_NotificationBehavior
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9216492914830173562, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 45029039, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+    - target: {fileID: 9216492914830173562, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnMovement
+      objectReference: {fileID: 0}
+    - target: {fileID: 9216492914830173562, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+      propertyPath: m_ActionEvents.Array.data[0].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Code.Runtime.HookBehaviour, Code.Runtime
+      objectReference: {fileID: 0}
     - target: {fileID: 9216492914830173564, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
       propertyPath: m_Name
       value: Hook
       objectReference: {fileID: 0}
-    - target: {fileID: 9216492914830173565, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9216492914830173561, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
 --- !u!1 &6909130122571171657
 GameObject:

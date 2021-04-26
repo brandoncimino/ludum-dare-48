@@ -1,8 +1,17 @@
 using System.Collections.Generic;
 
+using JetBrains.Annotations;
+
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Code.Runtime {
+    /// <summary>
+    /// <b>NOTE:</b> There is a <a href="https://forum.unity.com/threads/control-start-index-out-of-range-on-composite-error-on-diagonal-inputs.1004230/">known bug</a>
+    /// that causes a "Control index out of range on composite" error whenever you press two keys at once.
+    ///
+    /// Holy fuck how did they not catch that.
+    /// </summary>
     public class HookBehaviour : MonoBehaviour {
         public        float         test = 0f;
         public static HookBehaviour Single;
@@ -24,6 +33,27 @@ namespace Code.Runtime {
         public  float      StabilizerSmoothness;
 
         public List<Catchables> myCatches;
+
+        public Vector2 _movementAxesRawInput;
+
+        public float MaxLateralSpeed;
+        public float LateralAccelerationFactor;
+
+        public Vector2 LateralVelocity {
+            get {
+                var vel = MyRigidbody.velocity;
+                return new Vector2(vel.x, vel.z);
+            }
+            set => MyRigidbody.velocity = new Vector3(value.x, MyRigidbody.velocity.y, value.y);
+        }
+
+        public float VerticalVelocity {
+            get => MyRigidbody.velocity.y;
+            set {
+                Vector3 velocity;
+                velocity = new Vector3((velocity = MyRigidbody.velocity).x, value, velocity.z);
+            }
+        }
 
         private void Awake() {
             Single = this;
@@ -48,6 +78,28 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
         }
 
+        /// <summary>
+        /// Called by the Player Action Component whenever the designated input occurs
+        /// </summary>
+        /// <param name="context">Black Magic. Contains info regarding inputs and axes</param>
+        [UsedImplicitly]
+        public void OnMovement(InputAction.CallbackContext context) {
+            setRawInput(context.ReadValue<Vector2>());
+            Debug.LogWarning($"MOVED: {_movementAxesRawInput}");
+        }
+
+        public void setRawInput(Vector2 vector2) {
+            if (vector2 != Vector2.zero) {
+                _movementAxesRawInput = vector2;
+            }
+        }
+
+        public Vector3 CalculateLateralAcceleration() {
+            Debug.Log($"Calculating lateral acceleration based on movement axes: {_movementAxesRawInput}");
+            var targetVelocity = _movementAxesRawInput.normalized * MaxLateralSpeed;
+            return Vector2.Lerp(LateralVelocity, targetVelocity, Time.deltaTime * LateralAccelerationFactor);
+        }
+
 
         // Update is called once per frame
         void Update() {
@@ -55,12 +107,10 @@ namespace Code.Runtime {
             _depth          = Mathf.Abs(transform.localPosition.y - _depthInitial);
             _velocityPull.y = WaterManager.Single.computePull(_depth, MaxDepth);
 
-            // user induced movement
-            // TODO: David, he knows how the input system works
-
             // movement in total (additive as an approximation)
             var moveVector = (PullModifier * _velocityPull + PushModifier * _velocityPush);
-            MyRigidbody.velocity = moveVector;
+            moveVector           += CalculateLateralAcceleration();
+            MyRigidbody.velocity =  moveVector;
         }
 
         private void OnTriggerEnter(Collider other) {
