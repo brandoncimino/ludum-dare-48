@@ -1,5 +1,5 @@
 using System;
-
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,10 +9,13 @@ namespace Code.Runtime {
         public PlayerInput playerInput;
 
         public  float   movementSmoothing;
-        private Vector3 _rawInputMovement;
+        public Vector3 _rawInputMovement;
         private Vector3 _smoothInputMovement;
 
         private Rigidbody _myRigidbody;
+
+        public bool isSubmarine = false;
+        [CanBeNull] public HookBehaviourSubmarine Submarine;
 
         private void Start() {
             _myRigidbody = GetComponent<Rigidbody>();
@@ -28,7 +31,10 @@ namespace Code.Runtime {
             _rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
         }
 
-        private void FixedUpdate() {
+        private void FixedUpdate()
+        {
+            if (isSubmarine) return;
+            
             CalculateMovementInputSmoothing();
             UpdatePlayerMovement();
         }
