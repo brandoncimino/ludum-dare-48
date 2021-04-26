@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public class HookDolly : MonoBehaviour {
+    // star fox aquas submarine is ~ 120 / 620 pixels == 12/62 == 6/31 ~ 3/15 ~ 1/5
     private Vector3 RelativePosition;
 
     public Transform Hook;
