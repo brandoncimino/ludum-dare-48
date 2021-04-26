@@ -1,11 +1,11 @@
 using Code.Runtime;
+
 using TMPro;
 
 using UnityEngine;
 
 public class FishBehaviour : Catchables {
-    public Collider  myInnerCollider;
-    public Rigidbody myRigidbody;
+    public Collider myInnerCollider;
 
     protected float speed = 5;
     //protected Vector3 direction = Vector3.forward;
@@ -23,8 +23,7 @@ public class FishBehaviour : Catchables {
 
     public TMP_Text thoughts;
 
-    protected override void myStartBehaviour()
-    {
+    protected override void myStartBehaviour() {
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
     }
 
@@ -42,7 +41,7 @@ public class FishBehaviour : Catchables {
         }
 
         // move forward
-        myRigidbody.velocity = speed * transform.forward;
+        catchableRigidbody.velocity = speed * transform.forward;
     }
 
     public void Scare() {
@@ -57,11 +56,10 @@ public class FishBehaviour : Catchables {
 
 
     private void changeDirectionAtRandom() {
-        
         // count down until you change directions again
         timeTillChange -= Time.deltaTime;
         if (!(timeTillChange < 0)) return;
-        
+
         // rotate to your heart's desire
         timeForChange -= Time.deltaTime;
         transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
@@ -73,16 +71,13 @@ public class FishBehaviour : Catchables {
         AngleChange    = Random.Range(-90f,              90f);
     }
 
-    private void changeDirectionToHorizonntal()
-    {
+    private void changeDirectionToHorizonntal() {
         var horizontalRotation = new Quaternion();
         horizontalRotation.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, horizontalRotation, 20 * Time.deltaTime);
-        
+        transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, 20 * Time.deltaTime);
     }
 
-    protected override void myPersonalTrigger()
-    {
+    protected override void myPersonalTrigger() {
         EventManager.Single.TriggerCollisionFish(this);
     }
 }
