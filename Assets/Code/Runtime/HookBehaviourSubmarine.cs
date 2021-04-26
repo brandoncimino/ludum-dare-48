@@ -124,15 +124,11 @@ namespace Code.Runtime {
             _depth               = Mathf.Abs(transform.localPosition.y - _depthInitial);
             _velocityPull.y      = WaterManager.Single.computePull(_depth, MaxDepth);
             MyRigidbody.velocity = PullModifier * _velocityPull + (PushModifier * _pushSpeed) * _directionPush;
+            
         }
 
         #region catch
-
-        private void OnTriggerEnter(Collider other) {
-            if (other.GetComponent<Catchables>() != null) {
-                EventManager.Single.TriggerCollisionCatchable(other.GetComponent<Catchables>());
-            }
-        }
+        
 
         private void CollisionFish(FishBehaviour fish) {
             // fish-specific collision stuff
