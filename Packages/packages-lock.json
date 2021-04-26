@@ -8,7 +8,7 @@
         "com.unity.nuget.newtonsoft-json": "2.0.0",
         "com.unity.textmeshpro": "3.0.5"
       },
-      "hash": "38362dd8d12746f24e0049f90d04811236fad686"
+      "hash": "7e022481100d5017c2a719b17ab65ddcff4076d2"
     },
     "com.unity.collab-proxy": {
       "version": "1.3.9",
@@ -22,6 +22,16 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.formats.alembic": {
+      "version": "2.1.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.timeline": "1.0.0",
+        "com.unity.modules.cloth": "1.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.Runtime;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -18,11 +19,24 @@ public class EventManager : MonoBehaviour
         ONTriggerCollisionFish?.Invoke(fish);
     }
 
-    public event Action ONTriggerFirstFishCaught;
+    public event Action ONTriggerFirstCatch;
 
-    public void TriggerFirstFishCaught()
+    public void TriggerFirstCatch()
     {
-        ONTriggerFirstFishCaught();
+        ONTriggerFirstCatch();
+    }
+    
+    public event Action <DebrisBehaviour> ONTriggerCollisionDebris;
+    public void TriggerCollisionDebris(DebrisBehaviour debris)
+    {
+        ONTriggerCollisionDebris?.Invoke(debris);
+    }
+    
+    
+    public event Action <Catchables> ONTriggerCollisionCatchable;
+    public void TriggerCollisionCatchable(Catchables newCatch)
+    {
+        ONTriggerCollisionCatchable?.Invoke(newCatch);
     }
 
 }
