@@ -34,16 +34,13 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionCatchable -= GotCaught;
         }
 
-        protected void GotCaught(Catchables newCatch) {
+        protected virtual void GotCaught(Catchables newCatch) {
             if (newCatch == this)
             {
                 _gotCaught = true;
                 FindMyMouth();
                 myMouth.connectedBody = isSubmarine? HookBehaviourSubmarine.Single.FindHook() : HookBehaviour.Single.FindHook();
                 myPersonalTrigger();
-
-                // just to show that something is happening
-                //transform.eulerAngles = 90f * Vector3.left;
             }
         }
 

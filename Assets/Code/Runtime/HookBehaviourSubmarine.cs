@@ -83,13 +83,15 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionFish      += CollisionFish;
             EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable += CollisionCatchable;
+            EventManager.Single.ONTriggerCollisionShark += getEaten;
         }
 
         private void OnDestroy() {
             // cancel all substrictions to the event manager
             EventManager.Single.ONTriggerCollisionFish      -= CollisionFish;
-            EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
+            EventManager.Single.ONTriggerCollisionDebris    -= CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
+            EventManager.Single.ONTriggerCollisionShark -= getEaten;
         }
 
         // Update is called once per frame
@@ -156,5 +158,10 @@ namespace Code.Runtime {
         #region movement calculations
 
         #endregion
+        
+        private void getEaten()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

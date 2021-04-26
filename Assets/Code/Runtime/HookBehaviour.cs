@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using UnityEditor.UI;
 using UnityEngine;
 
 namespace Code.Runtime {
@@ -65,13 +65,15 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionFish      += CollisionFish;
             EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable += CollisionCatchable;
+            EventManager.Single.ONTriggerCollisionShark += getEaten;
         }
 
         private void OnDestroy() {
             // cancel all substrictions to the event manager
             EventManager.Single.ONTriggerCollisionFish      -= CollisionFish;
-            EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
+            EventManager.Single.ONTriggerCollisionDebris    -= CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
+            EventManager.Single.ONTriggerCollisionShark -= getEaten;
         }
 
         // Update is called once per frame
@@ -124,6 +126,12 @@ namespace Code.Runtime {
             );
 
             transform.rotation = Quaternion.Slerp(transform.rotation, _rotationInitial, Time.deltaTime * StabilizerSmoothness);
+        }
+
+        private void getEaten()
+        {
+            test = 4;
+            gameObject.SetActive(false);
         }
     }
 }
