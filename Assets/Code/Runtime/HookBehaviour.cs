@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 
-using JetBrains.Annotations;
-
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Code.Runtime {
     /// <summary>
@@ -18,23 +15,22 @@ namespace Code.Runtime {
         public        Rigidbody     MyRigidbody;
         public        Rigidbody     MouthCollector;
 
-        private float _depth;
+        private float _depth => Mathf.Abs(transform.localPosition.y - _depthInitial);
         private float _pressure;
         private float _depthInitial;
 
-        private       Vector3 _velocityPull  = new Vector3(0, 0, 0);
-        private       Vector3 _velocityPush  = new Vector3(0, 0, 0);
-        private       Vector3 _directionPush = new Vector3(0, 0, 0);
-        private const float   PullModifier   = 0.001f;
-        private const float   PushModifier   = 0.001f;
-        private const float   MaxDepth       = 1000f;
+        private       float _velocityPull = 0;
+        private       float _velocityPush = 0;
+        private const float PullModifier  = 0.001f;
+        private const float PushModifier  = 0.001f;
+        private const float MaxDepth      = 1000f;
 
         private Quaternion _rotationInitial;
         public  float      StabilizerSmoothness;
 
         public List<Catchables> myCatches;
 
-        public Vector2 _movementAxesRawInput;
+        public Vector2 _movementAxesRawInput => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         public float MaxLateralSpeed;
         public float LateralAccelerationFactor;
@@ -47,11 +43,11 @@ namespace Code.Runtime {
             set => MyRigidbody.velocity = new Vector3(value.x, MyRigidbody.velocity.y, value.y);
         }
 
-        public float VerticalVelocity {
+        public float SinkVelocity {
             get => MyRigidbody.velocity.y;
             set {
                 Vector3 velocity;
-                velocity = new Vector3((velocity = MyRigidbody.velocity).x, value, velocity.z);
+                MyRigidbody.velocity = new Vector3((velocity = MyRigidbody.velocity).x, value, velocity.z);
             }
         }
 
@@ -78,39 +74,15 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
         }
 
-        /// <summary>
-        /// Called by the Player Action Component whenever the designated input occurs
-        /// </summary>
-        /// <param name="context">Black Magic. Contains info regarding inputs and axes</param>
-        [UsedImplicitly]
-        public void OnMovement(InputAction.CallbackContext context) {
-            setRawInput(context.ReadValue<Vector2>());
-            Debug.LogWarning($"MOVED: {_movementAxesRawInput}");
-        }
-
-        public void setRawInput(Vector2 vector2) {
-            if (vector2 != Vector2.zero) {
-                _movementAxesRawInput = vector2;
-            }
-        }
-
-        public Vector3 CalculateLateralAcceleration() {
-            Debug.Log($"Calculating lateral acceleration based on movement axes: {_movementAxesRawInput}");
-            var targetVelocity = _movementAxesRawInput.normalized * MaxLateralSpeed;
-            return Vector2.Lerp(LateralVelocity, targetVelocity, Time.deltaTime * LateralAccelerationFactor);
-        }
-
-
         // Update is called once per frame
         void Update() {
             // falling down based on pressure and gravity
-            _depth          = Mathf.Abs(transform.localPosition.y - _depthInitial);
-            _velocityPull.y = WaterManager.Single.computePull(_depth, MaxDepth);
+            _velocityPull = WaterManager.Single.computePull(_depth, MaxDepth);
 
             // movement in total (additive as an approximation)
-            var moveVector = (PullModifier * _velocityPull + PushModifier * _velocityPush);
-            moveVector           += CalculateLateralAcceleration();
-            MyRigidbody.velocity =  moveVector;
+            SinkVelocity = (PullModifier * _velocityPull) + (PushModifier * _velocityPush);
+            var targetVelocity = _movementAxesRawInput.normalized * MaxLateralSpeed;
+            LateralVelocity = Vector2.Lerp(LateralVelocity, targetVelocity, Time.deltaTime * LateralAccelerationFactor);
         }
 
         private void OnTriggerEnter(Collider other) {

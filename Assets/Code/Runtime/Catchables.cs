@@ -3,22 +3,29 @@ using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Code.Runtime {
-    [RequireComponent(typeof(Rigidbody))]
-    public class Catchables : MonoBehaviour {
+    //[RequireComponent(typeof(Rigidbody))]
+    public class Catchables : MonoBehaviour
+    {
+
+        protected bool _gotCaught = false;
+        public bool isSubmarine = false;
+        
         [CanBeNull]
         protected CharacterJoint myMouth = null;
         public Vector3   MouthPosition = new Vector3(0, 0, 0.5f);
         public Rigidbody catchableRigidbody;
 
         protected void Start() {
+            
+            // find your Rigidbody
             if (catchableRigidbody == null) {
                 catchableRigidbody = GetComponent<Rigidbody>();
             }
 
             // subscribe to the event manager
-
             EventManager.Single.ONTriggerCollisionCatchable += GotCaught;
 
+            // individual behaviour depending on subclass
             myStartBehaviour();
         }
 
@@ -28,9 +35,11 @@ namespace Code.Runtime {
         }
 
         protected void GotCaught(Catchables newCatch) {
-            if (newCatch == this) {
+            if (newCatch == this)
+            {
+                _gotCaught = true;
                 FindMyMouth();
-                myMouth.connectedBody = HookBehaviour.Single.FindHook();
+                myMouth.connectedBody = isSubmarine? HookBehaviourSubmarine.Single.FindHook() : HookBehaviour.Single.FindHook();
                 myPersonalTrigger();
 
                 // just to show that something is happening
@@ -39,7 +48,7 @@ namespace Code.Runtime {
         }
 
         protected virtual void myStartBehaviour() {
-            // nothing has to happen
+            // individual Start routines of the subclasses
         }
 
         protected virtual void myPersonalTrigger() {
