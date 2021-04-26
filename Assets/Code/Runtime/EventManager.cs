@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Code.Runtime;
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class EventManager : MonoBehaviour
@@ -18,9 +19,14 @@ public class EventManager : MonoBehaviour
     {
         ONTriggerCollisionFish?.Invoke(fish);
     }
+    
+    public event Action ONTriggerCollisionShark;
+    public void TriggerCollisionShark()
+    {
+        ONTriggerCollisionShark?.Invoke();
+    }
 
     public event Action ONTriggerGameOver;
-
     public void TriggerGameOver()
     {
         ONTriggerGameOver?.Invoke();

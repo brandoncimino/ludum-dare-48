@@ -13,12 +13,14 @@ namespace Code.Runtime {
         void Start() {
             // subscribe to the event manager
             EventManager.Single.ONTriggerFirstCatch += DecideGameOver;
+            EventManager.Single.ONTriggerCollisionShark += DecideGameOver;
             // in the min. version the game is over on the first catch
         }
 
         protected void OnDestroy() {
             // unsubscribe from the event manager
             EventManager.Single.ONTriggerFirstCatch -= DecideGameOver;
+            EventManager.Single.ONTriggerCollisionShark += DecideGameOver;
         }
 
         // Update is called once per frame

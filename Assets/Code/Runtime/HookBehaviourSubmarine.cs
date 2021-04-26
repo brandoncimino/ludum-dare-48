@@ -83,13 +83,15 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionFish      += CollisionFish;
             EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable += CollisionCatchable;
+            EventManager.Single.ONTriggerCollisionShark += getEaten;
         }
 
         private void OnDestroy() {
             // cancel all substrictions to the event manager
             EventManager.Single.ONTriggerCollisionFish      -= CollisionFish;
-            EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
+            EventManager.Single.ONTriggerCollisionDebris    -= CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
+            EventManager.Single.ONTriggerCollisionShark -= getEaten;
         }
 
         // Update is called once per frame
@@ -124,10 +126,11 @@ namespace Code.Runtime {
             _depth               = Mathf.Abs(transform.localPosition.y - _depthInitial);
             _velocityPull.y      = WaterManager.Single.computePull(_depth, MaxDepth);
             MyRigidbody.velocity = PullModifier * _velocityPull + (PushModifier * _pushSpeed) * _directionPush;
+            
         }
 
         #region catch
-
+        
         private void OnTriggerEnter(Collider other) {
             if (other.GetComponent<Catchables>() != null) {
                 EventManager.Single.TriggerCollisionCatchable(other.GetComponent<Catchables>());
@@ -160,5 +163,10 @@ namespace Code.Runtime {
         #region movement calculations
 
         #endregion
+        
+        private void getEaten()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
