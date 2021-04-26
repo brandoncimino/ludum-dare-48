@@ -13,12 +13,12 @@ namespace Code.Runtime {
         private float _pressure;
         private float _depthInitial;
 
-        private Vector3 _velocityPull  = new Vector3(0, 0, 0);
-        private Vector3 _velocityPush  = new Vector3(0, 0, 0);
-        private Vector3 _directionPush = new Vector3(0, 0, 0);
-        private float   _pullModifier  = 0.001f;
-        private float   _pushModifier  = 0.001f;
-        private float   _maxDepth      = 1000f;
+        private       Vector3 _velocityPull  = new Vector3(0, 0, 0);
+        private       Vector3 _velocityPush  = new Vector3(0, 0, 0);
+        private       Vector3 _directionPush = new Vector3(0, 0, 0);
+        private const float   PullModifier   = 0.001f;
+        private const float   PushModifier   = 0.001f;
+        private const float   MaxDepth       = 1000f;
 
         private Quaternion _rotationInitial;
         public  float      StabilizerSmoothness;
@@ -53,13 +53,13 @@ namespace Code.Runtime {
         void Update() {
             // falling down based on pressure and gravity
             _depth          = Mathf.Abs(transform.localPosition.y - _depthInitial);
-            _velocityPull.y = WaterManager.Single.computePull(_depth, _maxDepth);
+            _velocityPull.y = WaterManager.Single.computePull(_depth, MaxDepth);
 
             // user induced movement
             // TODO: David, he knows how the input system works
 
             // movement in total (additive as an approximation)
-            var moveVector = (_pullModifier * _velocityPull + _pushModifier * _velocityPush);
+            var moveVector = (PullModifier * _velocityPull + PushModifier * _velocityPush);
             MyRigidbody.velocity = moveVector;
         }
 
