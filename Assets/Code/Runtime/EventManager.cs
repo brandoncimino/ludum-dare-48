@@ -19,8 +19,14 @@ public class EventManager : MonoBehaviour
         ONTriggerCollisionFish?.Invoke(fish);
     }
 
-    public event Action ONTriggerFirstCatch;
+    public event Action ONTriggerGameOver;
 
+    public void TriggerGameOver()
+    {
+        ONTriggerGameOver?.Invoke();
+    }
+    
+    public event Action ONTriggerFirstCatch;
     public void TriggerFirstCatch()
     {
         ONTriggerFirstCatch?.Invoke();

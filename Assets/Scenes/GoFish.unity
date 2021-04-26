@@ -197,7 +197,7 @@ Transform:
   m_GameObject: {fileID: 789555254}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 1136631482}
   m_RootOrder: 4
@@ -225,11 +225,13 @@ MonoBehaviour:
   tubeWeed: {fileID: 4764485492113216707, guid: 6bd441768211eb748a40af306cfe52bd, type: 3}
   acornBarnacle: {fileID: 5649459969420086943, guid: f231cd17f6e323d488453d0905487b6a, type: 3}
   coral: {fileID: 2610173412515071, guid: 487b4e5333119f6489f47a2d6343fa5a, type: 3}
+  wall: {fileID: 0}
   terrainWallDensityPercentage: 60
   terrainWallUseLargeRockPercentage: 20
   terrainWallPositionRandomizationPercentage: 0.1
   terrainWallBaseSpaceBetweenRocks: 1.5
   terrainWallRockSizeRandomizationPercentage: 0.104
+  scalingFactor: 10
   numberOfRocksPerRing: 30
 --- !u!1 &1136631481
 GameObject:
@@ -290,11 +292,13 @@ MonoBehaviour:
   tubeWeed: {fileID: 0}
   acornBarnacle: {fileID: 0}
   coral: {fileID: 0}
+  wall: {fileID: 0}
   terrainWallDensityPercentage: 0
   terrainWallUseLargeRockPercentage: 0
   terrainWallPositionRandomizationPercentage: 0
   terrainWallBaseSpaceBetweenRocks: 0
   terrainWallRockSizeRandomizationPercentage: 0
+  scalingFactor: 10
   numberOfRocksPerRing: 0
 --- !u!1 &1205367076
 GameObject:
