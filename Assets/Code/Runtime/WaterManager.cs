@@ -32,8 +32,10 @@ public class WaterManager : MonoBehaviour
         // in water, pressure changes by 1 bar per 10 m
         // = 10000 Pa m^{-2}
         // = 10000 N m^{-3}
-        //  10000 km s^{-2} m^{-2}
-        return 1e4f * depth + pressureSurface;
+        // = 10000 km s^{-2} m^{-2}
+        var pressure = 1e4f * depth + pressureSurface;
+        UIManager.Single.provideData("pressure", (Mathf.Round(pressure * 1e-5f)));
+        return pressure;
     }
 
     public float computeVelocityConst(float maxDepth)

@@ -85,6 +85,9 @@ namespace Code.Runtime {
             SinkVelocity = (PullModifier * _velocityPull) + (PushModifier * _velocityPush);
             var targetVelocity = _movementAxesRawInput.normalized * MaxLateralSpeed;
             LateralVelocity = Vector2.Lerp(LateralVelocity, targetVelocity, Time.deltaTime * LateralAccelerationFactor);
+            
+            // update data in the UI
+            UIManager.Single.provideData("depth", (int) (_depth / 0.546807f));
         }
 
         private void OnTriggerEnter(Collider other) {
