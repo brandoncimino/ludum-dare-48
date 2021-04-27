@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/TitlePage.unity
+    guid: 0b8447245a9f3420fae15db5f6ca7af7
+  - enabled: 1
+    path: Assets/Scenes/GoFish.unity
+    guid: 9e3275d8802b34409a9b957f5a7b5f9f
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 944ef7806038a2443a4e54659b63ad21, type: 2}
