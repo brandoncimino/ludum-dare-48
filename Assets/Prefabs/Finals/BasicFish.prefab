@@ -417,9 +417,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isSubmarine: 0
-  MouthPosition: {x: 0, y: 0, z: 0.5}
+  MouthPosition: {x: 0, y: 0, z: 0.9}
   catchableRigidbody: {fileID: 0}
   myInnerCollider: {fileID: 1487583699}
+  isUncomfortable: 0
   thoughts: {fileID: 1194857191}
 --- !u!54 &1487583698
 Rigidbody:

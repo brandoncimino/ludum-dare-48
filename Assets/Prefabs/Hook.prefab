@@ -29,8 +29,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1961041180}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.2, z: 0}
-  m_LocalScale: {x: 1, y: 0.1, z: 0.1}
+  m_LocalPosition: {x: 0.001, y: 0.91, z: -0.81}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children: []
   m_Father: {fileID: 9216492914830173560}
   m_RootOrder: 0
@@ -375,9 +375,8 @@ MonoBehaviour:
   MouthCollector: {fileID: 1961041183}
   StabilizerSmoothness: 0
   myCatches: []
-  _movementAxesRawInput: {x: 0, y: 0}
-  MaxLateralSpeed: 99
-  LateralAccelerationFactor: 99
+  MaxLateralSpeed: 8
+  LateralAccelerationFactor: 10
 --- !u!1001 &1798544960611163023
 PrefabInstance:
   m_ObjectHideFlags: 0
