@@ -4,10 +4,10 @@ namespace Code.Runtime {
     public class GameManager : MonoBehaviour {
         public static GameManager Single;
         public        bool        isGameOver = false;
-        
+
         public int lvl;
-        private float _lvlUpConditionCheckTime = 0;
-        private float _lvlUpConditionCheckInterval = 15f;
+        public float _lvlUpConditionCheckTime = 0;
+        private float _lvlUpConditionCheckInterval = 5f;
         
         private void Awake() {
             Single = this;
@@ -27,7 +27,7 @@ namespace Code.Runtime {
         protected void OnDestroy() {
             // unsubscribe from the event manager
             EventManager.Single.ONTriggerFirstCatch -= DecideGameOverWin;
-            EventManager.Single.ONTriggerCollisionShark += DecideGameOverFail;
+            EventManager.Single.ONTriggerCollisionShark -= DecideGameOverFail;
             EventManager.Single.ONTriggerLevelUp -= LevelUp;
         }
 

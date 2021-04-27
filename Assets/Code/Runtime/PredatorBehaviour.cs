@@ -67,5 +67,11 @@ public class PredatorBehaviour : FishBehaviour
             thoughts.text = "see ya";
         }
     }
+    
+    public override void ScaleUp(float newScale)
+    {
+        myScale = Mathf.Max(newScale, 1f);
+        transform.localScale = myScale * Vector3.one;
+    }
 
 }

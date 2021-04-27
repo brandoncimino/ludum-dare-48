@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.Runtime;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 using Random = UnityEngine.Random;
@@ -8,15 +9,18 @@ using Random = UnityEngine.Random;
 public class ChondrichthyesManager : MonoBehaviour
 {
     public Camera cameraCrew;
-    public GameObject goblinShark;
-    public GameObject basicFish;
+    public Catchables goblinShark;
+    public Catchables basicFish;
 
     public float minimumTimeBeforeNextFish;
     public float maximumTimeBeforeNextFish;
     public float distanceFromCameraCrewToSpawnFish;
     [Range(0, 100)] public float chanceToUseGoblinShark;
 
-    public int gameLevel;
+    private float fishScaleMin = 0.1f;
+    private float fishScaleStep = 0.3f;
+
+    public int gameLevel => GameManager.Single.lvl;
 
     private float lastFishTimeStamp;
     private float nextFishDelivery;
@@ -28,13 +32,11 @@ public class ChondrichthyesManager : MonoBehaviour
         GenerateFishTicket();
         
         // subscribe to the event manager
-        EventManager.Single.ONTriggerLevelUp += IncreaseDifficulty;
     }
 
     private void OnDestroy()
     {
         // unsubscribe to the event manager
-        EventManager.Single.ONTriggerLevelUp -= IncreaseDifficulty;
     }
 
     /// <summary>
@@ -62,20 +64,20 @@ public class ChondrichthyesManager : MonoBehaviour
     private void SpawnFish()
     {
         var ray = cameraCrew.ScreenPointToRay(new Vector3(Random.Range(0, Screen.width), Random.Range(0, Screen.height), 0));
-        Instantiate(RandomFish(), ray.GetPoint(distanceFromCameraCrewToSpawnFish), Random.rotation);
+        var newFish = Instantiate(RandomFish(), ray.GetPoint(distanceFromCameraCrewToSpawnFish), Random.rotation);
+        
+        // fish have a different size as a motivation to go deep
+        newFish.ScaleUp(fishScaleMin + fishScaleStep * (gameLevel + Random.Range(-1f, 1f)));
     }
 
-    private GameObject RandomFish()
+    private Catchables RandomFish()
     {
-        if (gameLevel >= 1 && Random.Range(0, 100) <= chanceToUseGoblinShark)
+        if (Random.Range(0, 100) < chanceToUseGoblinShark * (gameLevel - 1))
         {
             return goblinShark;
         }
         return basicFish;
     }
 
-    private void IncreaseDifficulty(int lvl)
-    {
-        gameLevel = lvl < 0 ? gameLevel + 1 : lvl;
-    }
+    
 }

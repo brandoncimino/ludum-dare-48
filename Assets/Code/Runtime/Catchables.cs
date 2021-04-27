@@ -15,6 +15,8 @@ namespace Code.Runtime {
         public Vector3   MouthPosition = new Vector3(0, 0, 0.5f);
         public Rigidbody catchableRigidbody;
 
+        public float myScale = 1f;
+
         protected void Start() {
             
             // find your Rigidbody
@@ -89,6 +91,12 @@ namespace Code.Runtime {
         public void getEaten()
         {
             gameObject.SetActive(false);
+        }
+
+        public virtual void ScaleUp(float newScale)
+        {
+            myScale = newScale;
+            transform.localScale = myScale * Vector3.one;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Code.Runtime {
         private       float _velocityPush = 0;
         private const float PullModifier  = 0.001f;
         private const float PushModifier  = 0.001f;
-        private const float MaxDepth      = 1000f;
+        private const float MaxDepth      = 200f;
 
         private Quaternion _rotationInitial;
         public  float      StabilizerSmoothness;
@@ -133,7 +133,7 @@ namespace Code.Runtime {
 
         public bool checkLevelUpCondition()
         {
-            return 2* Mathf.Pow(3, GameManager.Single.lvl) *_depth > (Mathf.Pow(3, GameManager.Single.lvl) + 1) * MaxDepth;
+            return Mathf.Pow(3, GameManager.Single.lvl) *_depth > (Mathf.Pow(3, GameManager.Single.lvl) - Mathf.Pow(2, GameManager.Single.lvl)) * MaxDepth;
         }
 
     }
