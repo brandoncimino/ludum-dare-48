@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor.UI;
+
 using UnityEngine;
 
 namespace Code.Runtime {
@@ -65,7 +65,7 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionFish      += CollisionFish;
             EventManager.Single.ONTriggerCollisionDebris    += CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable += CollisionCatchable;
-            EventManager.Single.ONTriggerCollisionShark += getEaten;
+            EventManager.Single.ONTriggerCollisionShark     += getEaten;
         }
 
         private void OnDestroy() {
@@ -73,11 +73,11 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionFish      -= CollisionFish;
             EventManager.Single.ONTriggerCollisionDebris    -= CollisionDebris;
             EventManager.Single.ONTriggerCollisionCatchable -= CollisionCatchable;
-            EventManager.Single.ONTriggerCollisionShark -= getEaten;
+            EventManager.Single.ONTriggerCollisionShark     -= getEaten;
         }
 
         // Update is called once per frame
-        void Update() {
+        private void Update() {
             // falling down based on pressure and gravity
             _velocityPull = WaterManager.Single.computePull(_depth, MaxDepth);
 
@@ -128,16 +128,13 @@ namespace Code.Runtime {
             transform.rotation = Quaternion.Slerp(transform.rotation, _rotationInitial, Time.deltaTime * StabilizerSmoothness);
         }
 
-        public void getEaten()
-        {
+        public void getEaten() {
             gameObject.SetActive(false);
         }
-        
-        protected void HaveIBeenEaten(Vector3 sharkPosition)
-        {
+
+        protected void HaveIBeenEaten(Vector3 sharkPosition) {
             var distance = sharkPosition - transform.position;
-            if (distance.magnitude < 1e-2)
-            {
+            if (distance.magnitude < 1e-2) {
                 gameObject.SetActive(false);
                 EventManager.Single.TriggerGameOver();
             }
