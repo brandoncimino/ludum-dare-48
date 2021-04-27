@@ -29,6 +29,7 @@ namespace Code.Runtime {
         public  float      StabilizerSmoothness;
 
         public List<Catchables> myCatches;
+        private bool caughtFish = false;
 
         public Vector2 _movementAxesRawInput => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
@@ -99,6 +100,7 @@ namespace Code.Runtime {
         }
 
         private void CollisionFish(FishBehaviour fish) {
+            if (!caughtFish) EventManager.Single.TriggerFirstCatch();
             // fish-specific collision stuff
         }
 
@@ -107,12 +109,6 @@ namespace Code.Runtime {
         }
 
         private void CollisionCatchable(Catchables newCatch) {
-            test = 3;
-            // general reaction to having caught a catchable: Yay!
-            if (myCatches.Count == 0) {
-                EventManager.Single.TriggerFirstCatch();
-            }
-
             myCatches.Add(newCatch);
         }
 
@@ -135,12 +131,10 @@ namespace Code.Runtime {
             gameObject.SetActive(false);
         }
 
-        protected void HaveIBeenEaten(Vector3 sharkPosition) {
-            var distance = sharkPosition - transform.position;
-            if (distance.magnitude < 1e-2) {
-                gameObject.SetActive(false);
-                EventManager.Single.TriggerGameOver();
-            }
+        public bool checkLevelUpCondition()
+        {
+            return 2* Mathf.Pow(3, GameManager.Single.lvl) *_depth > (Mathf.Pow(3, GameManager.Single.lvl) + 1) * MaxDepth;
         }
+
     }
 }

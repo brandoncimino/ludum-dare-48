@@ -15,13 +15,13 @@ public class BigBite : MonoBehaviour
         if (other.GetComponent<HookBehaviour>() != null)
         {
             other.GetComponent<HookBehaviour>().getEaten();
-            EventManager.Single.TriggerGameOver();
+            EventManager.Single.TriggerGameOverFail();
         }
         
         if (other.GetComponent<HookBehaviourSubmarine>() != null)
         {
             other.GetComponent<HookBehaviourSubmarine>().getEaten();
-            EventManager.Single.TriggerGameOver();
+            EventManager.Single.TriggerGameOverFail();
         }
     }
 }

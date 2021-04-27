@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
+using Random = UnityEngine.Random;
 
 public class ChondrichthyesManager : MonoBehaviour
 {
@@ -24,6 +26,15 @@ public class ChondrichthyesManager : MonoBehaviour
     {
         lastFishTimeStamp = 0f;
         GenerateFishTicket();
+        
+        // subscribe to the event manager
+        EventManager.Single.ONTriggerLevelUp += IncreaseDifficulty;
+    }
+
+    private void OnDestroy()
+    {
+        // unsubscribe to the event manager
+        EventManager.Single.ONTriggerLevelUp -= IncreaseDifficulty;
     }
 
     /// <summary>
@@ -61,5 +72,10 @@ public class ChondrichthyesManager : MonoBehaviour
             return goblinShark;
         }
         return basicFish;
+    }
+
+    private void IncreaseDifficulty(int lvl)
+    {
+        gameLevel = lvl < 0 ? gameLevel + 1 : lvl;
     }
 }

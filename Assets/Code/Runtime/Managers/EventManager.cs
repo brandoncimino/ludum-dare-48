@@ -14,12 +14,47 @@ public class EventManager : MonoBehaviour
         Single = this;
     }
 
+    #region game management
+
+    public event Action ONTriggerGameOverWin;
+    public void TriggerGameOverWin()
+    {
+        ONTriggerGameOverWin?.Invoke();
+    }
+    
+    public event Action ONTriggerGameOverFail;
+    public void TriggerGameOverFail()
+    {
+        ONTriggerGameOverFail?.Invoke();
+    }
+    
+    public event Action <int> ONTriggerLevelUp;
+    public void TriggerLevelUp(int level = -1)
+    {
+        ONTriggerLevelUp?.Invoke(level);
+    }
+
+    #endregion
+
+    #region fish
+
     public event Action <FishBehaviour> ONTriggerCollisionFish;
     public void TriggerCollisionFish(FishBehaviour fish)
     {
         ONTriggerCollisionFish?.Invoke(fish);
     }
     
+    public event Action ONTriggerFirstCatch;
+    public void TriggerFirstCatch()
+    {
+        ONTriggerFirstCatch?.Invoke();
+    }
+    
+
+    #endregion
+
+    #region sharks
+
     public event Action ONTriggerCollisionShark;
     public void TriggerCollisionShark()
     {
@@ -32,18 +67,10 @@ public class EventManager : MonoBehaviour
         ONTriggerSharkAttack?.Invoke();
     }
 
-    public event Action ONTriggerGameOver;
-    public void TriggerGameOver()
-    {
-        ONTriggerGameOver?.Invoke();
-    }
-    
-    public event Action ONTriggerFirstCatch;
-    public void TriggerFirstCatch()
-    {
-        ONTriggerFirstCatch?.Invoke();
-    }
-    
+    #endregion
+
+    #region collectables
+
     public event Action <DebrisBehaviour> ONTriggerCollisionDebris;
     public void TriggerCollisionDebris(DebrisBehaviour debris)
     {
@@ -56,5 +83,19 @@ public class EventManager : MonoBehaviour
     {
         ONTriggerCollisionCatchable?.Invoke(newCatch);
     }
+
+    #endregion
+
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
 
 }
