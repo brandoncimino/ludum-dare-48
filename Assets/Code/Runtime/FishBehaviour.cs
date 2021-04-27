@@ -1,5 +1,5 @@
 using Code.Runtime;
-
+using JetBrains.Annotations;
 using TMPro;
 
 using UnityEngine;
@@ -11,7 +11,7 @@ public class FishBehaviour : Catchables {
 
     //protected Vector3 direction = Vector3.forward;
 
-    protected bool isUncomfortable = false;
+    public bool isUncomfortable = false;
 
     protected float timeTillChange    = 4f;
     protected float minTimeTillChange = 1f;
@@ -29,9 +29,8 @@ public class FishBehaviour : Catchables {
     }
 
     // Update is called once per frame
-    protected void Update()
+    protected virtual void Update()
     {
-        
         // change direction if feeling uncomfortable
         if (isUncomfortable) {
             // always avoid in the right direction
@@ -47,12 +46,13 @@ public class FishBehaviour : Catchables {
         catchableRigidbody.velocity = speed * transform.forward;
     }
 
-    public void Scare() {
+
+    public virtual void Scare([CanBeNull] Transform enemy = null) {
         isUncomfortable = true;
         thoughts.text   = "AAAAAAAAAAAAAAAAAAAAAAAAAH";
     }
 
-    public void CalmDown() {
+    public virtual void CalmDown([CanBeNull] Transform enemy = null) {
         isUncomfortable = false;
         thoughts.text   = "that was close";
     }

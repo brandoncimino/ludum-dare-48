@@ -25,6 +25,12 @@ public class EventManager : MonoBehaviour
     {
         ONTriggerCollisionShark?.Invoke();
     }
+    
+    public event Action ONTriggerSharkAttack;
+    public void TriggerSharkAttack()
+    {
+        ONTriggerSharkAttack?.Invoke();
+    }
 
     public event Action ONTriggerGameOver;
     public void TriggerGameOver()

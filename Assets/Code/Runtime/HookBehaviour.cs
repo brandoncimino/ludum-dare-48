@@ -128,10 +128,19 @@ namespace Code.Runtime {
             transform.rotation = Quaternion.Slerp(transform.rotation, _rotationInitial, Time.deltaTime * StabilizerSmoothness);
         }
 
-        private void getEaten()
+        public void getEaten()
         {
-            test = 4;
             gameObject.SetActive(false);
+        }
+        
+        protected void HaveIBeenEaten(Vector3 sharkPosition)
+        {
+            var distance = sharkPosition - transform.position;
+            if (distance.magnitude < 1e-2)
+            {
+                gameObject.SetActive(false);
+                EventManager.Single.TriggerGameOver();
+            }
         }
     }
 }

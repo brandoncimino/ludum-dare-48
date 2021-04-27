@@ -75,5 +75,20 @@ namespace Code.Runtime {
             catchableRigidbody.useGravity  = true;
             catchableRigidbody.isKinematic = false;
         }
+
+        protected void HaveIBeenEaten(Vector3 sharkPosition)
+        {
+            var distance = sharkPosition - transform.position;
+            if (distance.magnitude < 1e-2)
+            {
+                transform.position -= 1e3f * transform.up;
+                gameObject.SetActive(false);
+            }
+        }
+        
+        public void getEaten()
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

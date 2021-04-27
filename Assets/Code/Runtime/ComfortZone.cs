@@ -21,11 +21,11 @@ public class ComfortZone : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        myFish.Scare();
+        myFish.Scare(other.transform);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        myFish.CalmDown();
+        myFish.CalmDown(other.transform);
     }
 }

@@ -164,9 +164,19 @@ namespace Code.Runtime {
 
         #endregion
         
-        private void getEaten()
+        public void getEaten()
         {
             gameObject.SetActive(false);
+        }
+        
+        protected void HaveIBeenEaten(Vector3 sharkPosition)
+        {
+            var distance = sharkPosition - transform.position;
+            if (distance.magnitude < 1e-2)
+            {
+                gameObject.SetActive(false);
+                EventManager.Single.TriggerGameOver();
+            }
         }
     }
 }
