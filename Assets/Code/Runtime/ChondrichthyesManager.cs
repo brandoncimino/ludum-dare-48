@@ -56,7 +56,7 @@ public class ChondrichthyesManager : MonoBehaviour
 
     private GameObject RandomFish()
     {
-        if (gameLevel >= 1 && Random.Range(0, 100) >= chanceToUseGoblinShark)
+        if (gameLevel >= 1 && Random.Range(0, 100) <= chanceToUseGoblinShark)
         {
             return goblinShark;
         }
