@@ -405,30 +405,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 45029039, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: MaxLateralSpeed
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 45029039, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: LateralAccelerationFactor
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1961041181, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1961041181, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.001
-      objectReference: {fileID: 0}
-    - target: {fileID: 1961041181, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.91
-      objectReference: {fileID: 0}
-    - target: {fileID: 1961041181, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0.81
-      objectReference: {fileID: 0}
     - target: {fileID: 9216492914830173560, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
       propertyPath: m_RootOrder
       value: 3
