@@ -203,6 +203,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGameOver: 0
+  lvl: 1
+  _lvlUpConditionCheckTime: 0
 --- !u!4 &547287093
 Transform:
   m_ObjectHideFlags: 0
@@ -261,13 +263,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraCrew: {fileID: 6909130122617165622}
-  goblinShark: {fileID: 6605675243674986574, guid: 504878b2cce4849fea5ab18fb5a2c4b6, type: 3}
-  basicFish: {fileID: 6982302474530867703, guid: b70424262750645d0896b3874ac88d71, type: 3}
+  goblinShark: {fileID: 1095902333, guid: 504878b2cce4849fea5ab18fb5a2c4b6, type: 3}
+  basicFish: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
   minimumTimeBeforeNextFish: 2
   maximumTimeBeforeNextFish: 0
   distanceFromCameraCrewToSpawnFish: 50
-  chanceToUseGoblinShark: 20.5
-  gameLevel: 0
+  chanceToUseGoblinShark: 10
 --- !u!1001 &640444908
 PrefabInstance:
   m_ObjectHideFlags: 0
