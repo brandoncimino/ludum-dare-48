@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6593259654692400577}
   - component: {fileID: 628687762756617332}
   m_Layer: 0
-  m_Name: Tile
+  m_Name: LandTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3a6003359be4f94b95873b95e6a8c1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnchorPoint: {x: 0, y: 0}
+  AnchorPoint: {x: 0.5, y: 0.5}
   Zone: 0
 --- !u!1 &7979527982810103170
 GameObject:
@@ -107,7 +107,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 41500c3dc0923834fb3c40f698cc7c27, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

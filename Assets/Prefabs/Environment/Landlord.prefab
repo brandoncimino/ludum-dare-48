@@ -45,7 +45,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TilePrefab: {fileID: 433838879906323015, guid: 9699f2c0e860f7747a7ecb43019ca0fd, type: 3}
   TileHolder: {fileID: 0}
-  TileSize: {x: 0, y: 0}
+  TileDiameter: 50
+  GridCellCount: 20
+  DecorationsPerCell:
+    X: 0
+    Y: 0
   TidalMaterial: {fileID: 2100000, guid: 41500c3dc0923834fb3c40f698cc7c27, type: 2}
   ChasmMaterial: {fileID: 0}
   DeepsMaterial: {fileID: 0}

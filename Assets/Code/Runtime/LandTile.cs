@@ -1,20 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 
-using BrandonUtils.UI;
+using BrandonUtils.Logging;
+using BrandonUtils.Standalone.Exceptions;
 
 using UnityEngine;
 
 namespace Code.Runtime {
     public class LandTile : MonoBehaviour {
-        public Vector2 AnchorPoint;
+        public Vector2 CenterPoint;
 
-        private Vector2 _diameter;
-        public Vector2 Diameter {
+        private float _diameter;
+        public float Diameter {
             get => _diameter;
 
             set {
-                _diameter                      = value;
-                _renderer.transform.localScale = Vector3.one * _diameter;
+                _diameter = value;
+                if (!Renderer) {
+                    throw new BrandonException("NO RENDERER!");
+                }
+
+                var tf = Renderer.transform;
+                if (!tf) {
+                    throw new BrandonException("NO TRANSFORM ON RENDERER!");
+                }
+
+                Renderer.transform.localScale = new Vector3(
+                    _diameter,
+                    _diameter,
+                    _diameter
+                );
             }
         }
         public Landlord.Zone Zone;
@@ -26,20 +41,32 @@ namespace Code.Runtime {
                     _renderer = GetComponentInChildren<Renderer>();
                 }
 
+                if (!_renderer) {
+                    throw new BrandonException("NO RENDERER!");
+                }
+
                 return _renderer;
             }
         }
 
-        public Vector2 BottomLeft => AnchorPoint - (new Vector2(0.5f, 0.5f) * Diameter);
+        public Vector2 BottomLeft => CenterPoint - (new Vector2(0.5f, 0.5f) * Diameter);
 
-        public Vector2 GetEdgePosition(RectTransform.Edge edge) {
+        public Vector3 GetEdgePosition_World(RectTransform.Edge edge) {
             // get the center point
-            var anchorOffset   = AnchorPoint * Diameter;
-            var anchorOffset3d = new Vector3(anchorOffset.x, 0, anchorOffset.y);
-            var centerPoint    = transform.position + anchorOffset3d;
+            var centerOffset = CenterPoint * Diameter;
+            var centerPoint  = transform.position + new Vector3(centerOffset.x, 0, centerOffset.y);
 
             var edgeOffset   = GetEdgeOffset(edge);
             var edgeOffset3d = new Vector3(edgeOffset.x, 0, edgeOffset.y);
+
+            LogUtils.Log(
+                new Dictionary<object, object>() {
+                    {nameof(centerOffset), centerOffset},
+                    {nameof(centerPoint), centerPoint},
+                    {nameof(edgeOffset), edgeOffset},
+                    {nameof(edgeOffset3d), edgeOffset3d}
+                }
+            );
 
             return centerPoint + edgeOffset3d;
         }
@@ -49,7 +76,16 @@ namespace Code.Runtime {
         }
 
         public void Connect(LandTile otherTile, RectTransform.Edge otherConnectedEdge) {
-            transform.position = otherTile.GetEdgePosition(otherConnectedEdge) + GetEdgeOffset(otherConnectedEdge.Inverse());
+            LogUtils.Log(
+                new Dictionary<object, object>() {
+                    {$"{otherTile.name}.{nameof(GetEdgePosition_World)}({otherConnectedEdge})", otherTile.GetEdgePosition_World(otherConnectedEdge)}
+                }
+            );
+
+            var offsetFromOther       = GetEdgeOffset(otherConnectedEdge);
+            var offsetFromOther_world = new Vector3(offsetFromOther.x, 0, offsetFromOther.y);
+
+            transform.position = otherTile.GetEdgePosition_World(otherConnectedEdge) + offsetFromOther_world;
         }
 
         public static Vector2 GetEdgeCenter(RectTransform.Edge edge) {
