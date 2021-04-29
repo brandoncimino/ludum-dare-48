@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using UnityEngine;
@@ -10,47 +11,53 @@ namespace Code.Runtime {
     /// Holy fuck how did they not catch that.
     /// </summary>
     public class HookBehaviour : MonoBehaviour {
-        public        float         test = 0f;
+        
+        #region general public stuff
+        
         public static HookBehaviour Single;
         public        Rigidbody     MyRigidbody;
-        public        Rigidbody     MouthCollector;
+        protected Quaternion _rotationInitial;
+        #endregion
+        
+        
+        #region depth-related variables
 
-        private float _depth => Mathf.Abs(transform.localPosition.y - _depthInitial);
-        private float _pressure;
-        private float _depthInitial;
+        protected       float _depth => Mathf.Abs(transform.localPosition.y - _depthInitial);
+        protected       float _depthInitial;
+        protected const float MaxDepth = 1000f;
 
-        private       float _velocityPull = 0;
-        private       float _velocityPush = 0;
-        private const float PullModifier  = 0.001f;
-        private const float PushModifier  = 0.001f;
-        private const float MaxDepth      = 200f;
+        #endregion
 
-        private Quaternion _rotationInitial;
-        public  float      StabilizerSmoothness;
+        #region pull-related variables
 
-        public List<Catchables> myCatches;
-        private bool caughtFish = false;
+        protected       float _velocityPull = 0;
+        protected const float   PullModifier  = 1e-3f;
+        
+        #endregion
+        
+        
+        #region catch-related variables
 
+        public List<Rigidbody>  MouthCollection;
+        public Rigidbody        MouthCollector;
+        public List<Catchables> myCatches = new List<Catchables>() { };
+        protected bool caughtFish = false;
+
+        #endregion
+        
+        
+        #region input-related variables
+        
+        public Vector3 RawMovement => new Vector2(
+            Input.GetAxis("Horizontal"),
+            Input.GetAxis("Vertical")
+        );
+        
         public Vector2 _movementAxesRawInput => new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        public float MaxLateralSpeed;
-        public float LateralAccelerationFactor;
+        #endregion
 
-        public Vector2 LateralVelocity {
-            get {
-                var vel = MyRigidbody.velocity;
-                return new Vector2(vel.x, vel.z);
-            }
-            set => MyRigidbody.velocity = new Vector3(value.x, MyRigidbody.velocity.y, value.y);
-        }
-
-        public float SinkVelocity {
-            get => MyRigidbody.velocity.y;
-            set {
-                Vector3 velocity;
-                MyRigidbody.velocity = new Vector3((velocity = MyRigidbody.velocity).x, value, velocity.z);
-            }
-        }
+        
 
         private void Awake() {
             Single = this;
@@ -77,38 +84,35 @@ namespace Code.Runtime {
             EventManager.Single.ONTriggerCollisionShark     -= getEaten;
         }
 
-        // Update is called once per frame
-        private void Update() {
-            // falling down based on pressure and gravity
-            _velocityPull = WaterManager.Single.computePull(_depth, MaxDepth);
 
-            // movement in total (additive as an approximation)
-            SinkVelocity = (PullModifier * _velocityPull) + (PushModifier * _velocityPush);
-            var targetVelocity = _movementAxesRawInput.normalized * MaxLateralSpeed;
-            LateralVelocity = Vector2.Lerp(LateralVelocity, targetVelocity, Time.deltaTime * LateralAccelerationFactor);
-            
-            // update data in the UI
-            UIManager.Single.provideData("depth", (int) (_depth / 0.546807f));
+        protected virtual void Update()
+        {
+            // depends on the subclass
         }
 
-        private void OnTriggerEnter(Collider other) {
-            test = 1;
+        public bool checkLevelUpCondition()
+        {
+            return Mathf.Pow(3, GameManager.Single.lvl) *_depth > (Mathf.Pow(3, GameManager.Single.lvl) - Mathf.Pow(2, GameManager.Single.lvl)) * MaxDepth;
+        }
+
+        #region catch-related stuff
+
+        protected void OnTriggerEnter(Collider other) {
             if (other.GetComponent<Catchables>() != null) {
-                test = 2;
                 EventManager.Single.TriggerCollisionCatchable(other.GetComponent<Catchables>());
             }
         }
 
-        private void CollisionFish(FishBehaviour fish) {
+        protected void CollisionFish(FishBehaviour fish) {
             if (!caughtFish) EventManager.Single.TriggerFirstCatch();
             // fish-specific collision stuff
         }
 
-        private void CollisionDebris(DebrisBehaviour debris) {
+        protected void CollisionDebris(DebrisBehaviour debris) {
             // debris-specific collision stuff
         }
 
-        private void CollisionCatchable(Catchables newCatch) {
+        protected void CollisionCatchable(Catchables newCatch) {
             myCatches.Add(newCatch);
         }
 
@@ -116,25 +120,12 @@ namespace Code.Runtime {
             return MouthCollector;
         }
 
-        private void ApplyStabilization() {
-            // Calculate the desired rotation, which will incorporate a bit of wobble
-            var targetRotation = new Vector3(
-                0,
-                90,
-                0
-            );
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, _rotationInitial, Time.deltaTime * StabilizerSmoothness);
-        }
-
         public void getEaten() {
             gameObject.SetActive(false);
         }
 
-        public bool checkLevelUpCondition()
-        {
-            return Mathf.Pow(3, GameManager.Single.lvl) *_depth > (Mathf.Pow(3, GameManager.Single.lvl) - Mathf.Pow(2, GameManager.Single.lvl)) * MaxDepth;
-        }
+        #endregion 
+
 
     }
 }

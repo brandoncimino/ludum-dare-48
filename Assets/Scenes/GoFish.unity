@@ -756,7 +756,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hook
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 45029039, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
 --- !u!224 &982315045 stripped
 RectTransform:
@@ -1074,6 +1075,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15a678d42a8f942488323a23e891620b, type: 3}
+--- !u!54 &1392558328 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 1961041183, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+  m_PrefabInstance: {fileID: 923612754}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1447870700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1475,6 +1481,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664162405}
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1902881926 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9216492914830173564, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+  m_PrefabInstance: {fileID: 923612754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1902881927 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 45029038, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
+  m_PrefabInstance: {fileID: 923612754}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1902881928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902881926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5bd7a2e5e9491e9beffc4666962b7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MyRigidbody: {fileID: 1902881927}
+  MouthCollection: []
+  MouthCollector: {fileID: 1392558328}
+  myCatches: []
+  test: 0
+  StabilizerSmoothness: 0
+  MaxLateralSpeed: 10
+  LateralAccelerationFactor: 10
 --- !u!4 &1920900262 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9216492914830173560, guid: f2c43281d1aaed64ab95e1bd9e03436b, type: 3}
