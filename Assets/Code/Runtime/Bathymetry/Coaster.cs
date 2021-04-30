@@ -6,6 +6,11 @@ using UnityEngine;
 namespace Code.Runtime.Bathymetry {
     /// <summary>
     /// Makes coasts!
+    ///
+    /// <ul>
+    /// <li>Supplanted the <see cref="Landlord"/>.</li>
+    /// <li>Can be used in conjunction with the <see cref="Arborist"/>.</li>
+    /// </ul>
     /// </summary>
     public class Coaster : MonoBehaviour {
         public Terrain CoastlineTerrain;
