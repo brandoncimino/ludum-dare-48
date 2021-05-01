@@ -12,7 +12,7 @@ namespace Code.Runtime.Bathymetry {
     /// </ul>
     ///
     /// <b>NOTE:</b>
-    /// If you are reading this Nicole, feel free to replace my laymath with realmath!
+    /// If you are reading this Nicole, feel free to replace my laymath with truemath!
     /// </summary>
     ///
     public class Curve {
