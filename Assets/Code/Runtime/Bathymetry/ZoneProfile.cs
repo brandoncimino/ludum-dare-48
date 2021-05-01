@@ -4,19 +4,14 @@ using System.Collections.Generic;
 namespace Code.Runtime.Bathymetry {
     [Serializable]
     public class ZoneProfile : IComparable<ZoneProfile> {
-        public  float              Amplitude;
-        public  float              GeographicDistance;
         public  ZoneType           ZoneType;
-        private Func<float, float> Equation;
-        private Curve.Form         CurveForm;
-
-        public ZoneProfile(Func<float, float> equation) {
-            this.Equation = equation;
-        }
+        public  Curve.Form         CurveForm;
+        private Func<float, float> Equation => Curve.Curves[CurveForm];
+        public  float              GeographicDistance;
+        public  float              Amplitude;
 
         public ZoneProfile(Curve.Form curveForm) {
             this.CurveForm = curveForm;
-            this.Equation  = Curve.Curves[curveForm];
         }
 
         public int CompareTo(ZoneProfile other) {
@@ -25,10 +20,6 @@ namespace Code.Runtime.Bathymetry {
             }
 
             return ReferenceEquals(null, other) ? 1 : ZoneType.CompareTo(other.ZoneType);
-        }
-
-        public void SetEquation(Func<float, float> equation) {
-            this.Equation = equation;
         }
 
         public float Invoke(float pointInZone) {

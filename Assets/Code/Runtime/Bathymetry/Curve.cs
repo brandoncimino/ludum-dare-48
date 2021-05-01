@@ -21,10 +21,14 @@ namespace Code.Runtime.Bathymetry {
             Quadratic_Dippy_Negative,
             Quadratic_Bumpy_Positive,
             Quadratic_Bumpy_Negative,
+
             Circular_Dippy_Positive,
             Circular_Dippy_Negative,
             Circular_Bumpy_Positive,
             Circular_Bumpy_Negative,
+
+            Cosine_Positive,
+            Cosine_Negative
         }
 
         public static readonly Func<float, float> Quadratic_Dippy_Positive = x => Mathf.Pow(x,     2);
@@ -37,6 +41,9 @@ namespace Code.Runtime.Bathymetry {
         public static readonly Func<float, float> Circular_Bumpy_Positive = x => Mathf.Sqrt(1 - Mathf.Pow(x - 1, 2));
         public static readonly Func<float, float> Circular_Bumpy_Negative = x => Mathf.Sqrt(1 - Mathf.Pow(x,     2));
 
+        public static readonly Func<float, float> Cosine_Positive = x => (Mathf.Cos((x + 1) * Mathf.PI) + 1) / 2f;
+        public static readonly Func<float, float> Cosine_Negative = x => (Mathf.Cos(x * Mathf.PI) + 1) / 2f;
+
         public static readonly Dictionary<Form, Func<float, float>> Curves = new Dictionary<Form, Func<float, float>>() {
             {Form.Quadratic_Dippy_Positive, Quadratic_Dippy_Positive},
             {Form.Quadratic_Dippy_Negative, Quadratic_Dippy_Negative},
@@ -46,7 +53,10 @@ namespace Code.Runtime.Bathymetry {
             {Form.Circular_Dippy_Positive, Circular_Dippy_Positive},
             {Form.Circular_Dippy_Negative, Circular_Dippy_Negative},
             {Form.Circular_Bumpy_Positive, Circular_Bumpy_Positive},
-            {Form.Circular_Bumpy_Negative, Circular_Bumpy_Negative}
+            {Form.Circular_Bumpy_Negative, Circular_Bumpy_Negative},
+
+            {Form.Cosine_Positive, Cosine_Positive},
+            {Form.Cosine_Negative, Cosine_Negative}
         };
     }
 }

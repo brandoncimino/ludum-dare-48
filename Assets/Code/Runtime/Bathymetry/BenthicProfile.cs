@@ -32,6 +32,11 @@ namespace Code.Runtime.Bathymetry {
             _zones.Sort();
         }
 
+        public void AddZones(IEnumerable<ZoneProfile> zoneProfiles) {
+            _zones.AddRange(zoneProfiles);
+            _zones.Sort();
+        }
+
         #region Surveying
 
         public SurveyResults Survey(float geographicDistance) {

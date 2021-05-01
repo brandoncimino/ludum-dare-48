@@ -45,6 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CoastlineTerrain: {fileID: 0}
+  Zones:
+  - Amplitude: 50
+    GeographicDistance: 300
+    ZoneType: 0
+    CurveForm: 3
+  - Amplitude: 100
+    GeographicDistance: 60
+    ZoneType: 1
+    CurveForm: 1
+  - Amplitude: 5
+    GeographicDistance: 150
+    ZoneType: 1
+    CurveForm: 1
   ShelfCurve: 3
   ShelfDistance: 300
   ShelfAmplitude: 50
@@ -54,6 +67,11 @@ MonoBehaviour:
   AbyssCurve: 1
   AbyssDistance: 150
   AbyssAmplitude: 5
+  Shelf2:
+    Amplitude: 0
+    GeographicDistance: 0
+    ZoneType: 0
+    CurveForm: 0
   Debug: 'MaxGeographicDistance: 510
 
     GeographicAmplitude: 155'
