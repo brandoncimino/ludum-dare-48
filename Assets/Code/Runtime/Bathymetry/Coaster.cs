@@ -17,13 +17,13 @@ namespace Code.Runtime.Bathymetry {
 
         public float          SeaLevel       => BenthicProfile.GeographicAmplitude;
         public BenthicProfile BenthicProfile => BuildBenthicProfile();
-        public Curve.Form     ShelfCurve     = Curve.Form.Quadratic_Concave_Negative;
+        public Curve.Form     ShelfCurve     = Curve.Form.Quadratic_Bumpy_Negative;
         public float          ShelfDistance  = 300;
         public float          ShelfAmplitude = 50;
-        public Curve.Form     SlopeCurve     = Curve.Form.Quadratic_Concave_Negative;
+        public Curve.Form     SlopeCurve     = Curve.Form.Quadratic_Dippy_Negative;
         public float          SlopeDistance  = 60;
         public float          SlopeAmplitude = 100;
-        public Curve.Form     AbyssCurve     = Curve.Form.Quadratic_Convex_Negative;
+        public Curve.Form     AbyssCurve     = Curve.Form.Quadratic_Dippy_Negative;
         public float          AbyssDistance  = 150;
         public float          AbyssAmplitude = 5;
 
