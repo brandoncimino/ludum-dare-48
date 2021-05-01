@@ -15,7 +15,8 @@ namespace Code.Runtime.Bathymetry {
 
         [EditorInvocationButton]
         public void Weed() {
-            throw new NotImplementedException("I don't know how to remove the terrain details yet");
+            var terrainData = Arboretum.terrainData;
+            terrainData.SetDetailLayer(0, 0, 0, new int[terrainData.detailResolution, terrainData.detailResolution]);
         }
     }
 }
