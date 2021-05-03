@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using BrandonUtils.Logging;
 using BrandonUtils.Standalone.Exceptions;
 
 using UnityEngine;
@@ -58,8 +57,6 @@ namespace Code.Runtime.Bathymetry {
                 GeographicAltitude     = geographicAltitude,
                 HeightInBenthicProfile = GeographicAltitudeToBenthicHeight(geographicAltitude)
             };
-
-            LogUtils.Log(surveyResults);
 
             return surveyResults;
         }
@@ -145,7 +142,7 @@ namespace Code.Runtime.Bathymetry {
             }
 
             if (geographicDistance > MaxGeographicDistance) {
-                throw new BrandonException($"The {nameof(geographicDistance)} {geographicDistance} is greater than the total {geographicDistance} of this {nameof(BenthicProfile)}, {MaxGeographicDistance}");
+                throw new BrandonException($"The {nameof(geographicDistance)} {geographicDistance} is greater than the total {nameof(geographicDistance)} of this {nameof(BenthicProfile)}, {MaxGeographicDistance}");
             }
         }
 
