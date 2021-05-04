@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 using BrandonUtils.Standalone.Exceptions;
@@ -23,8 +24,8 @@ namespace Code.Runtime.Bathymetry {
             }
         }
 
-        private List<ZoneProfile>                _zones = new List<ZoneProfile>();
-        public  IReadOnlyCollection<ZoneProfile> Zones => _zones.AsReadOnly();
+        private List<ZoneProfile>               _zones = new List<ZoneProfile>();
+        public  ReadOnlyCollection<ZoneProfile> Zones => _zones.AsReadOnly();
 
         public float MaxGeographicDistance => Zones.Sum(it => it.GeographicDistance);
         public float GeographicAmplitude   => Zones.Sum(it => it.Amplitude);
@@ -111,13 +112,13 @@ namespace Code.Runtime.Bathymetry {
             return GetPortion(geographicDistance, zoneBounds);
         }
 
-        private Vector2 GetZoneGeographicDistanceBoundaries(ZoneProfile zoneProfile) {
+        public Vector2 GetZoneGeographicDistanceBoundaries(ZoneProfile zoneProfile) {
             var min = Zones.TakeWhile(it => it != zoneProfile).Sum(it => it.GeographicDistance);
             var max = min + zoneProfile.GeographicDistance;
             return new Vector2(min, max);
         }
 
-        private Vector2 GetZoneGeographicAltitudeBoundaries(ZoneProfile zoneProfile) {
+        public Vector2 GetZoneGeographicAltitudeBoundaries(ZoneProfile zoneProfile) {
             var zoneStart = 0 - Zones.TakeWhile(it => it != zoneProfile).Sum(it => it.Amplitude);
             var zoneEnd   = zoneStart - zoneProfile.Amplitude;
             return new Vector2(zoneStart, zoneEnd);

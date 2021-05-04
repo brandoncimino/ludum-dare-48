@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
+using BrandonUtils.Logging;
 using BrandonUtils.Standalone.Attributes;
 using BrandonUtils.Standalone.Collections;
 
 using UnityEngine;
+
+using Random = UnityEngine.Random;
 
 namespace Code.Runtime.Bathymetry {
     /// <summary>
@@ -22,6 +26,9 @@ namespace Code.Runtime.Bathymetry {
 
         [TextArea(5, 100)]
         public string Debug;
+
+        public  Holder                          TreeHolder      = new Holder(nameof(TreeHolder));
+        private Dictionary<ZoneProfile, Holder> ZoneTreeHolders = new Dictionary<ZoneProfile, Holder>();
 
         public BenthicProfile BuildBenthicProfile() {
             var benthicProfile = new BenthicProfile();
@@ -60,6 +67,100 @@ namespace Code.Runtime.Bathymetry {
             }
 
             terrainData.SetAlphamaps(0, 0, matMap);
+        }
+
+        public List<GameObject> Trees;
+
+        [EditorInvocationButton]
+        public void PlantSomeTrees() {
+            for (int i = 0; i < 10; i++) {
+                var randomTree = Trees[Random.Range(0, Trees.Count)];
+                var zones      = BuildBenthicProfile().Zones;
+                var randomZone = zones[Random.Range(0, zones.Count)];
+                Plant(randomZone, randomTree);
+            }
+        }
+
+        [EditorInvocationButton]
+        public void PlantSomeFakeTrees() {
+            for (int i = 0; i < 10; i++) {
+                var randomTree = Trees[Random.Range(0, Trees.Count)];
+                var zones      = BuildBenthicProfile().Zones;
+                var randomZone = zones[Random.Range(0, zones.Count)];
+                PlantFakeTree(randomZone, randomTree);
+            }
+        }
+
+        [EditorInvocationButton]
+        public void ClearFakeTrees() {
+            LogUtils.Log($"Clearing {TreeHolder.Name}!");
+            TreeHolder.Clear();
+        }
+
+        public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree) {
+            var treePos      = GetRandomWorldPointInZone(zoneProfile);
+            var treeRot      = GetRotationAtPoint(treePos);
+            var treeInstance = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
+        }
+
+        public void Plant(ZoneProfile zoneProfile, GameObject tree) {
+            var treePos = GetRandomWorldPointInZone(zoneProfile);
+            LogUtils.Log($"Creating tree {tree} at {treePos}");
+            // var treeRot       = GetRotationAtPoint(treePos);
+            var treePrototype = GetTreePrototypeForPrefab(tree);
+            var inst          = new TreeInstance {prototypeIndex = GetTreePrototypeIndex(treePrototype)};
+            CoastlineTerrain.AddTreeInstance(inst);
+        }
+
+        private TreePrototype GetTreePrototypeForPrefab(GameObject prefab) {
+            var terrainData = CoastlineTerrain.terrainData;
+            var prototype   = terrainData.treePrototypes.FirstOrDefault(it => it.prefab.Equals(prefab));
+
+            if (prototype == default) {
+                var newPrototype = new TreePrototype {prefab = prefab};
+                terrainData.treePrototypes = terrainData.treePrototypes.Concat(new[] {newPrototype}).ToArray();
+                prototype                  = newPrototype;
+            }
+
+            return prototype;
+        }
+
+        private int GetTreePrototypeIndex(TreePrototype prototype) {
+            return CoastlineTerrain.terrainData.treePrototypes.ToList().IndexOf(prototype);
+        }
+
+        private Vector3 GetRandomWorldPointInZone(ZoneProfile zoneProfile) {
+            var pointInZone       = new Vector2(Random.value, Random.value);
+            var zoneGeoDistBounds = BuildBenthicProfile().GetZoneGeographicDistanceBoundaries(zoneProfile);
+            var terrainOrigin     = CoastlineTerrain.transform.position;
+            var plantX            = Mathf.Lerp(zoneGeoDistBounds.x, zoneGeoDistBounds.y, pointInZone.x);
+            var plantY            = CoastlineTerrain.terrainData.size.y * pointInZone.y;
+            var plantWorld        = terrainOrigin + new Vector3(plantX, 0, plantY);
+            plantWorld.y = CoastlineTerrain.SampleHeight(plantWorld);
+            return plantWorld;
+        }
+
+        private Quaternion GetRotationAtPoint(Vector2 worldHorizontal) {
+            var worldPoint = new Vector3(
+                worldHorizontal.x,
+                CoastlineTerrain.transform.position.y + (CoastlineTerrain.terrainData.size.y * 2),
+                worldHorizontal.y
+            );
+            var ray = new Ray(worldPoint, Vector3.down);
+            if (Physics.Raycast(ray, out var raycastHit)) {
+                return Quaternion.FromToRotation(Vector3.up, raycastHit.normal);
+            }
+            else {
+                throw new ArgumentException($"The point {worldPoint} is not inside of the {nameof(CoastlineTerrain)}!");
+            }
+        }
+
+        private Holder GetZoneTreeHolder(ZoneProfile zoneProfile) {
+            if (!ZoneTreeHolders.ContainsKey(zoneProfile)) {
+                ZoneTreeHolders.Add(zoneProfile, new Holder(zoneProfile.ToString(), TreeHolder));
+            }
+
+            return ZoneTreeHolders[zoneProfile];
         }
     }
 }
