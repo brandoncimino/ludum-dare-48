@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using UnityEngine;
+
 namespace Code.Runtime.Bathymetry {
     [Serializable]
     public class ZoneProfile : IComparable<ZoneProfile> {
@@ -9,6 +11,7 @@ namespace Code.Runtime.Bathymetry {
         private Func<float, float> Equation => Curve.Curves[CurveForm];
         public  float              GeographicDistance;
         public  float              Amplitude;
+        public  TerrainLayer       TerrainLayer;
 
         public ZoneProfile(Curve.Form curveForm) {
             this.CurveForm = curveForm;
