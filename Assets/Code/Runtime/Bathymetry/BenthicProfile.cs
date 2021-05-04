@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using BrandonUtils.Standalone.Exceptions;
@@ -9,11 +10,13 @@ namespace Code.Runtime.Bathymetry {
     public class BenthicProfile {
         public class SurveyResults {
             public float       GeographicDistance;
+            public float       LocalDistance01;
             public ZoneProfile Zone;
             public float       PointInZone;
             public float       HeightInZone;
             public float       GeographicAltitude;
             public float       HeightInBenthicProfile;
+            public Space       Space;
 
             public override string ToString() {
                 return JsonUtility.ToJson(this, true);
@@ -26,6 +29,8 @@ namespace Code.Runtime.Bathymetry {
         public float MaxGeographicDistance => Zones.Sum(it => it.GeographicDistance);
         public float GeographicAmplitude   => Zones.Sum(it => it.Amplitude);
 
+        #region Managing Zones
+
         public void AddZone(ZoneProfile zoneProfile) {
             _zones.Add(zoneProfile);
             _zones.Sort();
@@ -35,6 +40,10 @@ namespace Code.Runtime.Bathymetry {
             _zones.AddRange(zoneProfiles);
             _zones.Sort();
         }
+
+        public List<TerrainLayer> UniqueTerrainLayers => Zones.Select(it => it.TerrainLayer).Distinct().ToList();
+
+        #endregion
 
         #region Surveying
 
@@ -51,14 +60,34 @@ namespace Code.Runtime.Bathymetry {
             var geographicAltitude = ZoneHeightToGeographicAltitude(foundZone, heightInZone);
             var surveyResults = new SurveyResults() {
                 GeographicDistance     = geographicDistance,
+                LocalDistance01        = GeographicToLocalDistance(geographicDistance),
                 Zone                   = foundZone,
                 PointInZone            = pointInZone,
                 HeightInZone           = heightInZone,
                 GeographicAltitude     = geographicAltitude,
-                HeightInBenthicProfile = GeographicAltitudeToBenthicHeight(geographicAltitude)
+                HeightInBenthicProfile = GeographicAltitudeToBenthicHeight(geographicAltitude),
+                Space                  = Space.World
             };
 
             return surveyResults;
+        }
+
+        public SurveyResults LocalSurvey(float localDistance01) {
+            if (!IsPointInRange(localDistance01, new Vector2(0, 1))) {
+                throw new ArgumentException($"The local distance {localDistance01} isn't within the boundary of 0-1!");
+            }
+
+            var surveyResults = Survey(LocalToGeographicDistance(localDistance01));
+            surveyResults.Space = Space.Self;
+            return surveyResults;
+        }
+
+        public float LocalToGeographicDistance(float localDistance01) {
+            return localDistance01 * MaxGeographicDistance;
+        }
+
+        public float GeographicToLocalDistance(float geographicDistance) {
+            return geographicDistance / MaxGeographicDistance;
         }
 
         private float ZoneHeightToGeographicAltitude(ZoneProfile zone, float heightInZone) {
