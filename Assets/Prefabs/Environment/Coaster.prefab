@@ -61,12 +61,15 @@ MonoBehaviour:
     GeographicDistance: 150
     Amplitude: 5
     TerrainLayer: {fileID: 8574412962073106934, guid: 0c3018c70ec777c4a9d4a9da4a454d5f, type: 2}
-  ShelfTerrainLayer: {fileID: 0}
-  SlopeTerrainLayer: {fileID: 0}
-  AbyssTerrainLayer: {fileID: 0}
-  Debug: 'MaxGeographicDistance: 510
-
-    GeographicAmplitude: 155'
+  DebugText: 
+  Trees: []
+  Decorations:
+  - {fileID: -6872426004951483968, guid: f231cd17f6e323d488453d0905487b6a, type: 3}
+  - {fileID: -953748910713237039, guid: 487b4e5333119f6489f47a2d6343fa5a, type: 3}
+  - {fileID: 8671615824467144245, guid: c80a6268c0e781942b0de0f89feef653, type: 3}
+  - {fileID: 2656224295948447876, guid: edce83a71c111b34982900296151f5ee, type: 3}
+  - {fileID: -2591421022241021479, guid: 6bd441768211eb748a40af306cfe52bd, type: 3}
+  - {fileID: -986085993257051767, guid: 126a2f5ac5d00c244957242d92b4c6a0, type: 3}
 --- !u!114 &3862119979806376953
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -70,6 +70,7 @@ namespace Code.Runtime.Bathymetry {
         }
 
         public List<GameObject> Trees;
+        public List<Decoration> Decorations;
 
         [EditorInvocationButton]
         public void PlantSomeTrees() {
@@ -84,12 +85,20 @@ namespace Code.Runtime.Bathymetry {
         [EditorInvocationButton]
         public void PlantSomeFakeTrees() {
             var bp = BuildBenthicProfile();
-            for (int i = 0; i < 10; i++) {
-                var randomTree = Trees[Random.Range(0, Trees.Count)];
+            for (int i = 0; i < 20; i++) {
                 foreach (var z in bp.Zones) {
-                    PlantFakeTree(z, randomTree, Random.value, Random.value);
+                    PlantFakeTree(z, RandomZoneDecoration(z.ZoneType).gameObject, Random.value, Random.value);
                 }
             }
+        }
+
+        private Decoration RandomZoneDecoration(ZoneType zoneType) {
+            var zones = GetDecorationsForZone(zoneType);
+            return zones[Random.Range(0, zones.Count)];
+        }
+
+        private List<Decoration> GetDecorationsForZone(ZoneType zoneType) {
+            return Decorations.Where(it => it.ZoneTypes.Contains(zoneType)).ToList();
         }
 
         [EditorInvocationButton]

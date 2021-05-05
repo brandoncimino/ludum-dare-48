@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Zones: 00000000
+  ZoneTypes: 00000000
   Cost: 0
 --- !u!1 &7391301020768635022
 GameObject:

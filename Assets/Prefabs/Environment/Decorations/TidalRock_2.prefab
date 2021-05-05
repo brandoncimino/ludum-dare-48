@@ -131,4 +131,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Zones: 000000000100000002000000
+  ZoneTypes: 000000000100000002000000
   Cost: 0
