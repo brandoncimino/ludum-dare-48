@@ -100,7 +100,7 @@ namespace Code.Runtime.Bathymetry {
 
         public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01) {
             var treePos      = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
-            var treeRot      = GetRotationAtPoint(treePos);
+            var treeRot      = GetTerrainRotation(treePos);
             var treeInstance = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
         }
 
@@ -140,7 +140,12 @@ namespace Code.Runtime.Bathymetry {
             return plantWorld;
         }
 
-        private Quaternion GetRotationAtPoint(Vector3 worldPos) {
+        private Quaternion GetTerrainRotation(Vector3 worldPos) {
+            return Quaternion.FromToRotation(Vector3.up, TerrainHit(worldPos).normal);
+            ;
+        }
+
+        private RaycastHit TerrainHit(Vector3 worldPos) {
             var worldPoint = new Vector3(
                 worldPos.x,
                 CoastlineTerrain.transform.position.y + (CoastlineTerrain.terrainData.size.y * 2),
@@ -148,7 +153,7 @@ namespace Code.Runtime.Bathymetry {
             );
             var ray = new Ray(worldPoint, Vector3.down);
             if (Physics.Raycast(ray, out var raycastHit)) {
-                return Quaternion.FromToRotation(Vector3.up, raycastHit.normal);
+                return raycastHit;
             }
             else {
                 throw new ArgumentException($"The point {worldPoint} is not inside of the {nameof(CoastlineTerrain)}!");
@@ -161,6 +166,12 @@ namespace Code.Runtime.Bathymetry {
             }
 
             return ZoneTreeHolders[zoneProfile];
+        }
+
+        private void AlignToTerrain(Transform toAlign) {
+            var terrainHit = TerrainHit(toAlign.position);
+            toAlign.rotation = Quaternion.FromToRotation(Vector3.up, terrainHit.normal);
+            toAlign.position = terrainHit.point;
         }
     }
 }
