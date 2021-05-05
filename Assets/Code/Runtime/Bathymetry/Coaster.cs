@@ -87,7 +87,6 @@ namespace Code.Runtime.Bathymetry {
             for (int i = 0; i < 10; i++) {
                 var randomTree = Trees[Random.Range(0, Trees.Count)];
                 foreach (var z in bp.Zones) {
-                    // var randomZone = bp.Zones[Random.Range(0, bp.Zones.Count)];
                     PlantFakeTree(z, randomTree, Random.value, Random.value);
                 }
             }
@@ -100,7 +99,6 @@ namespace Code.Runtime.Bathymetry {
         }
 
         public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01) {
-            LogUtils.Log($"Attempting to plant tree:\nzone = {zoneProfile}\n{nameof(zoneDist01)}={zoneDist01}\b{nameof(zoneBreadth01)}={zoneBreadth01}");
             var treePos      = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
             var treeRot      = GetRotationAtPoint(treePos);
             var treeInstance = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
