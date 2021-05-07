@@ -74,7 +74,6 @@ namespace Code.Runtime {
 
             LandTiles.Add(tile);
             tile.Renderer.material = ZoneMaterials[zone];
-            DecorateTile(tile, GridCellCount, DecorationsPerCell);
         }
 
         public int TileCountByZone(Zone zone) {
@@ -88,57 +87,6 @@ namespace Code.Runtime {
             }
 
             return _zoneHolders[zone];
-        }
-
-        public void DecorateTile(LandTile tile, int gridCellCount, Pair<int, int> decorationsInCell) {
-            //box up the tile
-            var cellSize = tile.Diameter / gridCellCount;
-            for (int x = 0; x < gridCellCount; x++) {
-                for (int y = 0; y < gridCellCount; y++) {
-                    var xRange = new Vector2(
-                        x * cellSize,
-                        (x + 1) * cellSize
-                    );
-
-                    var yRange = new Vector2(
-                        y * cellSize,
-                        (y + 1) * cellSize
-                    );
-
-                    var decsToMake = Random.Range(decorationsInCell.X, decorationsInCell.Y);
-                    for (var d = 0; d < decsToMake; d++) {
-                        var spawnOffset = new Vector2(
-                            Random.Range(xRange.x, xRange.y),
-                            Random.Range(yRange.x, yRange.y)
-                        );
-
-                        var newDec     = Instantiate(GrabDecoration(tile.Zone), tile.transform);
-                        var transform1 = newDec.transform;
-
-                        var spawnPos = tile.BottomLeft + (spawnOffset * TileDiameter);
-                        transform1.localPosition = new Vector3(spawnPos.x, 0, spawnPos.y);
-                        transform1.localRotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
-                    }
-                }
-            }
-        }
-
-        private Decoration GrabDecoration(Zone zone) {
-            //return Decorations.Where(it => it.Zones.Contains(zone)).Random();
-            var dZone = Decorations.Where(it => it.Zones.Contains(zone)).ToList();
-            return dZone[Random.Range(0, dZone.Count)];
-            // var weights   = dZone.Select(it => it.Cost);
-            var weights   = new Dictionary<Decoration, int>();
-            var weightSum = 0;
-
-            foreach (var t in dZone) {
-                weightSum += t.Cost;
-                weights.Add(t, weightSum);
-            }
-
-            var randomWeight = Random.Range(0, weightSum);
-
-            return weights.First(it => randomWeight < it.Value).Key;
         }
     }
 }

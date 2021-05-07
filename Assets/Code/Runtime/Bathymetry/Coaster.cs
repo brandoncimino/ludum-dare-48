@@ -13,12 +13,11 @@ using Random = UnityEngine.Random;
 namespace Code.Runtime.Bathymetry {
     /// <summary>
     /// Makes coasts!
-    ///
-    /// <ul>
-    /// <li>Supplanted the <see cref="Landlord"/>.</li>
-    /// <li>Can be used in conjunction with the <see cref="Arborist"/>.</li>
-    /// </ul>
     /// </summary>
+    /// <remarks>
+    /// More specifically, this acts as a go-between between the terrain information (<see cref="BenthicProfile"/>, etc.) and the actual Unity <see cref="Terrain"/>.
+    /// Should probably just be combined with the <see cref="Arborist"/>.
+    /// </remarks>
     public class Coaster : MonoBehaviour {
         public Terrain CoastlineTerrain;
 

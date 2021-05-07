@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace Code.Runtime {
     public class Decoration : MonoBehaviour {
-        public List<Landlord.Zone> Zones;
-        public List<ZoneType>      ZoneTypes;
-        public int                 Cost;
+        public List<ZoneType> ZoneTypes;
+        public int            Cost;
     }
 }
