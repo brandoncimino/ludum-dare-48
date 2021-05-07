@@ -180,8 +180,6 @@ namespace Code.Runtime.Bathymetry {
 
         #region Terraforming
 
-        public List<string> TerraformLog;
-
         public float[] ComputeHeights(int resolution) {
             var heights = new float[resolution];
             for (int i = 0; i < resolution; i++) {
@@ -192,12 +190,11 @@ namespace Code.Runtime.Bathymetry {
             return heights;
         }
 
-        public List<string> Terraform(Terrain terrain) {
-            TerraformLog = new List<string> {
-                $"{nameof(MaxGeographicDistance)}: {MaxGeographicDistance}",
-                $"{nameof(GeographicAmplitude)}: {GeographicAmplitude}"
-            };
-
+        /// <summary>
+        /// TODO: Move this out of <see cref="BenthicProfile"/>, so that <see cref="BenthicProfile"/> no longer has any dependencies on <see cref="UnityEngine"/>.
+        /// </summary>
+        /// <param name="terrain"></param>
+        public void Terraform(Terrain terrain) {
             var terrainData    = terrain.terrainData;
             var resolution     = terrainData.heightmapResolution;
             var benthicHeights = ComputeHeights(resolution);
@@ -221,8 +218,6 @@ namespace Code.Runtime.Bathymetry {
                 height,
                 length
             );
-
-            return TerraformLog;
         }
 
         #endregion

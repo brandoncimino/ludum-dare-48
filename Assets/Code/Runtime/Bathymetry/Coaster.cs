@@ -4,7 +4,6 @@ using System.Linq;
 
 using BrandonUtils.Logging;
 using BrandonUtils.Standalone.Attributes;
-using BrandonUtils.Standalone.Collections;
 
 using UnityEngine;
 
@@ -23,8 +22,7 @@ namespace Code.Runtime.Bathymetry {
 
         public List<ZoneProfile> Zones;
 
-        [TextArea(5, 100)]
-        public string DebugText;
+        public Vector2 TreeSizeRange;
 
         public  Holder                          TreeHolder      = new Holder(nameof(TreeHolder));
         private Dictionary<ZoneProfile, Holder> ZoneTreeHolders = new Dictionary<ZoneProfile, Holder>();
@@ -39,7 +37,7 @@ namespace Code.Runtime.Bathymetry {
 
         [EditorInvocationButton]
         public void Terraform() {
-            DebugText = BuildBenthicProfile().Terraform(CoastlineTerrain).JoinString("\n");
+            BuildBenthicProfile().Terraform(CoastlineTerrain);
         }
 
         [EditorInvocationButton]
@@ -68,18 +66,7 @@ namespace Code.Runtime.Bathymetry {
             terrainData.SetAlphamaps(0, 0, matMap);
         }
 
-        public List<GameObject> Trees;
         public List<Decoration> Decorations;
-
-        [EditorInvocationButton]
-        public void PlantSomeTrees() {
-            for (int i = 0; i < 10; i++) {
-                var randomTree = Trees[Random.Range(0, Trees.Count)];
-                var zones      = BuildBenthicProfile().Zones;
-                var randomZone = zones[Random.Range(0, zones.Count)];
-                Plant(randomZone, randomTree);
-            }
-        }
 
         [EditorInvocationButton]
         public void PlantSomeFakeTrees() {
@@ -108,8 +95,10 @@ namespace Code.Runtime.Bathymetry {
 
         public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01) {
             var treePos      = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
-            var treeRot      = GetTerrainRotation(treePos);
+            var treeRot      = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up) * GetTerrainRotation(treePos);
             var treeInstance = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
+            var treeScale    = Random.Range(TreeSizeRange.x, TreeSizeRange.y);
+            treeInstance.transform.localScale = Vector3.one * treeScale;
         }
 
         public void Plant(ZoneProfile zoneProfile, GameObject tree) {
@@ -150,7 +139,6 @@ namespace Code.Runtime.Bathymetry {
 
         private Quaternion GetTerrainRotation(Vector3 worldPos) {
             return Quaternion.FromToRotation(Vector3.up, TerrainHit(worldPos).normal);
-            ;
         }
 
         private RaycastHit TerrainHit(Vector3 worldPos) {
