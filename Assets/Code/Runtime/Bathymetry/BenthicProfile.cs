@@ -18,6 +18,7 @@ namespace Code.Runtime.Bathymetry {
             public float       GeographicAltitude;
             public float       HeightInBenthicProfile;
             public Space       Space;
+            public float       ClosestGeographicBoundary;
 
             public override string ToString() {
                 return JsonUtility.ToJson(this, true);
@@ -60,14 +61,15 @@ namespace Code.Runtime.Bathymetry {
 
             var geographicAltitude = ZoneHeightToGeographicAltitude(foundZone, heightInZone);
             var surveyResults = new SurveyResults() {
-                GeographicDistance     = geographicDistance,
-                LocalDistance01        = GeographicToLocalDistance(geographicDistance),
-                Zone                   = foundZone,
-                PointInZone            = pointInZone,
-                HeightInZone           = heightInZone,
-                GeographicAltitude     = geographicAltitude,
-                HeightInBenthicProfile = GeographicAltitudeToBenthicHeight(geographicAltitude),
-                Space                  = Space.World
+                GeographicDistance        = geographicDistance,
+                LocalDistance01           = GeographicToLocalDistance(geographicDistance),
+                Zone                      = foundZone,
+                PointInZone               = pointInZone,
+                HeightInZone              = heightInZone,
+                GeographicAltitude        = geographicAltitude,
+                HeightInBenthicProfile    = GeographicAltitudeToBenthicHeight(geographicAltitude),
+                Space                     = Space.World,
+                ClosestGeographicBoundary = pointInZone < 0.5f ? GetZoneGeographicDistanceBoundaries(foundZone).x : GetZoneGeographicDistanceBoundaries(foundZone).y
             };
 
             return surveyResults;

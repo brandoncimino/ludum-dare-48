@@ -61,8 +61,7 @@ MonoBehaviour:
     GeographicDistance: 150
     Amplitude: 5
     TerrainLayer: {fileID: 8574412962073106934, guid: 0c3018c70ec777c4a9d4a9da4a454d5f, type: 2}
-  DebugText: 
-  Trees: []
+  TreeSizeRange: {x: 1, y: 9}
   Decorations:
   - {fileID: -6872426004951483968, guid: f231cd17f6e323d488453d0905487b6a, type: 3}
   - {fileID: -953748910713237039, guid: 487b4e5333119f6489f47a2d6343fa5a, type: 3}

@@ -24,6 +24,9 @@ namespace Code.Runtime.Bathymetry {
 
         public Vector2 TreeSizeRange;
 
+        [Range(0, 10)]
+        public float BlendMaterialDistance;
+
         public  Holder                          TreeHolder      = new Holder(nameof(TreeHolder));
         private Dictionary<ZoneProfile, Holder> ZoneTreeHolders = new Dictionary<ZoneProfile, Holder>();
 
@@ -42,6 +45,10 @@ namespace Code.Runtime.Bathymetry {
 
         [EditorInvocationButton]
         public void PaintTerrain() {
+            PaintTerrain(BlendMaterialDistance);
+        }
+
+        private void PaintTerrain(float blendDistance) {
             var benthicProfile = BuildBenthicProfile();
             var terrainData    = CoastlineTerrain.terrainData;
             terrainData.terrainLayers = benthicProfile.UniqueTerrainLayers.ToArray();
@@ -49,8 +56,8 @@ namespace Code.Runtime.Bathymetry {
             var matMap = terrainData.GetAlphamaps(0, 0, terrainData.alphamapResolution, terrainData.alphamapResolution);
 
             for (int x = 0; x < matMap.GetLength(0); x++) {
-                var desiredLayer = BuildBenthicProfile()
-                                   .LocalSurvey(1f / matMap.GetLength(0) * x)
+                var surveyResults = benthicProfile.LocalSurvey(1f / matMap.GetLength(0) * x);
+                var desiredLayer = surveyResults
                                    .Zone
                                    .TerrainLayer;
 
@@ -58,6 +65,7 @@ namespace Code.Runtime.Bathymetry {
 
                 for (int y = 0; y < matMap.GetLength(1); y++) {
                     for (int m = 0; m < matMap.GetLength(2); m++) {
+                        // TODO: Compute the desired blend amount
                         matMap[x, y, m] = m == desiredLayerIndex ? 1 : 0;
                     }
                 }
@@ -99,32 +107,6 @@ namespace Code.Runtime.Bathymetry {
             var treeInstance = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
             var treeScale    = Random.Range(TreeSizeRange.x, TreeSizeRange.y);
             treeInstance.transform.localScale = Vector3.one * treeScale;
-        }
-
-        public void Plant(ZoneProfile zoneProfile, GameObject tree) {
-            var treePos = ZonePointToWorldPoint(zoneProfile, Random.value, Random.value);
-            LogUtils.Log($"Creating tree {tree} at {treePos}");
-            // var treeRot       = GetRotationAtPoint(treePos);
-            var treePrototype = GetTreePrototypeForPrefab(tree);
-            var inst          = new TreeInstance {prototypeIndex = GetTreePrototypeIndex(treePrototype)};
-            CoastlineTerrain.AddTreeInstance(inst);
-        }
-
-        private TreePrototype GetTreePrototypeForPrefab(GameObject prefab) {
-            var terrainData = CoastlineTerrain.terrainData;
-            var prototype   = terrainData.treePrototypes.FirstOrDefault(it => it.prefab.Equals(prefab));
-
-            if (prototype == default) {
-                var newPrototype = new TreePrototype {prefab = prefab};
-                terrainData.treePrototypes = terrainData.treePrototypes.Concat(new[] {newPrototype}).ToArray();
-                prototype                  = newPrototype;
-            }
-
-            return prototype;
-        }
-
-        private int GetTreePrototypeIndex(TreePrototype prototype) {
-            return CoastlineTerrain.terrainData.treePrototypes.ToList().IndexOf(prototype);
         }
 
         private Vector3 ZonePointToWorldPoint(ZoneProfile zoneProfile, float zoneDist01, float zoneBreadth01) {
