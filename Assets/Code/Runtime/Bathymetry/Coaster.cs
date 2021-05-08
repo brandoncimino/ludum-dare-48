@@ -61,12 +61,34 @@ namespace Code.Runtime.Bathymetry {
                                    .Zone
                                    .TerrainLayer;
 
-                var desiredLayerIndex = terrainData.terrainLayers.ToList().IndexOf(desiredLayer);
+                // TODO: There's some weirdness with the blending - it's always blending from shallows -> rock, no matter what order the zones' terrain layers are.
+                var   desiredLayerIndex = terrainData.terrainLayers.ToList().IndexOf(desiredLayer);
+                var   blendDirection    = surveyResults.PointInZone < 0.5f ? -1 : 1;
+                var   blendZone         = benthicProfile.FindRelativeZone(surveyResults.Zone, blendDirection);
+                float blendAmount;
+                if (blendZone == null || desiredLayer == blendZone.TerrainLayer) {
+                    blendAmount = 0;
+                }
+                else {
+                    var distToBoundary = Math.Abs(surveyResults.GeographicDistance - surveyResults.ClosestGeographicBoundary);
+                    blendAmount = 1 - Mathf.Clamp01(distToBoundary / blendDistance);
+                }
 
                 for (int y = 0; y < matMap.GetLength(1); y++) {
                     for (int m = 0; m < matMap.GetLength(2); m++) {
-                        // TODO: Compute the desired blend amount
-                        matMap[x, y, m] = m == desiredLayerIndex ? 1 : 0;
+                        float layerBlend;
+
+                        if (m == desiredLayerIndex) {
+                            layerBlend = 1 - blendAmount;
+                        }
+                        else if (blendZone != null && m == terrainData.terrainLayers.ToList().IndexOf(blendZone.TerrainLayer)) {
+                            layerBlend = blendAmount;
+                        }
+                        else {
+                            layerBlend = 0;
+                        }
+
+                        matMap[x, y, m] = layerBlend;
                     }
                 }
             }

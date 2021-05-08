@@ -5,6 +5,8 @@ using System.Linq;
 
 using BrandonUtils.Standalone.Exceptions;
 
+using JetBrains.Annotations;
+
 using UnityEngine;
 
 namespace Code.Runtime.Bathymetry {
@@ -44,6 +46,18 @@ namespace Code.Runtime.Bathymetry {
         }
 
         public List<TerrainLayer> UniqueTerrainLayers => Zones.Select(it => it.TerrainLayer).Distinct().ToList();
+
+        [CanBeNull]
+        public ZoneProfile FindRelativeZone(ZoneProfile currentZone, int offset) {
+            var zoneIndex   = Zones.IndexOf(currentZone);
+            var offsetIndex = zoneIndex + offset;
+
+            if (offsetIndex < 0 || offsetIndex >= Zones.Count) {
+                return null;
+            }
+
+            return Zones[offsetIndex];
+        }
 
         #endregion
 
