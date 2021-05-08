@@ -29,6 +29,7 @@ namespace Code.Runtime.Bathymetry {
 
         public  Holder                          TreeHolder      = new Holder(nameof(TreeHolder));
         private Dictionary<ZoneProfile, Holder> ZoneTreeHolders = new Dictionary<ZoneProfile, Holder>();
+        public  Transform                       StartingLine;
 
         public BenthicProfile BuildBenthicProfile() {
             var benthicProfile = new BenthicProfile();
