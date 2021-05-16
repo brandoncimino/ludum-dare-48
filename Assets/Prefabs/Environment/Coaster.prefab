@@ -51,7 +51,7 @@ MonoBehaviour:
   - ZoneType: 0
     CurveForm: 3
     GeographicDistance: 300
-    Amplitude: 30
+    Amplitude: 100
     TerrainLayer: {fileID: 8574412962073106934, guid: 0c3018c70ec777c4a9d4a9da4a454d5f, type: 2}
   - ZoneType: 1
     CurveForm: 1

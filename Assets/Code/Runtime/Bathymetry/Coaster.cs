@@ -42,6 +42,8 @@ namespace Code.Runtime.Bathymetry {
         [EditorInvocationButton]
         public void Terraform() {
             BuildBenthicProfile().Terraform(CoastlineTerrain);
+
+            StartingLine.position = ZonePointToWorldPoint(BuildBenthicProfile().Zones[0], 0.05f, 0.5f);
         }
 
         [EditorInvocationButton]

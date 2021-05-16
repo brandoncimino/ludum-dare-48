@@ -1,42 +1,51 @@
+using BrandonUtils.Standalone.Exceptions;
+
 using UnityEngine;
 
 namespace Code.Runtime {
     public class GameManager : MonoBehaviour {
         public static GameManager Single;
         public        bool        isGameOver = false;
+        public        Transform   SpawnPoint;
+        public        GameObject  PlayerPrefab;
+        private       GameObject  PlayerInstance;
+        public        float       StartHeight = 10;
 
-        public int lvl;
-        public float _lvlUpConditionCheckTime = 0;
+        public  int   lvl;
+        public  float _lvlUpConditionCheckTime     = 0;
         private float _lvlUpConditionCheckInterval = 5f;
-        
+
         private void Awake() {
             Single = this;
         }
 
         // Start is called before the first frame update
-        void Start()
-        {
-            _lvlUpConditionCheckTime = Time.time + _lvlUpConditionCheckInterval;
-            
+        void Start() {
             // subscribe to the event manager
-            EventManager.Single.ONTriggerFirstCatch += DecideGameOverWin;
+            SubscribeToEvents();
+            StartGame();
+        }
+
+        private void SubscribeToEvents() {
+            EventManager.Single.ONTriggerFirstCatch     += DecideGameOverWin;
             EventManager.Single.ONTriggerCollisionShark += DecideGameOverFail;
-            EventManager.Single.ONTriggerLevelUp += LevelUp;
+            EventManager.Single.ONTriggerLevelUp        += LevelUp;
         }
 
         protected void OnDestroy() {
             // unsubscribe from the event manager
-            EventManager.Single.ONTriggerFirstCatch -= DecideGameOverWin;
+            EventManager.Single.ONTriggerFirstCatch     -= DecideGameOverWin;
             EventManager.Single.ONTriggerCollisionShark -= DecideGameOverFail;
-            EventManager.Single.ONTriggerLevelUp -= LevelUp;
+            EventManager.Single.ONTriggerLevelUp        -= LevelUp;
         }
 
         // Update is called once per frame
-        void Update()
-        {
-            if (Time.time > _lvlUpConditionCheckTime)
-            {
-                if (HookBehaviour.Single.checkLevelUpCondition()) EventManager.Single.TriggerLevelUp(lvl + 1);
+        void Update() {
+            if (Time.time > _lvlUpConditionCheckTime) {
+                if (HookBehaviour.Single.checkLevelUpCondition()) {
+                    EventManager.Single.TriggerLevelUp(lvl + 1);
+                }
+
                 _lvlUpConditionCheckTime = Time.time + _lvlUpConditionCheckInterval;
             }
         }
@@ -45,15 +54,27 @@ namespace Code.Runtime {
             isGameOver = true;
             EventManager.Single.TriggerGameOverWin();
         }
-        
+
         private void DecideGameOverFail() {
             isGameOver = true;
             EventManager.Single.TriggerGameOverFail();
         }
 
-        private void LevelUp(int newLvl)
-        {
+        private void LevelUp(int newLvl) {
             lvl = newLvl < 0 ? lvl + 1 : newLvl;
+        }
+
+        public void StartGame() {
+            SpawnPlayer();
+            _lvlUpConditionCheckTime = Time.time + _lvlUpConditionCheckInterval;
+        }
+
+        public void SpawnPlayer() {
+            if (PlayerInstance) {
+                throw new BrandonException("Can't spawn a player because there already is one!");
+            }
+
+            Instantiate(PlayerPrefab, SpawnPoint.position + (Vector3.up * StartHeight), PlayerPrefab.transform.rotation);
         }
     }
 }

@@ -370,13 +370,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f36df266431f4828b936a1d5904c66e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: 0
   MyRigidbody: {fileID: 45029038}
+  MouthCollection: []
   MouthCollector: {fileID: 1961041183}
-  StabilizerSmoothness: 0
   myCatches: []
-  MaxLateralSpeed: 8
-  LateralAccelerationFactor: 10
 --- !u!1001 &1798544960611163023
 PrefabInstance:
   m_ObjectHideFlags: 0
