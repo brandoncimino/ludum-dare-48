@@ -20,13 +20,13 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.033333335, g: 0.09411765, b: 0.09901961, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 65b825fab90f5f7488058eb144219eb1, type: 2}
+  m_AmbientMode: 3
+  m_SubtractiveShadowColor: {r: 0.13269848, g: 0.3771506, b: 0.3962264, a: 1}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 6f4b2735ae9f179459b4a088c2b28c2a, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -310,6 +310,10 @@ PrefabInstance:
     - target: {fileID: 48586859437911120, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
       propertyPath: m_Name
       value: Coaster
+      objectReference: {fileID: 0}
+    - target: {fileID: 48586859437911121, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
+      propertyPath: Zones.Array.data[1].Amplitude
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 48586859437911122, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
       propertyPath: m_RootOrder

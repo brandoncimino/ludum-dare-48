@@ -18,12 +18,12 @@ MonoBehaviour:
   MouthCollector: {fileID: 673955874539864437}
   myCatches: []
   _pitchMax: 45
-  _pitchSpeed: 2
-  _pushSpeed: 20
-  _directionPush: {x: 0, y: 0, z: 0}
-  _directionOriginal: {x: 0, y: -1, z: 0}
-  PushModifier: 1
+  _steerFactor: 1
+  _pushSpeed: 10
+  _downwardPushModifier: 1.5
+  _upwardPushModifier: 0.6
   _yawMax: 115
+  _stabilizationFactor: 0.5
 --- !u!1 &8909652999705767574
 GameObject:
   m_ObjectHideFlags: 0
@@ -67,7 +67,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.13269848, g: 0.3771506, b: 0.3962264, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

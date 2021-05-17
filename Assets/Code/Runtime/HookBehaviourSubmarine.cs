@@ -72,7 +72,9 @@ namespace Code.Runtime {
         }
 
         private void ApplyStabilization(float stabilizationFactor) {
-            transform.rotation = Quaternion.Slerp(transform.rotation, StableRotation(), Time.deltaTime * stabilizationFactor);
+            if (RawMovement.magnitude < float.Epsilon) {
+                transform.rotation = Quaternion.Slerp(transform.rotation, StableRotation(), Time.deltaTime * stabilizationFactor);
+            }
         }
 
         /**
@@ -109,7 +111,7 @@ namespace Code.Runtime {
         private RaycastHit Hovercast() {
             var pos      = transform.position;
             var hoverRay = new Ray(pos, Vector3.down);
-            if (Physics.Raycast(hoverRay, out var hoverHit, 100, TerrainMask)) {
+            if (Physics.Raycast(hoverRay, out var hoverHit, float.MaxValue, TerrainMask)) {
                 return hoverHit;
             }
             else {
