@@ -1,8 +1,12 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+
+using JetBrains.Annotations;
 
 using UnityEditor;
 
 using UnityEngine;
+
+using Object = UnityEngine.Object;
 
 namespace Code.Runtime.Bathymetry {
     /// <summary>
@@ -18,6 +22,7 @@ namespace Code.Runtime.Bathymetry {
     /// <li><b>Magically</b>, via implicitly-casting to <see cref="UnityEngine.Transform"/></li>
     ///
     /// </remarks>
+    [Serializable]
     public class Holder {
         /// <summary>
         /// The backing field for <see cref="Name"/> <b>when <see cref="_transform"/> does not exist.</b>
@@ -25,10 +30,10 @@ namespace Code.Runtime.Bathymetry {
         private string _name;
 
         /// <summary>
-        /// The <see cref="Object.name"/> of the <see cref="Holder"/>.
+        /// The <see cref="UnityEngine.Object.name"/> of the <see cref="Holder"/>.
         /// </summary>
         /// <remarks>
-        /// If it <see cref="Exists"/>, this will get/set <see cref="_transform"/>.<see cref="Object.name"/>.
+        /// If it <see cref="Exists"/>, this will get/set <see cref="_transform"/>.<see cref="UnityEngine.Object.name"/>.
         /// <p/>
         /// Otherwise, this will get/set <see cref="_name"/>.
         /// </remarks>

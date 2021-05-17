@@ -127,10 +127,11 @@ namespace Code.Runtime.Bathymetry {
         }
 
         public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01) {
-            var treePos      = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
-            var treeRot      = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up) * GetTerrainRotation(treePos);
-            var treeInstance = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
-            var treeScale    = Random.Range(TreeSizeRange.x, TreeSizeRange.y);
+            var treePos                = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
+            var treeRandomizedRotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
+            var treeRot                = GetTerrainRotation(treePos) * treeRandomizedRotation;
+            var treeInstance           = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
+            var treeScale              = Random.Range(TreeSizeRange.x, TreeSizeRange.y);
             treeInstance.transform.localScale = Vector3.one * treeScale;
         }
 

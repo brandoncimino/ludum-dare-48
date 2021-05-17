@@ -17,8 +17,13 @@ MonoBehaviour:
   MouthCollection: []
   MouthCollector: {fileID: 673955874539864437}
   myCatches: []
+  _pitchMax: 45
+  _pitchSpeed: 2
+  _pushSpeed: 20
   _directionPush: {x: 0, y: 0, z: 0}
   _directionOriginal: {x: 0, y: -1, z: 0}
+  PushModifier: 1
+  _yawMax: 115
 --- !u!1 &8909652999705767574
 GameObject:
   m_ObjectHideFlags: 0
