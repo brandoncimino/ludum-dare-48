@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 3
   m_SubtractiveShadowColor: {r: 0.13269848, g: 0.3771506, b: 0.3962264, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 6f4b2735ae9f179459b4a088c2b28c2a, type: 2}
+  m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.34623188, g: 0.42273313, b: 0.59576964, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -311,10 +311,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Coaster
       objectReference: {fileID: 0}
-    - target: {fileID: 48586859437911121, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
-      propertyPath: Zones.Array.data[1].Amplitude
-      value: 400
-      objectReference: {fileID: 0}
     - target: {fileID: 48586859437911122, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -365,11 +361,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1052301317410765787, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 204.75269
+      value: 304.7478
       objectReference: {fileID: 0}
     - target: {fileID: 1052301317410765787, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}

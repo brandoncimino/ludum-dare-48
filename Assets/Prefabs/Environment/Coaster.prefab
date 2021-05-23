@@ -50,17 +50,17 @@ MonoBehaviour:
   Zones:
   - ZoneType: 0
     CurveForm: 3
-    GeographicDistance: 300
+    GeographicDistance: 500
     Amplitude: 100
     TerrainLayer: {fileID: 8574412962073106934, guid: 0c3018c70ec777c4a9d4a9da4a454d5f, type: 2}
   - ZoneType: 1
     CurveForm: 1
     GeographicDistance: 60
-    Amplitude: 100
+    Amplitude: 200
     TerrainLayer: {fileID: 8574412962073106934, guid: 4a9e217fc47c53e4cadee82687f435e8, type: 2}
   - ZoneType: 2
     CurveForm: 1
-    GeographicDistance: 150
+    GeographicDistance: 300
     Amplitude: 5
     TerrainLayer: {fileID: 8574412962073106934, guid: 0c3018c70ec777c4a9d4a9da4a454d5f, type: 2}
   TreeSizeRange: {x: 1, y: 9}

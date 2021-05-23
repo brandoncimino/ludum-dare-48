@@ -1,3 +1,6 @@
+using System.Linq;
+
+using BrandonUtils.Spatial;
 using BrandonUtils.Standalone.Exceptions;
 using BrandonUtils.Vectors;
 
@@ -17,6 +20,7 @@ namespace Code.Runtime {
         public float _steerFactor = 2f;
 
         public float _pushSpeed = 10f;
+        public float _nosFactor = 10f;
 
         /**
          * The multiplier on <see cref="_pushSpeed"/> when the hook is pitched <b>downward</b>
@@ -27,7 +31,8 @@ namespace Code.Runtime {
          */
         public float _upwardPushModifier = 0.7f;
 
-        private float PushModifier => Mathf.Lerp(_downwardPushModifier, _upwardPushModifier, 0.5f - RawMovement.y);
+        private float NosModifier  => Input.GetButton("Jump") ? _nosFactor : 1;
+        private float PushModifier => Mathf.Lerp(_downwardPushModifier, _upwardPushModifier, 0.5f - RawMovement.y) + (NosModifier - 1);
 
         #endregion
 
@@ -47,11 +52,13 @@ namespace Code.Runtime {
          */
         public float _stabilizationFactor = 1f;
 
+        public float _stabilizationSpeed = 10f;
+
         #endregion
 
         // Update is called once per frame
         protected override void Update() {
-            ApplyStabilization(_stabilizationFactor);
+            ApplyStabilization(_stabilizationSpeed);
             Steer();
             ApplyVelocity();
 
@@ -71,9 +78,9 @@ namespace Code.Runtime {
             MyRigidbody.velocity = sinkVelocity + forwardVelocity;
         }
 
-        private void ApplyStabilization(float stabilizationFactor) {
+        private void ApplyStabilization(float stabilizationSpeed) {
             if (RawMovement.magnitude < float.Epsilon) {
-                transform.rotation = Quaternion.Slerp(transform.rotation, StableRotation(), Time.deltaTime * stabilizationFactor);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, StableRotation(), Time.deltaTime * stabilizationSpeed);
             }
         }
 
@@ -92,12 +99,13 @@ namespace Code.Runtime {
          * Calculates the "course to steer", i.e. the desired bearing based on the player's input
          */
         private Quaternion CourseToSteer() {
-            var targetYaw    = RawMovement.x * _yawMax;
-            var terrainPitch = GetTerrainPitch();
-            var inputPitch   = RawMovement.y * _pitchMax;
-            var targetPitch  = terrainPitch + inputPitch;
-
-            var targetRotation = Quaternion.Euler(targetPitch, targetYaw, 0);
+            // var targetYaw    = RawMovement.x * _yawMax;
+            var inputYaw        = RawMovement.x * _yawMax;
+            var inputPitch      = RawMovement.y * _pitchMax;
+            var terrainRotation = GetTerrainRotation();
+            var pitchRotation   = Quaternion.AngleAxis(inputPitch, Vector3.right);
+            var yawRotation     = Quaternion.AngleAxis(inputYaw,   Vector3.up);
+            var targetRotation  = terrainRotation * yawRotation * pitchRotation;
             return targetRotation;
         }
 
@@ -108,7 +116,7 @@ namespace Code.Runtime {
             transform.rotation = Quaternion.Slerp(transform.rotation, CourseToSteer(), _steerFactor * Time.deltaTime);
         }
 
-        private RaycastHit Hovercast() {
+        private RaycastHit Hovercast_old() {
             var pos      = transform.position;
             var hoverRay = new Ray(pos, Vector3.down);
             if (Physics.Raycast(hoverRay, out var hoverHit, float.MaxValue, TerrainMask)) {
@@ -119,9 +127,15 @@ namespace Code.Runtime {
             }
         }
 
-        private float GetTerrainPitch() {
+        private RaycastHit Hovercast() {
+            var hits = HoverHelper.ArcCast(transform, Cube.Face.Down, Cube.Face.Forward, 89, 5);
+            hits.Sort((a, b) => a.distance.CompareTo(b.distance));
+            return hits.First();
+        }
+
+        private Quaternion GetTerrainRotation() {
             var hoverHit = Hovercast();
-            return Quaternion.FromToRotation(Vector3.up, hoverHit.normal).eulerAngles.Pitch();
+            return Quaternion.FromToRotation(Vector3.up, hoverHit.normal);
         }
     }
 }
