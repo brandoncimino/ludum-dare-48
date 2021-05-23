@@ -98,7 +98,6 @@ namespace Code.Runtime {
          * Calculates the "course to steer", i.e. the desired bearing based on the player's input
          */
         private Quaternion CourseToSteer() {
-            // var targetYaw    = RawMovement.x * _yawMax;
             var inputYaw        = RawMovement.x * _yawMax;
             var inputPitch      = RawMovement.y * _pitchMax;
             var terrainRotation = GetTerrainRotation();
