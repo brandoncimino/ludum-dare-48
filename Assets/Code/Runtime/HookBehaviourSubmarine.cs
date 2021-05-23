@@ -1,7 +1,6 @@
 using System.Linq;
 
 using BrandonUtils.Spatial;
-using BrandonUtils.Standalone.Exceptions;
 using BrandonUtils.Vectors;
 
 using UnityEngine;
@@ -114,17 +113,6 @@ namespace Code.Runtime {
          */
         private void Steer() {
             transform.rotation = Quaternion.Slerp(transform.rotation, CourseToSteer(), _steerFactor * Time.deltaTime);
-        }
-
-        private RaycastHit Hovercast_old() {
-            var pos      = transform.position;
-            var hoverRay = new Ray(pos, Vector3.down);
-            if (Physics.Raycast(hoverRay, out var hoverHit, float.MaxValue, TerrainMask)) {
-                return hoverHit;
-            }
-            else {
-                throw new TransDimensionalException("The hook isn't over the terrain!");
-            }
         }
 
         private RaycastHit Hovercast() {
