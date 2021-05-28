@@ -1,6 +1,7 @@
-using System.Transactions;
 using Code.Runtime;
+
 using JetBrains.Annotations;
+
 using TMPro;
 
 using UnityEngine;
@@ -8,9 +9,9 @@ using UnityEngine;
 public class FishBehaviour : Catchables {
     public Collider myInnerCollider;
 
-    protected float speed = 5;
+    protected float speed     = 5;
     protected float fleeAngle = 90f;
-    protected float fleeTime = 1f;
+    protected float fleeTime  = 1f;
 
     //protected Vector3 direction = Vector3.forward;
 
@@ -29,22 +30,21 @@ public class FishBehaviour : Catchables {
 
     protected override void myStartBehaviour() {
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
-        AngleChange = Random.Range(-90f, 90f);
+        AngleChange    = Random.Range(-90f,              90f);
     }
 
     // Update is called once per frame
-    protected virtual void Update()
-    {
-        
+    protected virtual void Update() {
+        // rotate the thoughts to match the camera
+        RotateThoughts();
+
         // change direction if feeling uncomfortable
-        if (isUncomfortable)
-        {
+        if (isUncomfortable) {
             fleeTime -= Time.deltaTime;
-            if (fleeTime < 0)
-            {
+            if (fleeTime < 0) {
                 CalmDown();
             }
-            
+
             transform.Rotate(Vector3.up, fleeAngle * Time.deltaTime);
         }
         else {
@@ -57,18 +57,24 @@ public class FishBehaviour : Catchables {
     }
 
 
-    public virtual void Scare([CanBeNull] Transform enemy = null) {
+    public virtual void Scare(
+        [CanBeNull]
+        Transform enemy = null
+    ) {
         isUncomfortable = true;
         thoughts.text   = "AAAAAH";
-        fleeAngle = Random.Range(10f, 90f);
+        fleeAngle       = Random.Range(10f, 90f);
     }
 
-    public virtual void CalmDown([CanBeNull] Transform enemy = null) {
+    public virtual void CalmDown(
+        [CanBeNull]
+        Transform enemy = null
+    ) {
         isUncomfortable = false;
         thoughts.text   = "that was close";
 
         fleeTime = Random.Range(1f, 2f);
-        
+
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
         timeForChange  = Random.Range(minTimeForChange,  maxTimeForChange);
         AngleChange    = Random.Range(-90f,              90f);
@@ -99,5 +105,12 @@ public class FishBehaviour : Catchables {
 
     protected override void myPersonalTrigger() {
         EventManager.Single.TriggerCollisionFish(this);
+    }
+
+    private void RotateThoughts() {
+        if (Camera.current) {
+            var cameraRotation = Camera.current.transform.rotation;
+            thoughts.transform.rotation = cameraRotation;
+        }
     }
 }

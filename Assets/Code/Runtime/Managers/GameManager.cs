@@ -20,7 +20,7 @@ namespace Code.Runtime {
         private float _lvlUpConditionCheckInterval = 5f;
 
         // A lazy reference to the Coaster instance - an experiment with a different pattern than a simple Singleton
-        private readonly Lazy<Coaster> LazyCoaster = new Lazy<Coaster>(() => Single.transform.parent.GetComponentInChildren<Coaster>());
+        public readonly Lazy<Coaster> LazyCoaster = new Lazy<Coaster>(() => Single.transform.parent.GetComponentInChildren<Coaster>());
 
         private void Awake() {
             Single = this;

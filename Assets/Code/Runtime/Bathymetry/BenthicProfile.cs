@@ -30,8 +30,10 @@ namespace Code.Runtime.Bathymetry {
         private List<ZoneProfile>               _zones = new List<ZoneProfile>();
         public  ReadOnlyCollection<ZoneProfile> Zones => _zones.AsReadOnly();
 
-        public float MaxGeographicDistance => Zones.Sum(it => it.GeographicDistance);
-        public float GeographicAmplitude   => Zones.Sum(it => it.Amplitude);
+        public float   MinGeographicDistance        => 0;
+        public float   MaxGeographicDistance        => Zones.Sum(it => it.GeographicDistance);
+        public Vector2 GeographicDistanceBoundaries => new Vector2(MinGeographicDistance, MaxGeographicDistance);
+        public float   GeographicAmplitude          => Zones.Sum(it => it.Amplitude);
 
         #region Managing Zones
 
