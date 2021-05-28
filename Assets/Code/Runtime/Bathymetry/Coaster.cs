@@ -22,8 +22,6 @@ namespace Code.Runtime.Bathymetry {
 
         public List<ZoneProfile> Zones;
 
-        public Vector2 TreeSizeRange;
-
         [Range(0, 10)]
         public float BlendMaterialDistance;
 
@@ -101,12 +99,20 @@ namespace Code.Runtime.Bathymetry {
 
         public List<Decoration> Decorations;
 
+        [Tooltip("Specifies the number of decorations used by " + nameof(PlantFakeTreesInEveryZone))]
+        public int DecorationsPerZone = 20;
+
         [EditorInvocationButton]
-        public void PlantSomeFakeTrees() {
+        public void PlantFakeTreesInEveryZone() {
+            PlantFakeTreesInEveryZone(DecorationsPerZone);
+        }
+
+        private void PlantFakeTreesInEveryZone(int decorationsPerZone) {
             var bp = BuildBenthicProfile();
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < decorationsPerZone; i++) {
                 foreach (var z in bp.Zones) {
-                    PlantFakeTree(z, RandomZoneDecoration(z.ZoneType).gameObject, Random.value, Random.value);
+                    var decoration = RandomZoneDecoration(z.ZoneType);
+                    PlantFakeTree(z, decoration.gameObject, Random.value, Random.value, Random.Range(decoration.SizeRange.x, decoration.SizeRange.y));
                 }
             }
         }
@@ -126,12 +132,11 @@ namespace Code.Runtime.Bathymetry {
             TreeHolder.Clear();
         }
 
-        public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01) {
+        public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01, float treeScale) {
             var treePos                = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
             var treeRandomizedRotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
             var treeRot                = GetTerrainRotation(treePos) * treeRandomizedRotation;
             var treeInstance           = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
-            var treeScale              = Random.Range(TreeSizeRange.x, TreeSizeRange.y);
             treeInstance.transform.localScale = Vector3.one * treeScale;
         }
 

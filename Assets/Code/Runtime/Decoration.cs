@@ -8,5 +8,6 @@ namespace Code.Runtime {
     public class Decoration : MonoBehaviour {
         public List<ZoneType> ZoneTypes;
         public int            Cost;
+        public Vector2        SizeRange = Vector2.one;
     }
 }

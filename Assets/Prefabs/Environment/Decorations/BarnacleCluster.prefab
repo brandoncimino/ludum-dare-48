@@ -47,9 +47,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f50bfab25a4e1ca045d07351c4120e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Zones: 
   ZoneTypes: 0000000001000000
   Cost: 0
+  SizeRange: {x: 0.5, y: 1.5}
 --- !u!1001 &701984491904257843
 PrefabInstance:
   m_ObjectHideFlags: 0
