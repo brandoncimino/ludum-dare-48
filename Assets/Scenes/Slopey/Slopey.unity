@@ -480,8 +480,9 @@ MonoBehaviour:
   basicFish: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
   minTimeTilNextSpawn: 0.1
   maxTimeTilNextSpawn: 0.325
-  distanceFromCameraCrewToSpawnFish: 50
+  distanceFromCameraCrewToSpawnFish: {x: 0, y: 0}
   chanceToUseGoblinShark: 10
+  DistanceFromCameraRange: {x: 5, y: 50}
   Fishtrobution:
   - X: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
     Y: 9

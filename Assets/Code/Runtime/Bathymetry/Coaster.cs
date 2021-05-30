@@ -5,6 +5,9 @@ using System.Linq;
 using BrandonUtils.Logging;
 using BrandonUtils.Standalone.Attributes;
 
+using Code.Runtime.Bathymetry.Measurements;
+using Code.Runtime.Bathymetry.Points;
+
 using UnityEngine;
 
 using Random = UnityEngine.Random;
@@ -17,103 +20,9 @@ namespace Code.Runtime.Bathymetry {
     /// More specifically, this acts as a go-between between the terrain information (<see cref="BenthicProfile"/>, etc.) and the actual Unity <see cref="Terrain"/>.
     /// Should probably just be combined with the <see cref="Arborist"/>.
     /// </remarks>
-    public class Coaster : MonoBehaviour {
-        enum DimensionSpace {
-            /// <summary>
-            /// An absolute <see cref="Space.World"/> position.
-            /// </summary>
-            World,
-            /// <summary>
-            /// A distance in <see cref="Space.World"/> units, but with an <b>arbitrary origin</b>.
-            ///
-            /// Should represent a top-down view, as in, this should <b>not</b> include height (<see cref="Vector3.y"/>).
-            ///
-            /// Generally, <see cref="Geographic"/> describes a <b>distance</b>, while <see cref="World"/> describes a <b>position</b>.
-            /// </summary>
-            /// <remarks>
-            /// Similar to a <see cref="Space.Self"/> (aka <see cref="Transform.localPosition"/>) value, but should <b>always</b> be in <see cref="World"/> units.
-            ///
-            /// This avoids <a href="https://en.wikipedia.org/wiki/Gotcha_(programming)">gotchas</a> that can arise when using values local <see cref="Transform"/>s,
-            /// which are occasionally affected by <see cref="Transform.localScale"/>.
-            /// </remarks>
-            Geographic,
-            /// <summary>
-            /// A value between 0 and 1 representing a point within the boundaries of a <see cref="BenthicProfile"/>.
-            /// </summary>
-            /// <remarks>
-            /// TODO: Decide on a nice, concise way to describe numbers like this. Options include:
-            /// <code>
-            /// - Normalized
-            ///     - As in "normalized vector"
-            ///     - Ex: BenthicNormalizedDistance
-            ///     - Pro
-            ///         - ???
-            ///     - Con
-            ///         - Isn't _quite_ the correct definition of "normalized vector"
-            ///         - Akward to combine with a "context" (like "Benthic")
-            ///         - Is an adjective (I would prefer a noun)
-            /// - Unit
-            ///     - As in "unit vector"
-            ///         - Synonymous with "normalized vector"
-            ///     - Pro
-            ///         - Could sorta be a noun?
-            ///     - Con
-            ///         - See "Normalized"
-            /// - Lerp
-            ///     - As in Mathf.Lerp(a, b, t), i.e. "linear interpolation"
-            ///     - Ex: BenthicLerp
-            ///     - Pro
-            ///         - Fun to say
-            ///         - Really, really fun to say
-            ///         - Informs the context in which it is meant to be used (i.e. a lerp function)
-            ///         - Unlikely to be confused with "real" math, like how math nerds got "concave" and "convex" backwards
-            ///         - One syllable
-            ///         - Is a noun
-            ///     - Con
-            ///         - Doesn't mean anything to a normal math nerd
-            ///         - "lerp" usually describes an action, as in "lerp it" or "a lerp function"
-            /// - LerpAmount
-            ///     - Ex: BenthicLerpAmount
-            ///     - Pro
-            ///         - As informative as "lerp", if not more so (because it can't be confused with a method name)
-            ///     - Con
-            ///         - Two words
-            ///         - Uncannically-vallilly cute next to just "lerp"
-            /// - Aerp
-            ///     - From "[A]mount of liner int[ERP]olation"
-            ///     - Pro
-            ///         - Pronounced like "earp", which is fun to say
-            ///         - I like making up -erps, like plerp
-            ///     - Con
-            ///         - I am losing my mind
-            /// - Portion
-            ///     - This is what I used to use in the olden days
-            ///     - Invokes the phrasing "proportional to X"
-            /// - Proportion
-            ///     - What exactly is the difference between "portion" and "proportion"?
-            ///     - Is "proportion" a noun?
-            /// - 01
-            ///     - Ex: BenthicDistance01
-            ///     - Stands out a LOT, giving a good separation between the "variable name" and the "unit"
-            ///     - Weird enough to stand out and make you check the documentation instead of making assumptions
-            ///     - Intuitive enough (once you see the documentation) that it's easy to remember for next time
-            /// - _01
-            ///     - Same as "01" but even MORE obvious
-            /// - Scalar
-            ///     - Might be the opposite of what I mean?
-            /// - Magnitude
-            /// - Progress
-            ///
-            /// </code>
-            /// </remarks>
-            Benthic,
-            /// <summary>
-            /// <see cref="Zone"/> is to <see cref="ZoneProfile"/> as <see cref="Benthic"/> is to <see cref="BenthicProfile"/>.
-            /// </summary>
-            Zone
-        }
-
+    public partial class Coaster : MonoBehaviour {
         public Terrain CoastlineTerrain;
+        public float   CoastlineBreadth => CoastlineTerrain.terrainData.size.x;
 
         public List<ZoneProfile> Zones;
 
@@ -136,7 +45,15 @@ namespace Code.Runtime.Bathymetry {
         public void Terraform() {
             BuildBenthicProfile().Terraform(CoastlineTerrain);
 
-            StartingLine.position = ZonePointToWorldPoint(BuildBenthicProfile().Zones[0], 0.05f, 0.5f);
+            var zonePoint = ZonePointOf(BuildBenthicProfile().Zones[0], 0.05f, 0.5f);
+            var worldPos  = zonePoint.ToWorldly();
+            StartingLine.position = worldPos;
+        }
+
+        public BenthicProfile.SurveyResults Survey(Transform surveyor) {
+            var geoPoint = TerrainPointOf(surveyor).ToGeographicPoint();
+            return BuildBenthicProfile().Survey(geoPoint.Distance);
+            ;
         }
 
         [EditorInvocationButton]
@@ -192,6 +109,8 @@ namespace Code.Runtime.Bathymetry {
             terrainData.SetAlphamaps(0, 0, matMap);
         }
 
+        #region Decorations
+
         public List<Decoration> Decorations;
 
         [Tooltip("Specifies the number of decorations used by " + nameof(PlantFakeTreesInEveryZone))]
@@ -207,7 +126,8 @@ namespace Code.Runtime.Bathymetry {
             for (int i = 0; i < decorationsPerZone; i++) {
                 foreach (var z in bp.Zones) {
                     var decoration = RandomZoneDecoration(z.ZoneType);
-                    PlantFakeTree(z, decoration.gameObject, Random.value, Random.value, Random.Range(decoration.SizeRange.x, decoration.SizeRange.y));
+                    var treePoint  = ZonePointOf(z, Random.value, Random.value);
+                    PlantFakeTree(z, decoration.gameObject, treePoint, Random.Range(decoration.SizeRange.x, decoration.SizeRange.y));
                 }
             }
         }
@@ -227,85 +147,11 @@ namespace Code.Runtime.Bathymetry {
             TreeHolder.Clear();
         }
 
-        public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, float zoneDist01, float zoneBreadth01, float treeScale) {
-            var treePos                = ZonePointToWorldPoint(zoneProfile, zoneDist01, zoneBreadth01);
+        public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, Spacey.IWorldly treePoint, float treeScale) {
             var treeRandomizedRotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
-            var treeRot                = SampleRotation(treePos) * treeRandomizedRotation;
-            var treeInstance           = Instantiate(tree, treePos, treeRot, GetZoneTreeHolder(zoneProfile));
+            var treeRot                = TerrainCaster.SampleRotation(treePoint, CoastlineTerrain) * treeRandomizedRotation;
+            var treeInstance           = Instantiate(tree, treePoint.ToWorldly(), treeRot, GetZoneTreeHolder(zoneProfile));
             treeInstance.transform.localScale = Vector3.one * treeScale;
-        }
-
-        /// <summary>
-        /// Converts from <see cref="DimensionSpace.Geographic"/> → <see cref="DimensionSpace.World"/>, including the addition of a <see cref="Vector3.y"/> via <see cref="Terrain.SampleHeight"/>
-        /// </summary>
-        /// <param name="geoDist"></param>
-        /// <param name="geoBreadth"></param>
-        /// <returns></returns>
-        public Vector3 GeographicPointToWorldPoint(float geoDist, float geoBreadth) {
-            var terrainOrigin    = CoastlineTerrain.transform.position;
-            var offsetFromOrigin = new Vector3(geoBreadth, 0, geoDist);
-            var worldPos         = terrainOrigin + offsetFromOrigin;
-            worldPos.y = CoastlineTerrain.SampleHeight(worldPos);
-            return worldPos;
-        }
-
-        /// <summary>
-        /// Converts from <see cref="DimensionSpace.Zone"/> → <see cref="DimensionSpace.World"/>, including the addition of a <see cref="Vector3.y"/> coordinate via <see cref="Terrain.SampleHeight"/>
-        /// </summary>
-        /// <param name="zoneProfile"></param>
-        /// <param name="zoneDist01"></param>
-        /// <param name="zoneBreadth01"></param>
-        /// <returns></returns>
-        public Vector3 ZonePointToWorldPoint(ZoneProfile zoneProfile, float zoneDist01, float zoneBreadth01) {
-            var zoneGeoDistBounds = BuildBenthicProfile().GetZoneGeographicDistanceBoundaries(zoneProfile);
-            var geoDist           = Mathf.Lerp(zoneGeoDistBounds.x, zoneGeoDistBounds.y, zoneDist01);
-            var geoBreadth        = CoastlineTerrain.terrainData.size.x * zoneBreadth01;
-            return GeographicPointToWorldPoint(geoDist, geoBreadth);
-        }
-
-        /// <summary>
-        /// Converts from <see cref="DimensionSpace.Benthic"/> → <see cref="DimensionSpace.World"/>, including the addition of a <see cref="Vector3.y"/> coordinate via <see cref="Terrain.SampleHeight"/>
-        /// </summary>
-        /// <param name="benthicProfile"></param>
-        /// <param name="benthicDist01"></param>
-        /// <param name="benthicBreadth01"></param>
-        /// <returns></returns>
-        public Vector3 BenthicPointToWorldPoint(BenthicProfile benthicProfile, float benthicDist01, float benthicBreadth01) {
-            var geoDist    = Mathf.Lerp(benthicProfile.GeographicDistanceBoundaries.x, benthicProfile.GeographicDistanceBoundaries.y, benthicDist01);
-            var geoBreadth = CoastlineTerrain.terrainData.size.x * benthicBreadth01;
-            return GeographicPointToWorldPoint(geoDist, geoBreadth);
-        }
-
-        /// <inheritdoc cref="BenthicPointToWorldPoint(Code.Runtime.Bathymetry.BenthicProfile,float,float)"/>
-        /// <param name="benthicDist01"></param>
-        /// <param name="benthicBreadth01"></param>
-        /// <returns></returns>
-        public Vector3 BenthicPointToWorldPoint(float benthicDist01, float benthicBreadth01) {
-            return BenthicPointToWorldPoint(BuildBenthicProfile(), benthicDist01, benthicBreadth01);
-        }
-
-        /// <summary>
-        /// Similar to <see cref="Terrain.SampleHeight"/>, but returns the rotation of the <see cref="RaycastHit.normal"/> from the sky to the terrain.
-        /// </summary>
-        /// <param name="worldPos"></param>
-        /// <returns></returns>
-        private Quaternion SampleRotation(Vector3 worldPos) {
-            return Quaternion.FromToRotation(Vector3.up, TerrainHit(worldPos).normal);
-        }
-
-        private RaycastHit TerrainHit(Vector3 worldPos) {
-            var worldPoint = new Vector3(
-                worldPos.x,
-                CoastlineTerrain.transform.position.y + (CoastlineTerrain.terrainData.size.y * 2),
-                worldPos.z
-            );
-            var ray = new Ray(worldPoint, Vector3.down);
-            if (Physics.Raycast(ray, out var raycastHit)) {
-                return raycastHit;
-            }
-            else {
-                throw new ArgumentException($"The point {worldPoint} is not inside of the {nameof(CoastlineTerrain)}!");
-            }
         }
 
         private Holder GetZoneTreeHolder(ZoneProfile zoneProfile) {
@@ -316,10 +162,71 @@ namespace Code.Runtime.Bathymetry {
             return ZoneTreeHolders[zoneProfile];
         }
 
+        #endregion
+
         private void AlignToTerrain(Transform toAlign, float distanceFromTerrain = 0) {
-            var terrainHit = TerrainHit(toAlign.position);
+            var terrainHit = TerrainCaster.TerrainCast(toAlign.position, CoastlineTerrain);
             toAlign.rotation = Quaternion.FromToRotation(Vector3.up, terrainHit.normal);
             toAlign.position = terrainHit.point + terrainHit.normal * distanceFromTerrain;
         }
+
+        #region Point Factory Methods
+
+        public ZonePoint ZonePointOf(ZoneProfile zoneProfile, float zoneDist01, float zoneBreadth01) {
+            return new ZonePoint(CoastlineTerrain, BuildBenthicProfile(), zoneProfile) {
+                Distance = zoneDist01,
+                Breadth  = zoneBreadth01
+            };
+        }
+
+        /*
+         * What _is_ a "quantity"? (I'm starting to see why the Java library calls it a "quantity"!)
+         *
+         * It contains four parts:
+         *
+         *  1. A measurement
+         *  2. A value
+         *  3. A unit
+         *  4. A space
+         *
+         * Examples
+         *
+         * |Description         |Measurement    |Measures   |Relative To
+         *
+         * |Speedometer         |Speed          |Car        |World
+         * |Airspeed            |Speed          |Plane      |Air
+         * |Ground speed        |Speed          |Plane      |World
+         *
+         * |Course to Steer     |Heading        |Course     |Boat
+         * |Course over Water   |Heading        |Boat       |Water
+         * |Course made Good    |Heading        |Boat       |World
+         */
+
+        public BenthicPoint BenthicPointOf(float benthicDist01, float benthicBreadth01) {
+            return new BenthicPoint(CoastlineTerrain, BuildBenthicProfile()) {
+                Distance = benthicDist01,
+                Breadth  = benthicBreadth01
+            };
+        }
+
+        public IDGeographicPoint GeographicPointOf(float geographicDist, float geographicBreadth) {
+            return new IDGeographicPoint(CoastlineTerrain) {
+                Distance = geographicDist,
+                Breadth  = geographicBreadth
+            };
+        }
+
+        public TerrainPoint TerrainPointOf(Vector3 worldPoint) {
+            return new TerrainPoint(CoastlineTerrain) {
+                Distance = worldPoint.z,
+                Breadth  = worldPoint.x
+            };
+        }
+
+        public TerrainPoint TerrainPointOf(Transform tf) {
+            return TerrainPointOf(tf.position);
+        }
+
+        #endregion
     }
 }

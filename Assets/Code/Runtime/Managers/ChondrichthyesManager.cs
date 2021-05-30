@@ -6,6 +6,7 @@ using BrandonUtils.Standalone.Collections;
 using BrandonUtils.Standalone.Exceptions;
 
 using Code.Runtime;
+using Code.Runtime.Bathymetry.Measurements;
 
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class ChondrichthyesManager : MonoBehaviour {
     [Range(0.1f, 1f)]
     public float maxTimeTilNextSpawn;
     public Vector2 RangeTimeTilNextSpawn => new Vector2(minTimeTilNextSpawn, maxTimeTilNextSpawn);
-    public float   distanceFromCameraCrewToSpawnFish;
+    public Vector2 distanceFromCameraCrewToSpawnFish;
 
     [Range(0, 100)]
     public float chanceToUseGoblinShark;
@@ -29,11 +30,14 @@ public class ChondrichthyesManager : MonoBehaviour {
     private float fishScaleMin  = 0.1f;
     private float fishScaleStep = 0.3f;
 
+    public Vector2 DistanceFromCameraRange;
+
     [Header("The weighted distribution used to select which fish will be spawned")]
     public List<Pair<Catchables, int>> Fishtrobution;
 
     /// A much simpler and probably smarter implementation of <see cref="Code.Runtime.Bathymetry.Holder"/>
     private static Lazy<Transform> FishHolder = new Lazy<Transform>(() => new GameObject(nameof(FishHolder)).transform);
+    private static List<Catchables> AllFish = new List<Catchables>();
 
     public int gameLevel => GameManager.Single.lvl;
 
@@ -47,6 +51,23 @@ public class ChondrichthyesManager : MonoBehaviour {
     private void Start() {
         lastSpawnTimeStamp = Time.time;
         GenerateFishTicket();
+        SpawnStartingFish();
+    }
+
+    private void SpawnStartingFish() {
+        // Enumerable.Repeat()
+    }
+
+    private Catchables SpawnFishAroundCenter() {
+        return SpawnFish(
+            GameManager
+                .Single
+                .LazyCoaster
+                .Value.BenthicPointOf(
+                    Random.value,
+                    0.5f + Random.Range(0.1f, 0.1f)
+                )
+        );
     }
 
     /// <summary>
@@ -59,8 +80,13 @@ public class ChondrichthyesManager : MonoBehaviour {
 
     // Update is called once per frame
     private void Update() {
-        if (ShouldSpawn()) {
-            SpawnFish();
+        if (GameManager.Single.PlayerInstance) {
+            if (ShouldSpawn()) {
+                SpawnFish(GetSpawnPosition_NearPlayer(DistanceFromCameraRange));
+            }
+        }
+        else {
+            Debug.Log("NO PLAYER");
         }
     }
 
@@ -78,12 +104,10 @@ public class ChondrichthyesManager : MonoBehaviour {
     ///
     /// For "engine-y" stuff, see <see cref="InstantiateFish"/>
     /// </summary>
+    /// <param name="spawnWorldPosition"></param>
     /// <returns></returns>
-    private Catchables SpawnFish() {
-        var fishToSpawn          = PickRandomFish();
-        var spawnBenthicDistance = Random.value;
-        var spawnBenthicBreadth  = Random.value;
-        var spawnWorldPosition   = GameManager.Single.LazyCoaster.Value.BenthicPointToWorldPoint(spawnBenthicDistance, spawnBenthicBreadth);
+    private Catchables SpawnFish(Vector3 spawnWorldPosition) {
+        var fishToSpawn = PickRandomFish();
 
         // fish have a different size as a motivation to go deep
         var fishScale = fishScaleMin + fishScaleStep * (gameLevel + Random.Range(-1f, 1f));
@@ -95,13 +119,55 @@ public class ChondrichthyesManager : MonoBehaviour {
         return newFish;
     }
 
+    private Catchables SpawnFish(Spacey.IWorldly spawnPoint) {
+        return SpawnFish(spawnPoint.ToWorldly());
+    }
+
     /// <summary>
     /// Spawns a <a href="https://en.wikipedia.org/wiki/Clutch_(eggs)">clutch</a> of fish
     /// </summary>
     /// <param name="clutchSize">the size of the <a href="https://en.wikipedia.org/wiki/Clutch_(eggs)">clutch</a></param>
     /// <returns></returns>
     public List<Catchables> SpawnFish(int clutchSize) {
-        return Enumerable.Repeat(SpawnFish(), clutchSize).ToList();
+        return Enumerable.Repeat(SpawnFish(GetSpawnPosition_OverTerrain()), clutchSize).ToList();
+    }
+
+    private Vector3 GetSpawnPosition_NearPlayer(Vector2 distanceFromCameraRange) {
+        var yawFromCamera       = Random.Range(-90f,                      90f);
+        var distanceFromCamera  = Random.Range(distanceFromCameraRange.x, distanceFromCameraRange.y);
+        var camTf               = GameManager.Single.PlayerInstance.transform;
+        var directionFromCamera = Quaternion.AngleAxis(yawFromCamera, Vector3.up) * camTf.forward;
+        var positionFromCamera  = directionFromCamera * distanceFromCamera;
+        var worldPosition       = camTf.transform.position + positionFromCamera;
+        worldPosition.y = GameManager.Single.LazyCoaster.Value.CoastlineTerrain.SampleHeight(worldPosition) + Random.Range(5, 15);
+        return worldPosition;
+    }
+
+    private static float RandomNear(float center, float radius) {
+        return Random.Range(center - radius, center + radius);
+    }
+
+    private Vector3 GetSpawnPosition_OverTerrain() {
+        var terrain     = GameManager.Single.LazyCoaster.Value.CoastlineTerrain;
+        var terrainData = terrain.terrainData;
+
+        var distMin = GameManager.Single.PlayerInstance ? GameManager.Single.PlayerInstance.transform.position.x - 10 : terrain.GetPosition().x;
+
+        var distRange = new Vector2(
+            distMin,
+            terrain.GetPosition().z + terrainData.size.z
+        );
+
+        var breadthRange = new Vector2(
+            terrain.GetPosition().x,
+            terrain.GetPosition().x + terrainData.size.x
+        );
+
+        var     worldDist    = Random.Range(distRange.x,    distRange.y);
+        var     worldBreadth = Random.Range(breadthRange.x, breadthRange.y);
+        Vector3 worldPos     = new Vector3(worldBreadth, 0, worldDist);
+        worldPos.y = terrain.SampleHeight(worldPos);
+        return worldPos;
     }
 
     /// <summary>
@@ -117,10 +183,15 @@ public class ChondrichthyesManager : MonoBehaviour {
     private static Catchables InstantiateFish(Catchables fishToInstantiate, Vector3 position, float fishScale) {
         var newFish = Instantiate(fishToInstantiate, position, Quaternion.identity, FishHolder.Value);
         newFish.ScaleUp(fishScale);
+        AllFish.Add(newFish);
         return newFish;
     }
 
     private Catchables PickRandomFish() {
+        if (Fishtrobution == null || Fishtrobution.Count == 0) {
+            throw new BrandonException($"The {nameof(Fishtrobution)} list is empty!");
+        }
+
         var totalWeight       = Fishtrobution.Sum(it => it.Y);
         var weightedSelection = Random.Range(0, totalWeight);
 

@@ -122,7 +122,13 @@ namespace Code.Runtime.Bathymetry {
             return Zones.First(it => IsPointInRange(geographicDistance, GetZoneGeographicDistanceBoundaries(it)));
         }
 
-        private float FindPointInZone(float geographicDistance, ZoneProfile zone) {
+        /// <summary>
+        /// goes from <see cref="DimensionSpace.Benthic"/> -> <see cref="DimensionSpace.Zone"/>
+        /// </summary>
+        /// <param name="geographicDistance"></param>
+        /// <param name="zone"></param>
+        /// <returns></returns>
+        public float FindPointInZone(float geographicDistance, ZoneProfile zone) {
             Validate_GeographicDistance(geographicDistance);
 
             var zoneBounds = GetZoneGeographicDistanceBoundaries(zone);
@@ -158,7 +164,7 @@ namespace Code.Runtime.Bathymetry {
             return point >= min && point <= max;
         }
 
-        private static float GetPortion(float value, Vector2 range) {
+        public static float GetPortion(float value, Vector2 range) {
             if (!IsPointInRange(value, range)) {
                 throw new BrandonException($"The value {value} isn't within the range {range}");
             }

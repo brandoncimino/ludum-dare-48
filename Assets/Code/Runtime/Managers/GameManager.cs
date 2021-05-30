@@ -10,10 +10,14 @@ namespace Code.Runtime {
     public class GameManager : MonoBehaviour {
         public static GameManager Single;
         public        bool        isGameOver = false;
-        public        Transform   SpawnPoint;
-        public        GameObject  PlayerPrefab;
-        private       GameObject  PlayerInstance;
-        public        float       StartHeight = 10;
+
+        //region Player Positioning
+        public Transform                          SpawnPoint;
+        public GameObject                         PlayerPrefab;
+        public Transform                          PlayerInstance { get; private set; }
+        public float                              StartHeight  = 10;
+        public Lazy<BenthicProfile.SurveyResults> PlayerSurvey = NewSurveyPlan();
+        //endregion
 
         public  int   lvl;
         public  float _lvlUpConditionCheckTime     = 0;
@@ -25,6 +29,14 @@ namespace Code.Runtime {
         private void Awake() {
             Single = this;
             LazyCoaster.Value.PlantFakeTreesInEveryZone();
+        }
+
+        private static Lazy<BenthicProfile.SurveyResults> NewSurveyPlan() {
+            return new Lazy<BenthicProfile.SurveyResults>(() => Single.LazyCoaster.Value.Survey(Single.PlayerInstance));
+        }
+
+        private void LateUpdate() {
+            PlayerSurvey = NewSurveyPlan();
         }
 
         // Start is called before the first frame update
@@ -82,7 +94,7 @@ namespace Code.Runtime {
                 throw new BrandonException("Can't spawn a player because there already is one!");
             }
 
-            Instantiate(PlayerPrefab, SpawnPoint.position + (Vector3.up * StartHeight), PlayerPrefab.transform.rotation);
+            PlayerInstance = Instantiate(PlayerPrefab, SpawnPoint.position + (Vector3.up * StartHeight), PlayerPrefab.transform.rotation).transform;
         }
     }
 }
