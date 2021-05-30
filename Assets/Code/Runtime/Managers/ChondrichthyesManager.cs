@@ -30,6 +30,11 @@ public class ChondrichthyesManager : MonoBehaviour {
     private float fishScaleMin  = 0.1f;
     private float fishScaleStep = 0.3f;
 
+    /// <summary>
+    /// The arc that fish will spawn with, relative to the ground.
+    /// </summary>
+    public Vector2 FishSpawnPitchRange = new Vector2(-20, 45);
+
     public Vector2 DistanceFromCameraRange;
 
     [Header("The weighted distribution used to select which fish will be spawned")]
@@ -112,7 +117,7 @@ public class ChondrichthyesManager : MonoBehaviour {
         // fish have a different size as a motivation to go deep
         var fishScale = fishScaleMin + fishScaleStep * (gameLevel + Random.Range(-1f, 1f));
 
-        var newFish = InstantiateFish(fishToSpawn, spawnWorldPosition, fishScale);
+        var newFish = InstantiateFish(fishToSpawn, spawnWorldPosition, GetRandomFishSpawnRotation(), fishScale);
 
         GenerateFishTicket();
 
@@ -178,13 +183,32 @@ public class ChondrichthyesManager : MonoBehaviour {
     /// </summary>
     /// <param name="fishToInstantiate"></param>
     /// <param name="position"></param>
+    /// <param name="rotation"></param>
     /// <param name="fishScale"></param>
     /// <returns></returns>
-    private static Catchables InstantiateFish(Catchables fishToInstantiate, Vector3 position, float fishScale) {
-        var newFish = Instantiate(fishToInstantiate, position, Quaternion.identity, FishHolder.Value);
+    private static Catchables InstantiateFish(Catchables fishToInstantiate, Vector3 position, Quaternion rotation, float fishScale) {
+        var newFish = Instantiate(fishToInstantiate, position, rotation, FishHolder.Value);
         newFish.ScaleUp(fishScale);
         AllFish.Add(newFish);
         return newFish;
+    }
+
+    /// <summary>
+    /// Decides in what direction fish will spawn facing.
+    ///
+    /// The fish will spawn with a yaw between 0-360, and a pitch within <see cref="FishSpawnPitchRange"/>.
+    ///
+    /// </summary>
+    /// <remarks>
+    /// Note that due to <see cref="FishBehaviour.changeDirectionToHorizonntal">enthalpy</see>, fish will eventually all be swimming level.
+    ///
+    /// Note 2: I checked, and see that <a href="https://en.wikipedia.org/wiki/Enthalpy">enthalpy</a> is <b><i>not</i></b> the opposite of <a href="https://en.wikipedia.org/wiki/Entropy">entropy</a>.
+    /// I am very sad.</remarks>
+    /// <returns></returns>
+    private Quaternion GetRandomFishSpawnRotation() {
+        var yaw   = Random.Range(0,                     360);
+        var pitch = Random.Range(FishSpawnPitchRange.x, FishSpawnPitchRange.y);
+        return Quaternion.AngleAxis(yaw, Vector3.up) * Quaternion.AngleAxis(pitch, Vector3.right);
     }
 
     private Catchables PickRandomFish() {
