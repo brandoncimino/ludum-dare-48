@@ -115,7 +115,7 @@ namespace Code.Runtime {
         }
 
         private RaycastHit Hovercast() {
-            var hits = HoverHelper.ArcCast(transform, Cube.Face.Down, Cube.Face.Forward, 89, 5);
+            var hits = HoverHelper.ArcCast(transform, Cube.Face.Down, Cube.Face.Forward, 89, 5, TerrainMask);
             hits.Sort((a, b) => a.distance.CompareTo(b.distance));
             return hits.First();
         }
