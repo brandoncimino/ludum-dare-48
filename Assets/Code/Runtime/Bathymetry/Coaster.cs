@@ -46,7 +46,7 @@ namespace Code.Runtime.Bathymetry {
             BuildBenthicProfile().Terraform(CoastlineTerrain);
 
             var zonePoint = ZonePointOf(BuildBenthicProfile().Zones[0], 0.05f, 0.5f);
-            var worldPos  = zonePoint.ToWorldly();
+            var worldPos  = zonePoint.Worldly;
             StartingLine.position = worldPos;
         }
 
@@ -150,7 +150,7 @@ namespace Code.Runtime.Bathymetry {
         public void PlantFakeTree(ZoneProfile zoneProfile, GameObject tree, Spacey.IWorldly treePoint, float treeScale) {
             var treeRandomizedRotation = Quaternion.AngleAxis(Random.Range(0, 360), Vector3.up);
             var treeRot                = TerrainCaster.SampleRotation(treePoint, CoastlineTerrain) * treeRandomizedRotation;
-            var treeInstance           = Instantiate(tree, treePoint.ToWorldly(), treeRot, GetZoneTreeHolder(zoneProfile));
+            var treeInstance           = Instantiate(tree, treePoint.Worldly, treeRot, GetZoneTreeHolder(zoneProfile));
             treeInstance.transform.localScale = Vector3.one * treeScale;
         }
 
@@ -209,8 +209,8 @@ namespace Code.Runtime.Bathymetry {
             };
         }
 
-        public IDGeographicPoint GeographicPointOf(float geographicDist, float geographicBreadth) {
-            return new IDGeographicPoint(CoastlineTerrain) {
+        public GeographicPoint GeographicPointOf(float geographicDist, float geographicBreadth) {
+            return new GeographicPoint(CoastlineTerrain) {
                 Distance = geographicDist,
                 Breadth  = geographicBreadth
             };

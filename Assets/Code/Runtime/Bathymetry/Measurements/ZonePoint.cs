@@ -18,25 +18,27 @@ namespace Code.Runtime.Bathymetry {
             this.ZoneProfile    = zoneProfile;
         }
 
-        public BenthicPoint ToBenthic() {
-            var geoBounds = BenthicProfile.GetZoneGeographicDistanceBoundaries(ZoneProfile);
-            var geoDist   = Mathf.Lerp(geoBounds.x, geoBounds.y, Distance);
-            return new BenthicPoint(WorldTerrain, BenthicProfile) {
-                Distance = BenthicProfile.GetPortion(geoDist, BenthicProfile.GeographicDistanceBoundaries),
-                Breadth  = Breadth
-            };
+        public BenthicPoint Benthic {
+            get {
+                var geoBounds = BenthicProfile.GetZoneGeographicDistanceBoundaries(ZoneProfile);
+                var geoDist   = Mathf.Lerp(geoBounds.x, geoBounds.y, Distance);
+                return new BenthicPoint(WorldTerrain, BenthicProfile) {
+                    Distance = BenthicProfile.GetPortion(geoDist, BenthicProfile.GeographicDistanceBoundaries),
+                    Breadth  = Breadth
+                };
+            }
         }
 
-        public IDGeographicPoint ToGeographic() {
-            return ToBenthic().ToGeographic();
+        public GeographicPoint Geographic {
+            get { return Benthic.Geographic; }
         }
 
-        public TerrainPoint ToTerrene() {
-            return ToGeographic().ToTerrene();
+        public TerrainPoint Terrene {
+            get { return Geographic.Terrene; }
         }
 
-        public Vector3 ToWorldly() {
-            return ToTerrene().ToWorldly();
+        public Vector3 Worldly {
+            get { return Terrene.Worldly; }
         }
     }
 }

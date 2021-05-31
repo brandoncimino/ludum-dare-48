@@ -20,7 +20,7 @@ namespace Code.Runtime.Bathymetry.Measurements {
         }
 
         public static RaycastHit TerrainCast(Spacey.IWorldly point, Terrain terrain) {
-            return TerrainCast(point.ToWorldly(), terrain);
+            return TerrainCast(point.Worldly, terrain);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Code.Runtime.Bathymetry.Measurements {
         }
 
         public static Quaternion SampleRotation(Spacey.IWorldly point, Terrain terrain) {
-            return SampleRotation(point.ToWorldly(), terrain);
+            return SampleRotation(point.Worldly, terrain);
         }
     }
 }

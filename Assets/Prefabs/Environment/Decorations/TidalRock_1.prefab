@@ -131,4 +131,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ZoneTypes: 000000000100000002000000
   Cost: 0
-  SizeRange: {x: 0.5, y: 9}
+  SizeRange: {x: 0.5, y: 5}

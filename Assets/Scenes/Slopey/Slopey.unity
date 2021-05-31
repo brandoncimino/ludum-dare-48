@@ -481,9 +481,36 @@ MonoBehaviour:
   ActivateFishAheadBy: 100
   Fishtrobution:
   - X: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
-    Y: 9
-  - X: {fileID: 1095902333, guid: 504878b2cce4849fea5ab18fb5a2c4b6, type: 3}
     Y: 1
+  Sharktrobution:
+  - X: {fileID: 1095902333, guid: 504878b2cce4849fea5ab18fb5a2c4b6, type: 3}
+    Y: 5
+  - X: {fileID: 5267602853704915605, guid: 42a43b0e5609dbd42b6309c2d3341eb9, type: 3}
+    Y: 1
+  DangerCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.9895325
+      value: 0.8571434
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   FishtrobutionBreadthCurve:
     serializedVersion: 2
     m_Curve:
@@ -560,10 +587,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   FishtrobutionRadius: 0.1
-  InitialFishtrobution: 800
-  FishtrobutionDistanceFromGround: {x: 5, y: 15}
+  InitialFishtrobution: 200
+  FishtrobutionDistanceFromGround: {x: 10, y: 30}
   FishSpawnPitchRange: {x: -20, y: 45}
   DistanceFromCameraRange: {x: 5, y: 50}
+  FishNearPlayer: 0
 --- !u!1 &653179468
 GameObject:
   m_ObjectHideFlags: 0

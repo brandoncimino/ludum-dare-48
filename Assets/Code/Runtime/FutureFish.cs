@@ -13,16 +13,17 @@ namespace Code.Runtime {
         public static readonly Lazy<Transform> FishHolder = new Lazy<Transform>(() => new GameObject(nameof(FishHolder)).transform);
         public static readonly SortedSet<FutureFish> Portents = new SortedSet<FutureFish>(Comparer<FutureFish>.Default);
 
-        public Catchables      Catchables         { get; }
-        public Spacey.IWorldly Position           { get; }
-        public float           DistanceFromGround { get; }
-        public Quaternion      Rotation           { get; }
-        public float           Scale              { get; }
-        public bool            Instantiated       { get; private set; }
-        public bool            Reified            => Instantiated;
-        public bool            Activated          { get; private set; }
-        public bool            Consummated        => Activated;
-        public Catchables      Instance           { get; private set; }
+        public  Catchables      Catchables { get; }
+        private Spacey.IWorldly _spawnPosition;
+        public  Spacey.IWorldly Position           => Activated ? (WorldPoint) Instance.transform.position : _spawnPosition;
+        public  float           DistanceFromGround { get; }
+        public  Quaternion      Rotation           { get; }
+        public  float           Scale              { get; }
+        public  bool            Instantiated       { get; private set; }
+        public  bool            Reified            => Instantiated;
+        public  bool            Activated          { get; private set; }
+        public  bool            Consummated        => Activated;
+        public  Catchables      Instance           { get; private set; }
 
         /// <summary>
         /// Predicts the conditions under which a <see cref="FutureFish"/> will be <see cref="Reified"/>,
@@ -54,7 +55,7 @@ namespace Code.Runtime {
             float scale
         ) {
             Catchables         = catchables;
-            Position           = position;
+            _spawnPosition     = position;
             DistanceFromGround = distanceFromGround;
             Rotation           = rotation;
             Scale              = scale;
@@ -125,7 +126,7 @@ namespace Code.Runtime {
         private static Catchables InstantiateFish(Catchables fishToInstantiate, Spacey.IWorldly position, float distanceFromGround, Quaternion rotation, float fishScale) {
             var newFish = Object.Instantiate(
                 fishToInstantiate,
-                position.ToWorldly() + (Vector3.up * distanceFromGround),
+                position.Worldly + (Vector3.up * distanceFromGround),
                 rotation,
                 FishHolder.Value
             );
@@ -133,12 +134,12 @@ namespace Code.Runtime {
             return newFish;
         }
 
-        public Vector3 ToWorldly() {
-            return Position.ToWorldly();
+        public Vector3 Worldly {
+            get { return Position.Worldly; }
         }
 
         public int CompareTo(FutureFish other) {
-            return Position.ToWorldly().z.CompareTo(other.ToWorldly().z);
+            return Position.Worldly.z.CompareTo(other.Worldly.z);
         }
     }
 }

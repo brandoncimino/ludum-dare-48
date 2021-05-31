@@ -1,24 +1,26 @@
+using Code.Runtime.Bathymetry.Measurements;
+
 using JetBrains.Annotations;
 
 using UnityEngine;
 
 namespace Code.Runtime {
     //[RequireComponent(typeof(Rigidbody))]
-    public class Catchables : MonoBehaviour
-    {
+    public class Catchables : MonoBehaviour {
+        protected bool _gotCaught  = false;
+        public    bool isSubmarine = false;
 
-        protected bool _gotCaught = false;
-        public bool isSubmarine = false;
-        
         [CanBeNull]
         protected CharacterJoint myMouth = null;
         public Vector3   MouthPosition = new Vector3(0, 0, 0.5f);
         public Rigidbody catchableRigidbody;
 
+        public Vector2        ScaleRange;
+        public AnimationCurve ScaleByDepth;
+
         public float myScale = 1f;
 
         protected void Start() {
-            
             // find your Rigidbody
             if (catchableRigidbody == null) {
                 catchableRigidbody = GetComponent<Rigidbody>();
@@ -31,17 +33,23 @@ namespace Code.Runtime {
             myStartBehaviour();
         }
 
+        public float SetScaleByDepth(Spacey.ITerrene terrainPoint) {
+            return Random.Range(
+                ScaleRange.x,
+                ScaleByDepth.Evaluate(terrainPoint.Terrene.Depth)
+            );
+        }
+
         protected void OnDestroy() {
             // unsubscribe to the event manager
             EventManager.Single.ONTriggerCollisionCatchable -= GotCaught;
         }
 
         protected virtual void GotCaught(Catchables newCatch) {
-            if (newCatch == this)
-            {
+            if (newCatch == this) {
                 _gotCaught = true;
                 FindMyMouth();
-                myMouth.connectedBody = isSubmarine? HookBehaviourSubmarine.Single.FindHook() : HookBehaviour.Single.FindHook();
+                myMouth.connectedBody = isSubmarine ? HookBehaviourSubmarine.Single.FindHook() : HookBehaviour.Single.FindHook();
                 myPersonalTrigger();
             }
         }
@@ -78,24 +86,20 @@ namespace Code.Runtime {
             catchableRigidbody.isKinematic = false;
         }
 
-        protected void HaveIBeenEaten(Vector3 sharkPosition)
-        {
+        protected void HaveIBeenEaten(Vector3 sharkPosition) {
             var distance = sharkPosition - transform.position;
-            if (distance.magnitude < 1e-2)
-            {
+            if (distance.magnitude < 1e-2) {
                 transform.position -= 1e3f * transform.up;
                 gameObject.SetActive(false);
             }
         }
-        
-        public void getEaten()
-        {
+
+        public void getEaten() {
             gameObject.SetActive(false);
         }
 
-        public virtual void ScaleUp(float newScale)
-        {
-            myScale = newScale;
+        public virtual void ScaleUp(float newScale) {
+            myScale              = newScale;
             transform.localScale = myScale * Vector3.one;
         }
     }

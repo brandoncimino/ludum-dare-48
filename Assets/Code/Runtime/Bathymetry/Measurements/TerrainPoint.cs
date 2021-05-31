@@ -12,6 +12,7 @@ namespace Code.Runtime.Bathymetry {
         public readonly Terrain          WorldTerrain;
         private         Lazy<float>      _height;
         public          float            Height => _height.Value;
+        public          float            Depth  => 1 - _height.Value;
         private         Lazy<RaycastHit> _terrainHit;
         public          RaycastHit       TerrainHit => _terrainHit.Value;
 
@@ -22,15 +23,17 @@ namespace Code.Runtime.Bathymetry {
         }
 
         public override Vector3 ToWorldAxes() {
-            return ToWorldly();
+            return Worldly;
         }
 
-        public Vector3 ToWorldly() {
-            return new Vector3(
-                Breadth,
-                Height,
-                Distance
-            );
+        public Vector3 Worldly {
+            get {
+                return new Vector3(
+                    Breadth,
+                    Height,
+                    Distance
+                );
+            }
         }
 
         protected override void OnAnyChange() {
@@ -42,11 +45,11 @@ namespace Code.Runtime.Bathymetry {
         }
 
         private void ResetTerrainHit() {
-            this._terrainHit = new Lazy<RaycastHit>(() => TerrainCaster.TerrainCast(ToWorldly(), WorldTerrain));
+            this._terrainHit = new Lazy<RaycastHit>(() => TerrainCaster.TerrainCast(Worldly, WorldTerrain));
         }
 
-        public IDGeographicPoint ToGeographicPoint() {
-            return new IDGeographicPoint(WorldTerrain);
+        public GeographicPoint ToGeographicPoint() {
+            return new GeographicPoint(WorldTerrain);
         }
     }
 }

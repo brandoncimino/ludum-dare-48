@@ -4,32 +4,32 @@ using UnityEngine;
 
 namespace Code.Runtime.Bathymetry.Measurements {
     public interface IPoint {
-        float          Distance       { get; set; }
-        float          Breadth        { get; set; }
+        float          Distance       { get; }
+        float          Breadth        { get; }
         DimensionSpace DimensionSpace { get; }
         Vector3 ToWorldAxes();
     }
 
     public abstract class Spacey {
         public interface IWorldly {
-            Vector3 ToWorldly();
+            Vector3 Worldly { get; }
         }
 
         public interface ITerrene : IWorldly, IPoint {
-            TerrainPoint ToTerrene();
+            TerrainPoint Terrene { get; }
         }
 
         public interface IGeographic : ITerrene {
-            IDGeographicPoint ToGeographic();
+            GeographicPoint Geographic { get; }
         }
 
         public interface IBenthic : IGeographic {
-            BenthicPoint ToBenthic();
+            BenthicPoint Benthic { get; }
         }
 
 
         public interface IZonal : IBenthic {
-            ZonePoint ToZonal();
+            ZonePoint Zonal { get; }
         }
     }
 }

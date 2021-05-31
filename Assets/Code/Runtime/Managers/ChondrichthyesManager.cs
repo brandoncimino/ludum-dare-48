@@ -23,14 +23,15 @@ namespace Code.Runtime.Managers {
         public float   DeactivateFishBehindBy = 50;
         public float   ActivateFishAheadBy    = 100;
 
-        private float fishScaleMin  = 0.1f;
-        private float fishScaleStep = 0.3f;
-
         #region Fishtrobution
 
         [Header("Fishtrobution")]
-        [Tooltip("The weighted distribution used to select which fish will be spawned.")]
+        [Tooltip("The weighted distribution used to select which FISH (not shark) will be spawned.")]
         public List<Pair<Catchables, int>> Fishtrobution;
+        public List<Pair<Catchables, int>> Sharktrobution;
+
+        [Header("Below = " + nameof(Fishtrobution) + ", above = " + nameof(Sharktrobution))]
+        public AnimationCurve DangerCurve;
 
         [FormerlySerializedAs("FishtrobutionCurve")]
         [Tooltip("Controls how densely fish are distributed away the center of the terrain.")]
@@ -115,22 +116,21 @@ namespace Code.Runtime.Managers {
         /// Portends a <see cref="FutureFish"/>.
         /// </summary>
         /// <remarks>
-        /// TODO: Should this be named "Fishee"? Or is that too vague?
+        /// TODO: Should this be named "Fishsee"? Or is that too vague?
         /// </remarks>
-        /// <param name="spawnWorldPosition"></param>
+        /// <param name="spawnBenthicPosition"></param>
         /// <returns></returns>
-        private FutureFish ForeseeFish(Spacey.IWorldly spawnWorldPosition) {
-            var fishToSpawn = PickRandomFish();
+        private FutureFish ForeseeFish(Spacey.IBenthic spawnBenthicPosition) {
+            var fishToSpawn = PickPossiblyDangerousFish(spawnBenthicPosition);
 
             // fish have a different size as a motivation to go deep
-            var fishScale = fishScaleMin + fishScaleStep * (gameLevel + Random.Range(-1f, 1f));
 
             var newFish = new FutureFish(
                 fishToSpawn,
-                spawnWorldPosition,
+                spawnBenthicPosition,
                 Random.Range(FishtrobutionDistanceFromGround.x, FishtrobutionDistanceFromGround.y),
                 GetRandomFishSpawnRotation(),
-                fishScale
+                fishToSpawn.SetScaleByDepth(spawnBenthicPosition)
             );
 
             GenerateFishTicket();
@@ -154,22 +154,13 @@ namespace Code.Runtime.Managers {
         }
 
         private bool IsFarBehind(Spacey.IWorldly position) {
-            var cam = Camera.current;
-
-            if (!cam) {
-                return false;
-            }
-
-            return cam.transform.position.z - position.ToWorldly().z > Mathf.Abs(DeactivateFishBehindBy);
+            return GameManager.Single.PlayerInstance.transform.position.z - position.Worldly.z > Mathf.Abs(DeactivateFishBehindBy);
         }
 
         private bool IsCloseAhead(Spacey.IWorldly position) {
-            var cam = Camera.current;
-            if (!cam) {
-                return false;
-            }
+            var player = GameManager.Single.PlayerInstance.transform.position;
 
-            return position.ToWorldly().z - cam.transform.position.z < ActivateFishAheadBy;
+            return position.Worldly.z - player.z < ActivateFishAheadBy;
         }
 
         private bool ShouldActivateFish(FutureFish fish) {
@@ -180,7 +171,7 @@ namespace Code.Runtime.Managers {
             return IsFarBehind(fishPosition);
         }
 
-        private List<FutureFish> ForeseeFish(Func<Spacey.IWorldly> spawnPositionSupplier, int clutchSize) {
+        private List<FutureFish> ForeseeFish(Func<Spacey.IBenthic> spawnPositionSupplier, int clutchSize) {
             return Enumerable.Range(0, clutchSize).Select(i => ForeseeFish(spawnPositionSupplier.Invoke())).ToList();
         }
 
@@ -224,17 +215,24 @@ namespace Code.Runtime.Managers {
             return Quaternion.AngleAxis(yaw, Vector3.up) * Quaternion.AngleAxis(pitch, Vector3.right);
         }
 
-        private Catchables PickRandomFish() {
-            if (Fishtrobution == null || Fishtrobution.Count == 0) {
-                throw new BrandonException($"The {nameof(Fishtrobution)} list is empty!");
+        private Catchables PickPossiblyDangerousFish(Spacey.IBenthic benthicPoint) {
+            var dangerChance      = DangerCurve.Evaluate(benthicPoint.Distance);
+            var shouldBeDangerous = Random.value < dangerChance;
+            var spawnList         = shouldBeDangerous ? Sharktrobution : Fishtrobution;
+            return PickRandomCatchable(spawnList);
+        }
+
+        private Catchables PickRandomCatchable(List<Pair<Catchables, int>> distributionList) {
+            if (distributionList == null || distributionList.Count == 0) {
+                throw new BrandonException($"The {nameof(distributionList)} list is empty!");
             }
 
-            var totalWeight       = Fishtrobution.Sum(it => it.Y);
+            var totalWeight       = distributionList.Sum(it => it.Y);
             var weightedSelection = Random.Range(0, totalWeight);
 
             // Some people talk about fancier, smarter ways to do this here https://stackoverflow.com/questions/7366838/select-a-random-item-from-a-weighted-list
             var cumulative = 0;
-            foreach (var fish in Fishtrobution) {
+            foreach (var fish in distributionList) {
                 cumulative += fish.Y;
                 if (cumulative > weightedSelection) {
                     return fish.X;
@@ -242,7 +240,7 @@ namespace Code.Runtime.Managers {
             }
 
             throw new BrandonException(
-                $"Unable to {nameof(PickRandomFish)}!\n" +
+                $"Unable to {nameof(PickRandomCatchable)}!\n" +
                 $"{nameof(totalWeight)}:       {totalWeight}\n" +
                 $"{nameof(weightedSelection)}: {weightedSelection}\n"
             );

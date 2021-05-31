@@ -16,23 +16,25 @@ namespace Code.Runtime.Bathymetry {
             this.BenthicProfile = benthicProfile;
         }
 
-        public IDGeographicPoint ToGeographic() {
-            return new IDGeographicPoint(WorldTerrain) {
-                Distance = Mathf.Lerp(BenthicProfile.MinGeographicDistance, BenthicProfile.MaxGeographicDistance, Distance),
-                Breadth  = Mathf.Lerp(0,                                    MaxGeographicBreadth,                 Breadth)
-            };
+        public GeographicPoint Geographic {
+            get {
+                return new GeographicPoint(WorldTerrain) {
+                    Distance = Mathf.Lerp(BenthicProfile.MinGeographicDistance, BenthicProfile.MaxGeographicDistance, Distance),
+                    Breadth  = Mathf.Lerp(0,                                    MaxGeographicBreadth,                 Breadth)
+                };
+            }
         }
 
-        public TerrainPoint ToTerrene() {
-            return ToGeographic().ToTerrene();
+        public TerrainPoint Terrene {
+            get { return Geographic.Terrene; }
         }
 
-        public BenthicPoint ToBenthic() {
-            return this;
+        public BenthicPoint Benthic {
+            get { return this; }
         }
 
-        public Vector3 ToWorldly() {
-            return ToTerrene().ToWorldly();
+        public Vector3 Worldly {
+            get { return Terrene.Worldly; }
         }
     }
 }
