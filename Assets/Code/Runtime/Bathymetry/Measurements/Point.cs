@@ -1,13 +1,16 @@
-﻿using UnityEngine;
+﻿using Code.Runtime.Bathymetry.Measurements;
+
+using UnityEngine;
 
 namespace Code.Runtime.Bathymetry {
-    public abstract class Point {
+    public abstract class Point : IPoint {
         private float _distance;
         public float Distance {
             get => _distance;
             set {
-                OnDistanceChanged(_distance, value);
+                var old = _distance;
                 this._distance = value;
+                OnDistanceChanged(old, value);
                 OnAnyChange();
             }
         }
@@ -16,8 +19,9 @@ namespace Code.Runtime.Bathymetry {
         public float Breadth {
             get => _breadth;
             set {
-                OnBreadthChanged(_breadth, value);
+                var old = _breadth;
                 _breadth = value;
+                OnBreadthChanged(old, value);
                 OnAnyChange();
             }
         }
@@ -33,11 +37,11 @@ namespace Code.Runtime.Bathymetry {
 
         #region "Events"
 
-        public virtual void OnDistanceChanged(float from, float to) { }
+        protected virtual void OnDistanceChanged(float from, float to) { }
 
-        public virtual void OnBreadthChanged(float from, float to) { }
+        protected virtual void OnBreadthChanged(float from, float to) { }
 
-        public virtual void OnAnyChange() { }
+        protected virtual void OnAnyChange() { }
 
         #endregion
     }

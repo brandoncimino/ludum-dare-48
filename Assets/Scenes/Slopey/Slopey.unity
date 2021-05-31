@@ -475,77 +475,95 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc4c62f618eede64cb8cb2456c6513f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraCrew: {fileID: 6909130122617165622}
-  goblinShark: {fileID: 1095902333, guid: 504878b2cce4849fea5ab18fb5a2c4b6, type: 3}
-  basicFish: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
   minTimeTilNextSpawn: 0.1
   maxTimeTilNextSpawn: 0.325
-  distanceFromCameraCrewToSpawnFish: {x: 0, y: 0}
-  chanceToUseGoblinShark: 10
-  FishSpawnPitchRange: {x: -20, y: 45}
-  DistanceFromCameraRange: {x: 5, y: 50}
+  DeactivateFishBehindBy: 50
+  ActivateFishAheadBy: 100
   Fishtrobution:
   - X: {fileID: 6982302474530867690, guid: b70424262750645d0896b3874ac88d71, type: 3}
     Y: 9
   - X: {fileID: 1095902333, guid: 504878b2cce4849fea5ab18fb5a2c4b6, type: 3}
     Y: 1
---- !u!1001 &640444908
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_RootOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalPosition.x
+  FishtrobutionBreadthCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.0773795
+      inSlope: 2.2738094
+      outSlope: 2.2738094
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.10319774
+    - serializedVersion: 3
+      time: 0.7388893
+      value: 0.43503737
+      inSlope: 0.2256047
+      outSlope: 0.2256047
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21156928
+      outWeight: 0.22001697
+    - serializedVersion: 3
+      time: 1
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -30
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalRotation.x
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  FishtrobutionDistanceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalRotation.y
+      inSlope: 1.6285392
+      outSlope: 1.6285392
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.14917661
+    - serializedVersion: 3
+      time: 0.50427634
+      value: 0.8379393
+      inSlope: 1.4170105
+      outSlope: 1.4170105
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17134416
+      outWeight: 0.17741717
+    - serializedVersion: 3
+      time: 0.86675423
+      value: 0.91857195
+      inSlope: -0.53736496
+      outSlope: -0.53736496
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.65706414
+    - serializedVersion: 3
+      time: 1
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867691, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6982302474530867703, guid: b70424262750645d0896b3874ac88d71, type: 3}
-      propertyPath: m_Name
-      value: BasicFish
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b70424262750645d0896b3874ac88d71, type: 3}
+      inSlope: 0.07726529
+      outSlope: 0.07726529
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.93663096
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  FishtrobutionRadius: 0.1
+  InitialFishtrobution: 800
+  FishtrobutionDistanceFromGround: {x: 5, y: 15}
+  FishSpawnPitchRange: {x: -20, y: 45}
+  DistanceFromCameraRange: {x: 5, y: 50}
 --- !u!1 &653179468
 GameObject:
   m_ObjectHideFlags: 0
@@ -1651,7 +1669,7 @@ Transform:
   m_Children:
   - {fileID: 6909130123044225346}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6909130122617165512
 MonoBehaviour:

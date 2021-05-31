@@ -33,7 +33,7 @@ namespace Code.Runtime.Bathymetry {
             );
         }
 
-        public override void OnAnyChange() {
+        protected override void OnAnyChange() {
             ResetHeight();
         }
 

@@ -3,12 +3,19 @@
 using UnityEngine;
 
 namespace Code.Runtime.Bathymetry.Measurements {
+    public interface IPoint {
+        float          Distance       { get; set; }
+        float          Breadth        { get; set; }
+        DimensionSpace DimensionSpace { get; }
+        Vector3 ToWorldAxes();
+    }
+
     public abstract class Spacey {
         public interface IWorldly {
             Vector3 ToWorldly();
         }
 
-        public interface ITerrene : IWorldly {
+        public interface ITerrene : IWorldly, IPoint {
             TerrainPoint ToTerrene();
         }
 

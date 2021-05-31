@@ -15,7 +15,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5284141709278137977
 Transform:
@@ -44,9 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98f50bfab25a4e1ca045d07351c4120e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Zones: 00000000
   ZoneTypes: 00000000
   Cost: 0
+  SizeRange: {x: 0, y: 0}
 --- !u!1 &7391301020768635022
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +63,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1094821766708879668
 Transform:

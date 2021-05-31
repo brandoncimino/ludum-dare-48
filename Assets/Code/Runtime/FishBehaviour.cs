@@ -2,8 +2,6 @@ using Code.Runtime;
 
 using JetBrains.Annotations;
 
-using TMPro;
-
 using UnityEngine;
 
 public class FishBehaviour : Catchables {
@@ -26,8 +24,6 @@ public class FishBehaviour : Catchables {
     protected float maxTimeForChange = 0.4f;
     protected float AngleChange      = 90;
 
-    public TMP_Text thoughts;
-
     protected override void myStartBehaviour() {
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
         AngleChange    = Random.Range(-90f,              90f);
@@ -35,9 +31,6 @@ public class FishBehaviour : Catchables {
 
     // Update is called once per frame
     protected virtual void Update() {
-        // rotate the thoughts to match the camera
-        RotateThoughts();
-
         // change direction if feeling uncomfortable
         if (isUncomfortable) {
             fleeTime -= Time.deltaTime;
@@ -62,7 +55,6 @@ public class FishBehaviour : Catchables {
         Transform enemy = null
     ) {
         isUncomfortable = true;
-        thoughts.text   = "AAAAAH";
         fleeAngle       = Random.Range(10f, 90f);
     }
 
@@ -71,7 +63,6 @@ public class FishBehaviour : Catchables {
         Transform enemy = null
     ) {
         isUncomfortable = false;
-        thoughts.text   = "that was close";
 
         fleeTime = Random.Range(1f, 2f);
 
@@ -84,12 +75,16 @@ public class FishBehaviour : Catchables {
     protected void changeDirectionAtRandom() {
         // count down until you change directions again
         timeTillChange -= Time.deltaTime;
-        if (!(timeTillChange < 0)) return;
+        if (!(timeTillChange < 0)) {
+            return;
+        }
 
         // rotate to your heart's desire
         timeForChange -= Time.deltaTime;
         transform.Rotate(Vector3.up, AngleChange * Time.deltaTime);
-        if (!(timeForChange < 0)) return;
+        if (!(timeForChange < 0)) {
+            return;
+        }
 
         // start moving forward again when your change time is up
         timeTillChange = Random.Range(minTimeTillChange, maxTimeTillChange);
@@ -99,18 +94,13 @@ public class FishBehaviour : Catchables {
 
     protected void changeDirectionToHorizonntal() {
         var horizontalRotation = new Quaternion();
-        horizontalRotation.eulerAngles = new Vector3(0, transform.rotation.eulerAngles.y, 0);
-        transform.rotation             = Quaternion.RotateTowards(transform.rotation, horizontalRotation, 20 * Time.deltaTime);
+        var rotation           = transform.rotation;
+        horizontalRotation.eulerAngles = new Vector3(0, rotation.eulerAngles.y, 0);
+        rotation                       = Quaternion.RotateTowards(rotation, horizontalRotation, 20 * Time.deltaTime);
+        transform.rotation             = rotation;
     }
 
     protected override void myPersonalTrigger() {
         EventManager.Single.TriggerCollisionFish(this);
-    }
-
-    private void RotateThoughts() {
-        if (Camera.current) {
-            var cameraRotation = Camera.current.transform.rotation;
-            thoughts.transform.rotation = cameraRotation;
-        }
     }
 }
