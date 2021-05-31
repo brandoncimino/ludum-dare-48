@@ -315,6 +315,14 @@ PrefabInstance:
       propertyPath: TreeSizeRange.x
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 48586859437911121, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
+      propertyPath: Zones.Array.data[2].Amplitude
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 48586859437911121, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
+      propertyPath: Zones.Array.data[2].GeographicDistance
+      value: 600
+      objectReference: {fileID: 0}
     - target: {fileID: 48586859437911122, guid: d8bed8499dfa6bc4f99e2324ac9a1ea9, type: 3}
       propertyPath: m_RootOrder
       value: 8
